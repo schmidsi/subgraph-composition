@@ -1,5 +1,8 @@
 // @ts-nocheck
 import { GraphQLResolveInfo, SelectionSetNode, FieldNode, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+import { gql } from '@graphql-mesh/utils';
+
 import type { GetMeshOptions } from '@graphql-mesh/runtime';
 import type { YamlConfig } from '@graphql-mesh/types';
 import { PubSub } from '@graphql-mesh/utils';
@@ -11,6 +14,7 @@ import { MeshResolvedSource } from '@graphql-mesh/runtime';
 import { MeshTransform, MeshPlugin } from '@graphql-mesh/types';
 import GraphqlHandler from "@graphql-mesh/graphql"
 import BareMerger from "@graphql-mesh/merger-bare";
+import { printWithCache } from '@graphql-mesh/utils';
 import { createMeshHTTPHandler, MeshHTTPHandler } from '@graphql-mesh/http';
 import { getMesh, ExecuteMeshFn, SubscribeMeshFn, MeshContext as BaseMeshContext, MeshInstance } from '@graphql-mesh/runtime';
 import { MeshStore, FsStoreStorageAdapter } from '@graphql-mesh/store';
@@ -12733,7 +12737,8 @@ export type DirectiveResolvers<ContextType = MeshContext> = ResolversObject<{
 export type MeshContext = MainnetTypes.Context & BaseMeshContext;
 
 
-const baseDir = pathModule.join(typeof __dirname === 'string' ? __dirname : '/', '..');
+import { fileURLToPath } from '@graphql-mesh/utils';
+const baseDir = pathModule.join(pathModule.dirname(fileURLToPath(import.meta.url)), '..');
 
 const importFn: ImportFn = <T>(moduleId: string) => {
   const relativeModuleId = (pathModule.isAbsolute(moduleId) ? pathModule.relative(baseDir, moduleId) : moduleId).split('\\').join('/').replace(baseDir + '/', '');
@@ -12808,7 +12813,13 @@ const merger = new(BareMerger as any)({
     additionalEnvelopPlugins,
     get documents() {
       return [
-      
+      {
+        document: SubgraphsDocument,
+        get rawSDL() {
+          return printWithCache(SubgraphsDocument);
+        },
+        location: 'SubgraphsDocument.graphql'
+      }
     ];
     },
     fetchFn,
@@ -12842,3 +12853,37 @@ export function getBuiltGraphClient(): Promise<MeshInstance> {
 export const execute: ExecuteMeshFn = (...args) => getBuiltGraphClient().then(({ execute }) => execute(...args));
 
 export const subscribe: SubscribeMeshFn = (...args) => getBuiltGraphClient().then(({ subscribe }) => subscribe(...args));
+export function getBuiltGraphSDK<TGlobalContext = any, TOperationContext = any>(globalContext?: TGlobalContext) {
+  const sdkRequester$ = getBuiltGraphClient().then(({ sdkRequesterFactory }) => sdkRequesterFactory(globalContext));
+  return getSdk<TOperationContext, TGlobalContext>((...args) => sdkRequester$.then(sdkRequester => sdkRequester(...args)));
+}
+export type SubgraphsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type SubgraphsQuery = { subgraphs: Array<(
+    Pick<Subgraph, 'id'>
+    & { metadata?: Maybe<Pick<SubgraphMetadata, 'displayName'>> }
+  )> };
+
+
+export const SubgraphsDocument = gql`
+    query Subgraphs {
+  subgraphs {
+    id
+    metadata {
+      displayName
+    }
+  }
+}
+    ` as unknown as DocumentNode<SubgraphsQuery, SubgraphsQueryVariables>;
+
+
+export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
+export function getSdk<C, E>(requester: Requester<C, E>) {
+  return {
+    Subgraphs(variables?: SubgraphsQueryVariables, options?: C): Promise<SubgraphsQuery> {
+      return requester<SubgraphsQuery, SubgraphsQueryVariables>(SubgraphsDocument, variables, options) as Promise<SubgraphsQuery>;
+    }
+  };
+}
+export type Sdk = ReturnType<typeof getSdk>;

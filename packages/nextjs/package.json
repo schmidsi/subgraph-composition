@@ -21,6 +21,7 @@
     "@uniswap/v2-sdk": "~3.0.1",
     "blo": "~1.0.1",
     "daisyui": "~3.5.1",
+    "graphql": "^16.8.1",
     "next": "~13.1.6",
     "nextjs-progressbar": "~0.0.16",
     "qrcode.react": "~3.1.0",
@@ -35,6 +36,7 @@
     "zustand": "~4.1.2"
   },
   "devDependencies": {
+    "@graphprotocol/client-cli": "^3.0.0",
     "@trivago/prettier-plugin-sort-imports": "~4.1.1",
     "@types/node": "^17.0.45",
     "@types/react": "^18.0.21",

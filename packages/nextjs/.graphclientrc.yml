@@ -3,3 +3,6 @@ sources:
     handler:
       graphql:
         endpoint: https://gateway-arbitrum.network.thegraph.com/api/dc9b1200d80a1c064c90462b9c04f264/subgraphs/id/AwyZBdna4vTAHiqBWsrQ5ErFRMi6HCgGEkQMgNBseWTL
+
+documents:
+  - "./queries/**/*.graphql"
