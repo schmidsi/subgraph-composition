@@ -1,38 +1,14 @@
 // @ts-nocheck
-import { GraphQLResolveInfo, SelectionSetNode, FieldNode, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-import { gql } from '@graphql-mesh/utils';
 
-import type { GetMeshOptions } from '@graphql-mesh/runtime';
-import type { YamlConfig } from '@graphql-mesh/types';
-import { PubSub } from '@graphql-mesh/utils';
-import { DefaultLogger } from '@graphql-mesh/utils';
-import MeshCache from "@graphql-mesh/cache-localforage";
-import { fetch as fetchFn } from '@whatwg-node/fetch';
+import { InContextSdkMethod } from '@graphql-mesh/types';
+import { MeshContext } from '@graphql-mesh/runtime';
 
-import { MeshResolvedSource } from '@graphql-mesh/runtime';
-import { MeshTransform, MeshPlugin } from '@graphql-mesh/types';
-import GraphqlHandler from "@graphql-mesh/graphql"
-import StitchingMerger from "@graphql-mesh/merger-stitching";
-import { printWithCache } from '@graphql-mesh/utils';
-import { createMeshHTTPHandler, MeshHTTPHandler } from '@graphql-mesh/http';
-import { getMesh, ExecuteMeshFn, SubscribeMeshFn, MeshContext as BaseMeshContext, MeshInstance } from '@graphql-mesh/runtime';
-import { MeshStore, FsStoreStorageAdapter } from '@graphql-mesh/store';
-import { path as pathModule } from '@graphql-mesh/cross-helpers';
-import { ImportFn } from '@graphql-mesh/types';
-import type { MainnetTypes } from './sources/mainnet/types';
-import type { ArbitrumTypes } from './sources/arbitrum/types';
-import * as importedModule$0 from "./sources/arbitrum/introspectionSchema";
-import * as importedModule$1 from "./sources/mainnet/introspectionSchema";
-export type Maybe<T> = T | null;
+export namespace ArbitrumTypes {
+  export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type RequireFields<T, K extends keyof T> = Omit<T, K> & { [P in K]-?: NonNullable<T[P]> };
-
-
-
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -44,1526 +20,6 @@ export type Scalars = {
   BigInt: any;
   Bytes: any;
   Int8: any;
-};
-
-export type Query = {
-  graphNetwork?: Maybe<GraphNetwork>;
-  graphNetworks: Array<GraphNetwork>;
-  graphAccount?: Maybe<GraphAccount>;
-  graphAccounts: Array<GraphAccount>;
-  accountMetadata: Array<AccountMetadata>;
-  graphAccountName?: Maybe<GraphAccountName>;
-  graphAccountNames: Array<GraphAccountName>;
-  subgraph?: Maybe<Subgraph>;
-  subgraphs: Array<Subgraph>;
-  subgraphMetadata: Array<SubgraphMetadata>;
-  currentSubgraphDeploymentRelation?: Maybe<CurrentSubgraphDeploymentRelation>;
-  currentSubgraphDeploymentRelations: Array<CurrentSubgraphDeploymentRelation>;
-  network?: Maybe<Network>;
-  networks: Array<Network>;
-  subgraphVersion?: Maybe<SubgraphVersion>;
-  subgraphVersions: Array<SubgraphVersion>;
-  subgraphVersionMetadata: Array<SubgraphVersionMetadata>;
-  subgraphDeployment?: Maybe<SubgraphDeployment>;
-  subgraphDeployments: Array<SubgraphDeployment>;
-  subgraphDeploymentMetadata: Array<SubgraphDeploymentMetadata>;
-  indexer?: Maybe<Indexer>;
-  indexers: Array<Indexer>;
-  allocation?: Maybe<Allocation>;
-  allocations: Array<Allocation>;
-  pool?: Maybe<Pool>;
-  pools: Array<Pool>;
-  delegator?: Maybe<Delegator>;
-  delegators: Array<Delegator>;
-  delegatedStake?: Maybe<DelegatedStake>;
-  delegatedStakes: Array<DelegatedStake>;
-  curator?: Maybe<Curator>;
-  curators: Array<Curator>;
-  signal?: Maybe<Signal>;
-  signals: Array<Signal>;
-  nameSignal?: Maybe<NameSignal>;
-  nameSignals: Array<NameSignal>;
-  nameSignalSubgraphRelation?: Maybe<NameSignalSubgraphRelation>;
-  nameSignalSubgraphRelations: Array<NameSignalSubgraphRelation>;
-  signalSubgraphDeploymentRelation?: Maybe<SignalSubgraphDeploymentRelation>;
-  signalSubgraphDeploymentRelations: Array<SignalSubgraphDeploymentRelation>;
-  dispute?: Maybe<Dispute>;
-  disputes: Array<Dispute>;
-  attestation?: Maybe<Attestation>;
-  attestations: Array<Attestation>;
-  epoch?: Maybe<Epoch>;
-  epoches: Array<Epoch>;
-  nameSignalTransaction?: Maybe<NameSignalTransaction>;
-  nameSignalTransactions: Array<NameSignalTransaction>;
-  signalTransaction?: Maybe<SignalTransaction>;
-  signalTransactions: Array<SignalTransaction>;
-  bridgeWithdrawalTransaction?: Maybe<BridgeWithdrawalTransaction>;
-  bridgeWithdrawalTransactions: Array<BridgeWithdrawalTransaction>;
-  bridgeDepositTransaction?: Maybe<BridgeDepositTransaction>;
-  bridgeDepositTransactions: Array<BridgeDepositTransaction>;
-  retryableTicket?: Maybe<RetryableTicket>;
-  retryableTickets: Array<RetryableTicket>;
-  retryableTicketRedeemAttempt?: Maybe<RetryableTicketRedeemAttempt>;
-  retryableTicketRedeemAttempts: Array<RetryableTicketRedeemAttempt>;
-  tokenManager?: Maybe<TokenManager>;
-  tokenManagers: Array<TokenManager>;
-  authorizedFunction?: Maybe<AuthorizedFunction>;
-  authorizedFunctions: Array<AuthorizedFunction>;
-  tokenLockWallet?: Maybe<TokenLockWallet>;
-  tokenLockWallets: Array<TokenLockWallet>;
-  indexerDeployment?: Maybe<IndexerDeployment>;
-  indexerDeployments: Array<IndexerDeployment>;
-  rewardCutHistoryEntity?: Maybe<RewardCutHistoryEntity>;
-  rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
-  delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
-  delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
-  transaction?: Maybe<Transaction>;
-  transactions: Array<Transaction>;
-  curatorSearch: Array<Curator>;
-  delegatorSearch: Array<Delegator>;
-  indexerSearch: Array<Indexer>;
-  accountSearch: Array<GraphAccount>;
-  /** Access to subgraph metadata */
-  _meta?: Maybe<_Meta_>;
-};
-
-
-export type QuerygraphNetworkArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerygraphNetworksArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<GraphNetwork_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<GraphNetwork_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerygraphAccountArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerygraphAccountsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<GraphAccount_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<GraphAccount_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryaccountMetadataArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<AccountMetadata_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<AccountMetadata_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerygraphAccountNameArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerygraphAccountNamesArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<GraphAccountName_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<GraphAccountName_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysubgraphArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysubgraphsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Subgraph_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Subgraph_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysubgraphMetadataArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SubgraphMetadata_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SubgraphMetadata_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerycurrentSubgraphDeploymentRelationArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerycurrentSubgraphDeploymentRelationsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<CurrentSubgraphDeploymentRelation_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<CurrentSubgraphDeploymentRelation_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerynetworkArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerynetworksArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Network_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Network_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysubgraphVersionArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysubgraphVersionsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SubgraphVersion_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SubgraphVersion_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysubgraphVersionMetadataArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SubgraphVersionMetadata_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SubgraphVersionMetadata_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysubgraphDeploymentArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysubgraphDeploymentsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SubgraphDeployment_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SubgraphDeployment_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysubgraphDeploymentMetadataArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SubgraphDeploymentMetadata_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SubgraphDeploymentMetadata_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryindexerArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryindexersArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Indexer_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Indexer_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryallocationArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryallocationsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Allocation_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Allocation_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerypoolArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerypoolsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Pool_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Pool_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerydelegatorArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerydelegatorsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Delegator_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Delegator_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerydelegatedStakeArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerydelegatedStakesArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<DelegatedStake_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<DelegatedStake_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerycuratorArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerycuratorsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Curator_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Curator_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysignalArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysignalsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Signal_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Signal_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerynameSignalArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerynameSignalsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<NameSignal_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<NameSignal_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerynameSignalSubgraphRelationArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerynameSignalSubgraphRelationsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<NameSignalSubgraphRelation_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<NameSignalSubgraphRelation_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysignalSubgraphDeploymentRelationArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysignalSubgraphDeploymentRelationsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SignalSubgraphDeploymentRelation_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SignalSubgraphDeploymentRelation_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerydisputeArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerydisputesArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Dispute_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Dispute_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryattestationArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryattestationsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Attestation_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Attestation_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryepochArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryepochesArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Epoch_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Epoch_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerynameSignalTransactionArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerynameSignalTransactionsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<NameSignalTransaction_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<NameSignalTransaction_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysignalTransactionArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerysignalTransactionsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SignalTransaction_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SignalTransaction_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerybridgeWithdrawalTransactionArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerybridgeWithdrawalTransactionsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<BridgeWithdrawalTransaction_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<BridgeWithdrawalTransaction_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerybridgeDepositTransactionArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerybridgeDepositTransactionsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<BridgeDepositTransaction_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<BridgeDepositTransaction_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryretryableTicketArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryretryableTicketsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<RetryableTicket_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<RetryableTicket_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryretryableTicketRedeemAttemptArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryretryableTicketRedeemAttemptsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<RetryableTicketRedeemAttempt_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<RetryableTicketRedeemAttempt_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerytokenManagerArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerytokenManagersArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<TokenManager_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<TokenManager_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryauthorizedFunctionArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryauthorizedFunctionsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<AuthorizedFunction_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<AuthorizedFunction_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerytokenLockWalletArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerytokenLockWalletsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<TokenLockWallet_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<TokenLockWallet_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryindexerDeploymentArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryindexerDeploymentsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<IndexerDeployment_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<IndexerDeployment_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryrewardCutHistoryEntityArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryrewardCutHistoryEntitiesArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<RewardCutHistoryEntity_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<RewardCutHistoryEntity_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerydelegationPoolHistoryEntityArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerydelegationPoolHistoryEntitiesArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<DelegationPoolHistoryEntity_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<DelegationPoolHistoryEntity_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerytransactionArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerytransactionsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Transaction_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Transaction_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerycuratorSearchArgs = {
-  text: Scalars['String'];
-  first?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  block?: InputMaybe<Block_height>;
-  where?: InputMaybe<Curator_filter>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerydelegatorSearchArgs = {
-  text: Scalars['String'];
-  first?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  block?: InputMaybe<Block_height>;
-  where?: InputMaybe<Delegator_filter>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryindexerSearchArgs = {
-  text: Scalars['String'];
-  first?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  block?: InputMaybe<Block_height>;
-  where?: InputMaybe<Indexer_filter>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryaccountSearchArgs = {
-  text: Scalars['String'];
-  first?: InputMaybe<Scalars['Int']>;
-  skip?: InputMaybe<Scalars['Int']>;
-  block?: InputMaybe<Block_height>;
-  where?: InputMaybe<GraphAccount_filter>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type Query_metaArgs = {
-  block?: InputMaybe<Block_height>;
-};
-
-export type Subscription = {
-  graphNetwork?: Maybe<GraphNetwork>;
-  graphNetworks: Array<GraphNetwork>;
-  graphAccount?: Maybe<GraphAccount>;
-  graphAccounts: Array<GraphAccount>;
-  accountMetadata: Array<AccountMetadata>;
-  graphAccountName?: Maybe<GraphAccountName>;
-  graphAccountNames: Array<GraphAccountName>;
-  subgraph?: Maybe<Subgraph>;
-  subgraphs: Array<Subgraph>;
-  subgraphMetadata: Array<SubgraphMetadata>;
-  currentSubgraphDeploymentRelation?: Maybe<CurrentSubgraphDeploymentRelation>;
-  currentSubgraphDeploymentRelations: Array<CurrentSubgraphDeploymentRelation>;
-  network?: Maybe<Network>;
-  networks: Array<Network>;
-  subgraphVersion?: Maybe<SubgraphVersion>;
-  subgraphVersions: Array<SubgraphVersion>;
-  subgraphVersionMetadata: Array<SubgraphVersionMetadata>;
-  subgraphDeployment?: Maybe<SubgraphDeployment>;
-  subgraphDeployments: Array<SubgraphDeployment>;
-  subgraphDeploymentMetadata: Array<SubgraphDeploymentMetadata>;
-  indexer?: Maybe<Indexer>;
-  indexers: Array<Indexer>;
-  allocation?: Maybe<Allocation>;
-  allocations: Array<Allocation>;
-  pool?: Maybe<Pool>;
-  pools: Array<Pool>;
-  delegator?: Maybe<Delegator>;
-  delegators: Array<Delegator>;
-  delegatedStake?: Maybe<DelegatedStake>;
-  delegatedStakes: Array<DelegatedStake>;
-  curator?: Maybe<Curator>;
-  curators: Array<Curator>;
-  signal?: Maybe<Signal>;
-  signals: Array<Signal>;
-  nameSignal?: Maybe<NameSignal>;
-  nameSignals: Array<NameSignal>;
-  nameSignalSubgraphRelation?: Maybe<NameSignalSubgraphRelation>;
-  nameSignalSubgraphRelations: Array<NameSignalSubgraphRelation>;
-  signalSubgraphDeploymentRelation?: Maybe<SignalSubgraphDeploymentRelation>;
-  signalSubgraphDeploymentRelations: Array<SignalSubgraphDeploymentRelation>;
-  dispute?: Maybe<Dispute>;
-  disputes: Array<Dispute>;
-  attestation?: Maybe<Attestation>;
-  attestations: Array<Attestation>;
-  epoch?: Maybe<Epoch>;
-  epoches: Array<Epoch>;
-  nameSignalTransaction?: Maybe<NameSignalTransaction>;
-  nameSignalTransactions: Array<NameSignalTransaction>;
-  signalTransaction?: Maybe<SignalTransaction>;
-  signalTransactions: Array<SignalTransaction>;
-  bridgeWithdrawalTransaction?: Maybe<BridgeWithdrawalTransaction>;
-  bridgeWithdrawalTransactions: Array<BridgeWithdrawalTransaction>;
-  bridgeDepositTransaction?: Maybe<BridgeDepositTransaction>;
-  bridgeDepositTransactions: Array<BridgeDepositTransaction>;
-  retryableTicket?: Maybe<RetryableTicket>;
-  retryableTickets: Array<RetryableTicket>;
-  retryableTicketRedeemAttempt?: Maybe<RetryableTicketRedeemAttempt>;
-  retryableTicketRedeemAttempts: Array<RetryableTicketRedeemAttempt>;
-  tokenManager?: Maybe<TokenManager>;
-  tokenManagers: Array<TokenManager>;
-  authorizedFunction?: Maybe<AuthorizedFunction>;
-  authorizedFunctions: Array<AuthorizedFunction>;
-  tokenLockWallet?: Maybe<TokenLockWallet>;
-  tokenLockWallets: Array<TokenLockWallet>;
-  indexerDeployment?: Maybe<IndexerDeployment>;
-  indexerDeployments: Array<IndexerDeployment>;
-  rewardCutHistoryEntity?: Maybe<RewardCutHistoryEntity>;
-  rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
-  delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
-  delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
-  transaction?: Maybe<Transaction>;
-  transactions: Array<Transaction>;
-  /** Access to subgraph metadata */
-  _meta?: Maybe<_Meta_>;
-};
-
-
-export type SubscriptiongraphNetworkArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiongraphNetworksArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<GraphNetwork_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<GraphNetwork_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiongraphAccountArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiongraphAccountsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<GraphAccount_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<GraphAccount_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionaccountMetadataArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<AccountMetadata_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<AccountMetadata_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiongraphAccountNameArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiongraphAccountNamesArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<GraphAccountName_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<GraphAccountName_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubgraphArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubgraphsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Subgraph_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Subgraph_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubgraphMetadataArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SubgraphMetadata_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SubgraphMetadata_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptioncurrentSubgraphDeploymentRelationArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptioncurrentSubgraphDeploymentRelationsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<CurrentSubgraphDeploymentRelation_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<CurrentSubgraphDeploymentRelation_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionnetworkArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionnetworksArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Network_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Network_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubgraphVersionArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubgraphVersionsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SubgraphVersion_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SubgraphVersion_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubgraphVersionMetadataArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SubgraphVersionMetadata_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SubgraphVersionMetadata_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubgraphDeploymentArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubgraphDeploymentsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SubgraphDeployment_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SubgraphDeployment_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsubgraphDeploymentMetadataArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SubgraphDeploymentMetadata_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SubgraphDeploymentMetadata_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexerArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexersArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Indexer_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Indexer_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionallocationArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionallocationsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Allocation_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Allocation_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionpoolArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionpoolsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Pool_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Pool_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiondelegatorArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiondelegatorsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Delegator_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Delegator_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiondelegatedStakeArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiondelegatedStakesArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<DelegatedStake_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<DelegatedStake_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptioncuratorArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptioncuratorsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Curator_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Curator_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsignalArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsignalsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Signal_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Signal_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionnameSignalArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionnameSignalsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<NameSignal_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<NameSignal_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionnameSignalSubgraphRelationArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionnameSignalSubgraphRelationsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<NameSignalSubgraphRelation_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<NameSignalSubgraphRelation_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsignalSubgraphDeploymentRelationArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsignalSubgraphDeploymentRelationsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SignalSubgraphDeploymentRelation_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SignalSubgraphDeploymentRelation_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiondisputeArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiondisputesArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Dispute_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Dispute_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionattestationArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionattestationsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Attestation_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Attestation_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionepochArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionepochesArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Epoch_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Epoch_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionnameSignalTransactionArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionnameSignalTransactionsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<NameSignalTransaction_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<NameSignalTransaction_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsignalTransactionArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionsignalTransactionsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<SignalTransaction_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<SignalTransaction_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionbridgeWithdrawalTransactionArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionbridgeWithdrawalTransactionsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<BridgeWithdrawalTransaction_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<BridgeWithdrawalTransaction_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionbridgeDepositTransactionArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionbridgeDepositTransactionsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<BridgeDepositTransaction_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<BridgeDepositTransaction_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionretryableTicketArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionretryableTicketsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<RetryableTicket_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<RetryableTicket_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionretryableTicketRedeemAttemptArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionretryableTicketRedeemAttemptsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<RetryableTicketRedeemAttempt_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<RetryableTicketRedeemAttempt_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenManagerArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenManagersArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<TokenManager_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<TokenManager_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionauthorizedFunctionArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionauthorizedFunctionsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<AuthorizedFunction_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<AuthorizedFunction_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenLockWalletArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontokenLockWalletsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<TokenLockWallet_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<TokenLockWallet_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexerDeploymentArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionindexerDeploymentsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<IndexerDeployment_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<IndexerDeployment_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionrewardCutHistoryEntityArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptionrewardCutHistoryEntitiesArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<RewardCutHistoryEntity_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<RewardCutHistoryEntity_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiondelegationPoolHistoryEntityArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiondelegationPoolHistoryEntitiesArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<DelegationPoolHistoryEntity_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<DelegationPoolHistoryEntity_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontransactionArgs = {
-  id: Scalars['ID'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type SubscriptiontransactionsArgs = {
-  skip?: InputMaybe<Scalars['Int']>;
-  first?: InputMaybe<Scalars['Int']>;
-  orderBy?: InputMaybe<Transaction_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<Transaction_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type Subscription_metaArgs = {
-  block?: InputMaybe<Block_height>;
 };
 
 export type AccountMetadata = {
@@ -8313,6 +6769,788 @@ export type Pool_orderBy =
   | 'curatorRewards'
   | 'closedAllocations';
 
+export type Query = {
+  graphNetwork?: Maybe<GraphNetwork>;
+  graphNetworks: Array<GraphNetwork>;
+  graphAccount?: Maybe<GraphAccount>;
+  graphAccounts: Array<GraphAccount>;
+  accountMetadata: Array<AccountMetadata>;
+  graphAccountName?: Maybe<GraphAccountName>;
+  graphAccountNames: Array<GraphAccountName>;
+  subgraph?: Maybe<Subgraph>;
+  subgraphs: Array<Subgraph>;
+  subgraphMetadata: Array<SubgraphMetadata>;
+  currentSubgraphDeploymentRelation?: Maybe<CurrentSubgraphDeploymentRelation>;
+  currentSubgraphDeploymentRelations: Array<CurrentSubgraphDeploymentRelation>;
+  network?: Maybe<Network>;
+  networks: Array<Network>;
+  subgraphVersion?: Maybe<SubgraphVersion>;
+  subgraphVersions: Array<SubgraphVersion>;
+  subgraphVersionMetadata: Array<SubgraphVersionMetadata>;
+  subgraphDeployment?: Maybe<SubgraphDeployment>;
+  subgraphDeployments: Array<SubgraphDeployment>;
+  subgraphDeploymentMetadata: Array<SubgraphDeploymentMetadata>;
+  indexer?: Maybe<Indexer>;
+  indexers: Array<Indexer>;
+  allocation?: Maybe<Allocation>;
+  allocations: Array<Allocation>;
+  pool?: Maybe<Pool>;
+  pools: Array<Pool>;
+  delegator?: Maybe<Delegator>;
+  delegators: Array<Delegator>;
+  delegatedStake?: Maybe<DelegatedStake>;
+  delegatedStakes: Array<DelegatedStake>;
+  curator?: Maybe<Curator>;
+  curators: Array<Curator>;
+  signal?: Maybe<Signal>;
+  signals: Array<Signal>;
+  nameSignal?: Maybe<NameSignal>;
+  nameSignals: Array<NameSignal>;
+  nameSignalSubgraphRelation?: Maybe<NameSignalSubgraphRelation>;
+  nameSignalSubgraphRelations: Array<NameSignalSubgraphRelation>;
+  signalSubgraphDeploymentRelation?: Maybe<SignalSubgraphDeploymentRelation>;
+  signalSubgraphDeploymentRelations: Array<SignalSubgraphDeploymentRelation>;
+  dispute?: Maybe<Dispute>;
+  disputes: Array<Dispute>;
+  attestation?: Maybe<Attestation>;
+  attestations: Array<Attestation>;
+  epoch?: Maybe<Epoch>;
+  epoches: Array<Epoch>;
+  nameSignalTransaction?: Maybe<NameSignalTransaction>;
+  nameSignalTransactions: Array<NameSignalTransaction>;
+  signalTransaction?: Maybe<SignalTransaction>;
+  signalTransactions: Array<SignalTransaction>;
+  bridgeWithdrawalTransaction?: Maybe<BridgeWithdrawalTransaction>;
+  bridgeWithdrawalTransactions: Array<BridgeWithdrawalTransaction>;
+  bridgeDepositTransaction?: Maybe<BridgeDepositTransaction>;
+  bridgeDepositTransactions: Array<BridgeDepositTransaction>;
+  retryableTicket?: Maybe<RetryableTicket>;
+  retryableTickets: Array<RetryableTicket>;
+  retryableTicketRedeemAttempt?: Maybe<RetryableTicketRedeemAttempt>;
+  retryableTicketRedeemAttempts: Array<RetryableTicketRedeemAttempt>;
+  tokenManager?: Maybe<TokenManager>;
+  tokenManagers: Array<TokenManager>;
+  authorizedFunction?: Maybe<AuthorizedFunction>;
+  authorizedFunctions: Array<AuthorizedFunction>;
+  tokenLockWallet?: Maybe<TokenLockWallet>;
+  tokenLockWallets: Array<TokenLockWallet>;
+  indexerDeployment?: Maybe<IndexerDeployment>;
+  indexerDeployments: Array<IndexerDeployment>;
+  rewardCutHistoryEntity?: Maybe<RewardCutHistoryEntity>;
+  rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
+  delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
+  delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
+  transaction?: Maybe<Transaction>;
+  transactions: Array<Transaction>;
+  curatorSearch: Array<Curator>;
+  delegatorSearch: Array<Delegator>;
+  indexerSearch: Array<Indexer>;
+  accountSearch: Array<GraphAccount>;
+  /** Access to subgraph metadata */
+  _meta?: Maybe<_Meta_>;
+};
+
+
+export type QuerygraphNetworkArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerygraphNetworksArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<GraphNetwork_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<GraphNetwork_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerygraphAccountArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerygraphAccountsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<GraphAccount_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<GraphAccount_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryaccountMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<AccountMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<AccountMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerygraphAccountNameArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerygraphAccountNamesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<GraphAccountName_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<GraphAccountName_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysubgraphArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysubgraphsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Subgraph_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Subgraph_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysubgraphMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerycurrentSubgraphDeploymentRelationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerycurrentSubgraphDeploymentRelationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<CurrentSubgraphDeploymentRelation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<CurrentSubgraphDeploymentRelation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerynetworkArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerynetworksArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Network_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Network_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysubgraphVersionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysubgraphVersionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphVersion_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphVersion_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysubgraphVersionMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphVersionMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphVersionMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysubgraphDeploymentArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysubgraphDeploymentsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphDeployment_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphDeployment_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysubgraphDeploymentMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphDeploymentMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphDeploymentMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryindexerArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryindexersArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Indexer_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Indexer_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryallocationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryallocationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Allocation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Allocation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerypoolArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerypoolsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Pool_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Pool_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerydelegatorArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerydelegatorsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Delegator_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Delegator_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerydelegatedStakeArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerydelegatedStakesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<DelegatedStake_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<DelegatedStake_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerycuratorArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerycuratorsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Curator_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Curator_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysignalArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysignalsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Signal_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Signal_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerynameSignalArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerynameSignalsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameSignal_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<NameSignal_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerynameSignalSubgraphRelationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerynameSignalSubgraphRelationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameSignalSubgraphRelation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<NameSignalSubgraphRelation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysignalSubgraphDeploymentRelationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysignalSubgraphDeploymentRelationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SignalSubgraphDeploymentRelation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SignalSubgraphDeploymentRelation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerydisputeArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerydisputesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Dispute_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Dispute_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryattestationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryattestationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Attestation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Attestation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryepochArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryepochesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Epoch_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Epoch_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerynameSignalTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerynameSignalTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameSignalTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<NameSignalTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysignalTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerysignalTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SignalTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SignalTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerybridgeWithdrawalTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerybridgeWithdrawalTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<BridgeWithdrawalTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<BridgeWithdrawalTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerybridgeDepositTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerybridgeDepositTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<BridgeDepositTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<BridgeDepositTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryretryableTicketArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryretryableTicketsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<RetryableTicket_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<RetryableTicket_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryretryableTicketRedeemAttemptArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryretryableTicketRedeemAttemptsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<RetryableTicketRedeemAttempt_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<RetryableTicketRedeemAttempt_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerytokenManagerArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerytokenManagersArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<TokenManager_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<TokenManager_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryauthorizedFunctionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryauthorizedFunctionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<AuthorizedFunction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<AuthorizedFunction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerytokenLockWalletArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerytokenLockWalletsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<TokenLockWallet_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<TokenLockWallet_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryindexerDeploymentArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryindexerDeploymentsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<IndexerDeployment_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<IndexerDeployment_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryrewardCutHistoryEntityArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryrewardCutHistoryEntitiesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<RewardCutHistoryEntity_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<RewardCutHistoryEntity_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerydelegationPoolHistoryEntityArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerydelegationPoolHistoryEntitiesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<DelegationPoolHistoryEntity_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<DelegationPoolHistoryEntity_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerytransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerytransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Transaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Transaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerycuratorSearchArgs = {
+  text: Scalars['String'];
+  first?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  block?: InputMaybe<Block_height>;
+  where?: InputMaybe<Curator_filter>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerydelegatorSearchArgs = {
+  text: Scalars['String'];
+  first?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  block?: InputMaybe<Block_height>;
+  where?: InputMaybe<Delegator_filter>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryindexerSearchArgs = {
+  text: Scalars['String'];
+  first?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  block?: InputMaybe<Block_height>;
+  where?: InputMaybe<Indexer_filter>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryaccountSearchArgs = {
+  text: Scalars['String'];
+  first?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  block?: InputMaybe<Block_height>;
+  where?: InputMaybe<GraphAccount_filter>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Query_metaArgs = {
+  block?: InputMaybe<Block_height>;
+};
+
 /**
  * All relevant data for arbitrum retryable tickets
  *
@@ -10962,6 +10200,744 @@ export type Subgraph_orderBy =
   | 'currentVersionRelationEntity__id'
   | 'currentVersionRelationEntity__active';
 
+export type Subscription = {
+  graphNetwork?: Maybe<GraphNetwork>;
+  graphNetworks: Array<GraphNetwork>;
+  graphAccount?: Maybe<GraphAccount>;
+  graphAccounts: Array<GraphAccount>;
+  accountMetadata: Array<AccountMetadata>;
+  graphAccountName?: Maybe<GraphAccountName>;
+  graphAccountNames: Array<GraphAccountName>;
+  subgraph?: Maybe<Subgraph>;
+  subgraphs: Array<Subgraph>;
+  subgraphMetadata: Array<SubgraphMetadata>;
+  currentSubgraphDeploymentRelation?: Maybe<CurrentSubgraphDeploymentRelation>;
+  currentSubgraphDeploymentRelations: Array<CurrentSubgraphDeploymentRelation>;
+  network?: Maybe<Network>;
+  networks: Array<Network>;
+  subgraphVersion?: Maybe<SubgraphVersion>;
+  subgraphVersions: Array<SubgraphVersion>;
+  subgraphVersionMetadata: Array<SubgraphVersionMetadata>;
+  subgraphDeployment?: Maybe<SubgraphDeployment>;
+  subgraphDeployments: Array<SubgraphDeployment>;
+  subgraphDeploymentMetadata: Array<SubgraphDeploymentMetadata>;
+  indexer?: Maybe<Indexer>;
+  indexers: Array<Indexer>;
+  allocation?: Maybe<Allocation>;
+  allocations: Array<Allocation>;
+  pool?: Maybe<Pool>;
+  pools: Array<Pool>;
+  delegator?: Maybe<Delegator>;
+  delegators: Array<Delegator>;
+  delegatedStake?: Maybe<DelegatedStake>;
+  delegatedStakes: Array<DelegatedStake>;
+  curator?: Maybe<Curator>;
+  curators: Array<Curator>;
+  signal?: Maybe<Signal>;
+  signals: Array<Signal>;
+  nameSignal?: Maybe<NameSignal>;
+  nameSignals: Array<NameSignal>;
+  nameSignalSubgraphRelation?: Maybe<NameSignalSubgraphRelation>;
+  nameSignalSubgraphRelations: Array<NameSignalSubgraphRelation>;
+  signalSubgraphDeploymentRelation?: Maybe<SignalSubgraphDeploymentRelation>;
+  signalSubgraphDeploymentRelations: Array<SignalSubgraphDeploymentRelation>;
+  dispute?: Maybe<Dispute>;
+  disputes: Array<Dispute>;
+  attestation?: Maybe<Attestation>;
+  attestations: Array<Attestation>;
+  epoch?: Maybe<Epoch>;
+  epoches: Array<Epoch>;
+  nameSignalTransaction?: Maybe<NameSignalTransaction>;
+  nameSignalTransactions: Array<NameSignalTransaction>;
+  signalTransaction?: Maybe<SignalTransaction>;
+  signalTransactions: Array<SignalTransaction>;
+  bridgeWithdrawalTransaction?: Maybe<BridgeWithdrawalTransaction>;
+  bridgeWithdrawalTransactions: Array<BridgeWithdrawalTransaction>;
+  bridgeDepositTransaction?: Maybe<BridgeDepositTransaction>;
+  bridgeDepositTransactions: Array<BridgeDepositTransaction>;
+  retryableTicket?: Maybe<RetryableTicket>;
+  retryableTickets: Array<RetryableTicket>;
+  retryableTicketRedeemAttempt?: Maybe<RetryableTicketRedeemAttempt>;
+  retryableTicketRedeemAttempts: Array<RetryableTicketRedeemAttempt>;
+  tokenManager?: Maybe<TokenManager>;
+  tokenManagers: Array<TokenManager>;
+  authorizedFunction?: Maybe<AuthorizedFunction>;
+  authorizedFunctions: Array<AuthorizedFunction>;
+  tokenLockWallet?: Maybe<TokenLockWallet>;
+  tokenLockWallets: Array<TokenLockWallet>;
+  indexerDeployment?: Maybe<IndexerDeployment>;
+  indexerDeployments: Array<IndexerDeployment>;
+  rewardCutHistoryEntity?: Maybe<RewardCutHistoryEntity>;
+  rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
+  delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
+  delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
+  transaction?: Maybe<Transaction>;
+  transactions: Array<Transaction>;
+  /** Access to subgraph metadata */
+  _meta?: Maybe<_Meta_>;
+};
+
+
+export type SubscriptiongraphNetworkArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiongraphNetworksArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<GraphNetwork_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<GraphNetwork_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiongraphAccountArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiongraphAccountsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<GraphAccount_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<GraphAccount_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionaccountMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<AccountMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<AccountMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiongraphAccountNameArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiongraphAccountNamesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<GraphAccountName_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<GraphAccountName_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsubgraphArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsubgraphsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Subgraph_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Subgraph_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsubgraphMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptioncurrentSubgraphDeploymentRelationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptioncurrentSubgraphDeploymentRelationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<CurrentSubgraphDeploymentRelation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<CurrentSubgraphDeploymentRelation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionnetworkArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionnetworksArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Network_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Network_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsubgraphVersionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsubgraphVersionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphVersion_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphVersion_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsubgraphVersionMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphVersionMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphVersionMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsubgraphDeploymentArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsubgraphDeploymentsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphDeployment_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphDeployment_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsubgraphDeploymentMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphDeploymentMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphDeploymentMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionindexerArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionindexersArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Indexer_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Indexer_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionallocationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionallocationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Allocation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Allocation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionpoolArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionpoolsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Pool_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Pool_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiondelegatorArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiondelegatorsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Delegator_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Delegator_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiondelegatedStakeArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiondelegatedStakesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<DelegatedStake_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<DelegatedStake_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptioncuratorArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptioncuratorsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Curator_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Curator_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsignalArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsignalsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Signal_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Signal_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionnameSignalArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionnameSignalsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameSignal_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<NameSignal_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionnameSignalSubgraphRelationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionnameSignalSubgraphRelationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameSignalSubgraphRelation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<NameSignalSubgraphRelation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsignalSubgraphDeploymentRelationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsignalSubgraphDeploymentRelationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SignalSubgraphDeploymentRelation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SignalSubgraphDeploymentRelation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiondisputeArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiondisputesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Dispute_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Dispute_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionattestationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionattestationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Attestation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Attestation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionepochArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionepochesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Epoch_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Epoch_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionnameSignalTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionnameSignalTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameSignalTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<NameSignalTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsignalTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionsignalTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SignalTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SignalTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionbridgeWithdrawalTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionbridgeWithdrawalTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<BridgeWithdrawalTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<BridgeWithdrawalTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionbridgeDepositTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionbridgeDepositTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<BridgeDepositTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<BridgeDepositTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionretryableTicketArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionretryableTicketsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<RetryableTicket_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<RetryableTicket_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionretryableTicketRedeemAttemptArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionretryableTicketRedeemAttemptsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<RetryableTicketRedeemAttempt_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<RetryableTicketRedeemAttempt_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiontokenManagerArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiontokenManagersArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<TokenManager_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<TokenManager_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionauthorizedFunctionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionauthorizedFunctionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<AuthorizedFunction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<AuthorizedFunction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiontokenLockWalletArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiontokenLockWalletsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<TokenLockWallet_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<TokenLockWallet_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionindexerDeploymentArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionindexerDeploymentsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<IndexerDeployment_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<IndexerDeployment_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionrewardCutHistoryEntityArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionrewardCutHistoryEntitiesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<RewardCutHistoryEntity_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<RewardCutHistoryEntity_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiondelegationPoolHistoryEntityArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiondelegationPoolHistoryEntitiesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<DelegationPoolHistoryEntity_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<DelegationPoolHistoryEntity_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiontransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptiontransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Transaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Transaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscription_metaArgs = {
+  block?: InputMaybe<Block_height>;
+};
+
 /**
  * Token Lock Wallets which hold locked GRT
  *
@@ -11399,1512 +11375,318 @@ export type _SubgraphErrorPolicy_ =
   /** If the subgraph has indexing errors, data will be omitted. The default. */
   | 'deny';
 
-export type WithIndex<TObject> = TObject & Record<string, any>;
-export type ResolversObject<TObject> = WithIndex<TObject>;
-
-export type ResolverTypeWrapper<T> = Promise<T> | T;
-
-
-export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
-
-export type LegacyStitchingResolver<TResult, TParent, TContext, TArgs> = {
-  fragment: string;
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
-
-export type NewStitchingResolver<TResult, TParent, TContext, TArgs> = {
-  selectionSet: string | ((fieldNode: FieldNode) => SelectionSetNode);
-  resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
-export type StitchingResolver<TResult, TParent, TContext, TArgs> = LegacyStitchingResolver<TResult, TParent, TContext, TArgs> | NewStitchingResolver<TResult, TParent, TContext, TArgs>;
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
-  | ResolverFn<TResult, TParent, TContext, TArgs>
-  | ResolverWithResolve<TResult, TParent, TContext, TArgs>
-  | StitchingResolver<TResult, TParent, TContext, TArgs>;
-
-export type ResolverFn<TResult, TParent, TContext, TArgs> = (
-  parent: TParent,
-  args: TArgs,
-  context: TContext,
-  info: GraphQLResolveInfo
-) => Promise<TResult> | TResult;
-
-export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
-  parent: TParent,
-  args: TArgs,
-  context: TContext,
-  info: GraphQLResolveInfo
-) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
-
-export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
-  parent: TParent,
-  args: TArgs,
-  context: TContext,
-  info: GraphQLResolveInfo
-) => TResult | Promise<TResult>;
-
-export interface SubscriptionSubscriberObject<TResult, TKey extends string, TParent, TContext, TArgs> {
-  subscribe: SubscriptionSubscribeFn<{ [key in TKey]: TResult }, TParent, TContext, TArgs>;
-  resolve?: SubscriptionResolveFn<TResult, { [key in TKey]: TResult }, TContext, TArgs>;
-}
-
-export interface SubscriptionResolverObject<TResult, TParent, TContext, TArgs> {
-  subscribe: SubscriptionSubscribeFn<any, TParent, TContext, TArgs>;
-  resolve: SubscriptionResolveFn<TResult, any, TContext, TArgs>;
-}
-
-export type SubscriptionObject<TResult, TKey extends string, TParent, TContext, TArgs> =
-  | SubscriptionSubscriberObject<TResult, TKey, TParent, TContext, TArgs>
-  | SubscriptionResolverObject<TResult, TParent, TContext, TArgs>;
-
-export type SubscriptionResolver<TResult, TKey extends string, TParent = {}, TContext = {}, TArgs = {}> =
-  | ((...args: any[]) => SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>)
-  | SubscriptionObject<TResult, TKey, TParent, TContext, TArgs>;
-
-export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
-  parent: TParent,
-  context: TContext,
-  info: GraphQLResolveInfo
-) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
-
-export type IsTypeOfResolverFn<T = {}, TContext = {}> = (obj: T, context: TContext, info: GraphQLResolveInfo) => boolean | Promise<boolean>;
-
-export type NextResolverFn<T> = () => Promise<T>;
-
-export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs = {}> = (
-  next: NextResolverFn<TResult>,
-  parent: TParent,
-  args: TArgs,
-  context: TContext,
-  info: GraphQLResolveInfo
-) => TResult | Promise<TResult>;
-
-
-
-/** Mapping between all available schema types and the resolvers types */
-export type ResolversTypes = ResolversObject<{
-  Query: ResolverTypeWrapper<{}>;
-  Subscription: ResolverTypeWrapper<{}>;
-  AccountMetadata: ResolverTypeWrapper<AccountMetadata>;
-  AccountMetadata_filter: AccountMetadata_filter;
-  AccountMetadata_orderBy: AccountMetadata_orderBy;
-  Allocation: ResolverTypeWrapper<Allocation>;
-  AllocationStatus: AllocationStatus;
-  Allocation_filter: Allocation_filter;
-  Allocation_orderBy: Allocation_orderBy;
-  Attestation: ResolverTypeWrapper<Attestation>;
-  Attestation_filter: Attestation_filter;
-  Attestation_orderBy: Attestation_orderBy;
-  AuthorizedFunction: ResolverTypeWrapper<AuthorizedFunction>;
-  AuthorizedFunction_filter: AuthorizedFunction_filter;
-  AuthorizedFunction_orderBy: AuthorizedFunction_orderBy;
-  BigDecimal: ResolverTypeWrapper<Scalars['BigDecimal']>;
-  BigInt: ResolverTypeWrapper<Scalars['BigInt']>;
-  BlockChangedFilter: BlockChangedFilter;
-  Block_height: Block_height;
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  BridgeDepositTransaction: ResolverTypeWrapper<BridgeDepositTransaction>;
-  BridgeDepositTransaction_filter: BridgeDepositTransaction_filter;
-  BridgeDepositTransaction_orderBy: BridgeDepositTransaction_orderBy;
-  BridgeWithdrawalTransaction: ResolverTypeWrapper<BridgeWithdrawalTransaction>;
-  BridgeWithdrawalTransaction_filter: BridgeWithdrawalTransaction_filter;
-  BridgeWithdrawalTransaction_orderBy: BridgeWithdrawalTransaction_orderBy;
-  Bytes: ResolverTypeWrapper<Scalars['Bytes']>;
-  Curator: ResolverTypeWrapper<Curator>;
-  Curator_filter: Curator_filter;
-  Curator_orderBy: Curator_orderBy;
-  CurrentSubgraphDeploymentRelation: ResolverTypeWrapper<CurrentSubgraphDeploymentRelation>;
-  CurrentSubgraphDeploymentRelation_filter: CurrentSubgraphDeploymentRelation_filter;
-  CurrentSubgraphDeploymentRelation_orderBy: CurrentSubgraphDeploymentRelation_orderBy;
-  DelegatedStake: ResolverTypeWrapper<DelegatedStake>;
-  DelegatedStake_filter: DelegatedStake_filter;
-  DelegatedStake_orderBy: DelegatedStake_orderBy;
-  DelegationPoolHistoryEntity: ResolverTypeWrapper<DelegationPoolHistoryEntity>;
-  DelegationPoolHistoryEntity_filter: DelegationPoolHistoryEntity_filter;
-  DelegationPoolHistoryEntity_orderBy: DelegationPoolHistoryEntity_orderBy;
-  Delegator: ResolverTypeWrapper<Delegator>;
-  Delegator_filter: Delegator_filter;
-  Delegator_orderBy: Delegator_orderBy;
-  Dispute: ResolverTypeWrapper<Dispute>;
-  DisputeStatus: DisputeStatus;
-  DisputeType: DisputeType;
-  Dispute_filter: Dispute_filter;
-  Dispute_orderBy: Dispute_orderBy;
-  Epoch: ResolverTypeWrapper<Epoch>;
-  Epoch_filter: Epoch_filter;
-  Epoch_orderBy: Epoch_orderBy;
-  Float: ResolverTypeWrapper<Scalars['Float']>;
-  GraphAccount: ResolverTypeWrapper<GraphAccount>;
-  GraphAccountName: ResolverTypeWrapper<GraphAccountName>;
-  GraphAccountName_filter: GraphAccountName_filter;
-  GraphAccountName_orderBy: GraphAccountName_orderBy;
-  GraphAccount_filter: GraphAccount_filter;
-  GraphAccount_orderBy: GraphAccount_orderBy;
-  GraphNetwork: ResolverTypeWrapper<GraphNetwork>;
-  GraphNetwork_filter: GraphNetwork_filter;
-  GraphNetwork_orderBy: GraphNetwork_orderBy;
-  ID: ResolverTypeWrapper<Scalars['ID']>;
-  Indexer: ResolverTypeWrapper<Indexer>;
-  IndexerDeployment: ResolverTypeWrapper<IndexerDeployment>;
-  IndexerDeployment_filter: IndexerDeployment_filter;
-  IndexerDeployment_orderBy: IndexerDeployment_orderBy;
-  Indexer_filter: Indexer_filter;
-  Indexer_orderBy: Indexer_orderBy;
-  Int: ResolverTypeWrapper<Scalars['Int']>;
-  Int8: ResolverTypeWrapper<Scalars['Int8']>;
-  NameSignal: ResolverTypeWrapper<NameSignal>;
-  NameSignalSubgraphRelation: ResolverTypeWrapper<NameSignalSubgraphRelation>;
-  NameSignalSubgraphRelation_filter: NameSignalSubgraphRelation_filter;
-  NameSignalSubgraphRelation_orderBy: NameSignalSubgraphRelation_orderBy;
-  NameSignalTransaction: ResolverTypeWrapper<NameSignalTransaction>;
-  NameSignalTransaction_filter: NameSignalTransaction_filter;
-  NameSignalTransaction_orderBy: NameSignalTransaction_orderBy;
-  NameSignal_filter: NameSignal_filter;
-  NameSignal_orderBy: NameSignal_orderBy;
-  NameSystem: NameSystem;
-  Network: ResolverTypeWrapper<Network>;
-  Network_filter: Network_filter;
-  Network_orderBy: Network_orderBy;
-  OrderDirection: OrderDirection;
-  Pool: ResolverTypeWrapper<Pool>;
-  Pool_filter: Pool_filter;
-  Pool_orderBy: Pool_orderBy;
-  RetryableTicket: ResolverTypeWrapper<RetryableTicket>;
-  RetryableTicketRedeemAttempt: ResolverTypeWrapper<RetryableTicketRedeemAttempt>;
-  RetryableTicketRedeemAttempt_filter: RetryableTicketRedeemAttempt_filter;
-  RetryableTicketRedeemAttempt_orderBy: RetryableTicketRedeemAttempt_orderBy;
-  RetryableTicket_filter: RetryableTicket_filter;
-  RetryableTicket_orderBy: RetryableTicket_orderBy;
-  Revocability: Revocability;
-  RewardCutHistoryEntity: ResolverTypeWrapper<RewardCutHistoryEntity>;
-  RewardCutHistoryEntity_filter: RewardCutHistoryEntity_filter;
-  RewardCutHistoryEntity_orderBy: RewardCutHistoryEntity_orderBy;
-  Signal: ResolverTypeWrapper<Signal>;
-  SignalSubgraphDeploymentRelation: ResolverTypeWrapper<SignalSubgraphDeploymentRelation>;
-  SignalSubgraphDeploymentRelation_filter: SignalSubgraphDeploymentRelation_filter;
-  SignalSubgraphDeploymentRelation_orderBy: SignalSubgraphDeploymentRelation_orderBy;
-  SignalTransaction: ResolverTypeWrapper<SignalTransaction>;
-  SignalTransaction_filter: SignalTransaction_filter;
-  SignalTransaction_orderBy: SignalTransaction_orderBy;
-  Signal_filter: Signal_filter;
-  Signal_orderBy: Signal_orderBy;
-  String: ResolverTypeWrapper<Scalars['String']>;
-  Subgraph: ResolverTypeWrapper<Subgraph>;
-  SubgraphDeployment: ResolverTypeWrapper<SubgraphDeployment>;
-  SubgraphDeploymentMetadata: ResolverTypeWrapper<SubgraphDeploymentMetadata>;
-  SubgraphDeploymentMetadata_filter: SubgraphDeploymentMetadata_filter;
-  SubgraphDeploymentMetadata_orderBy: SubgraphDeploymentMetadata_orderBy;
-  SubgraphDeployment_filter: SubgraphDeployment_filter;
-  SubgraphDeployment_orderBy: SubgraphDeployment_orderBy;
-  SubgraphMetadata: ResolverTypeWrapper<SubgraphMetadata>;
-  SubgraphMetadata_filter: SubgraphMetadata_filter;
-  SubgraphMetadata_orderBy: SubgraphMetadata_orderBy;
-  SubgraphVersion: ResolverTypeWrapper<SubgraphVersion>;
-  SubgraphVersionMetadata: ResolverTypeWrapper<SubgraphVersionMetadata>;
-  SubgraphVersionMetadata_filter: SubgraphVersionMetadata_filter;
-  SubgraphVersionMetadata_orderBy: SubgraphVersionMetadata_orderBy;
-  SubgraphVersion_filter: SubgraphVersion_filter;
-  SubgraphVersion_orderBy: SubgraphVersion_orderBy;
-  Subgraph_filter: Subgraph_filter;
-  Subgraph_orderBy: Subgraph_orderBy;
-  TokenLockWallet: ResolverTypeWrapper<TokenLockWallet>;
-  TokenLockWallet_filter: TokenLockWallet_filter;
-  TokenLockWallet_orderBy: TokenLockWallet_orderBy;
-  TokenManager: ResolverTypeWrapper<TokenManager>;
-  TokenManager_filter: TokenManager_filter;
-  TokenManager_orderBy: TokenManager_orderBy;
-  Transaction: ResolversTypes['BridgeDepositTransaction'] | ResolversTypes['BridgeWithdrawalTransaction'] | ResolversTypes['NameSignalTransaction'] | ResolversTypes['SignalTransaction'];
-  TransactionType: TransactionType;
-  Transaction_filter: Transaction_filter;
-  Transaction_orderBy: Transaction_orderBy;
-  _Block_: ResolverTypeWrapper<_Block_>;
-  _Meta_: ResolverTypeWrapper<_Meta_>;
-  _SubgraphErrorPolicy_: _SubgraphErrorPolicy_;
-}>;
-
-/** Mapping between all available schema types and the resolvers parents */
-export type ResolversParentTypes = ResolversObject<{
-  Query: {};
-  Subscription: {};
-  AccountMetadata: AccountMetadata;
-  AccountMetadata_filter: AccountMetadata_filter;
-  Allocation: Allocation;
-  Allocation_filter: Allocation_filter;
-  Attestation: Attestation;
-  Attestation_filter: Attestation_filter;
-  AuthorizedFunction: AuthorizedFunction;
-  AuthorizedFunction_filter: AuthorizedFunction_filter;
-  BigDecimal: Scalars['BigDecimal'];
-  BigInt: Scalars['BigInt'];
-  BlockChangedFilter: BlockChangedFilter;
-  Block_height: Block_height;
-  Boolean: Scalars['Boolean'];
-  BridgeDepositTransaction: BridgeDepositTransaction;
-  BridgeDepositTransaction_filter: BridgeDepositTransaction_filter;
-  BridgeWithdrawalTransaction: BridgeWithdrawalTransaction;
-  BridgeWithdrawalTransaction_filter: BridgeWithdrawalTransaction_filter;
-  Bytes: Scalars['Bytes'];
-  Curator: Curator;
-  Curator_filter: Curator_filter;
-  CurrentSubgraphDeploymentRelation: CurrentSubgraphDeploymentRelation;
-  CurrentSubgraphDeploymentRelation_filter: CurrentSubgraphDeploymentRelation_filter;
-  DelegatedStake: DelegatedStake;
-  DelegatedStake_filter: DelegatedStake_filter;
-  DelegationPoolHistoryEntity: DelegationPoolHistoryEntity;
-  DelegationPoolHistoryEntity_filter: DelegationPoolHistoryEntity_filter;
-  Delegator: Delegator;
-  Delegator_filter: Delegator_filter;
-  Dispute: Dispute;
-  Dispute_filter: Dispute_filter;
-  Epoch: Epoch;
-  Epoch_filter: Epoch_filter;
-  Float: Scalars['Float'];
-  GraphAccount: GraphAccount;
-  GraphAccountName: GraphAccountName;
-  GraphAccountName_filter: GraphAccountName_filter;
-  GraphAccount_filter: GraphAccount_filter;
-  GraphNetwork: GraphNetwork;
-  GraphNetwork_filter: GraphNetwork_filter;
-  ID: Scalars['ID'];
-  Indexer: Indexer;
-  IndexerDeployment: IndexerDeployment;
-  IndexerDeployment_filter: IndexerDeployment_filter;
-  Indexer_filter: Indexer_filter;
-  Int: Scalars['Int'];
-  Int8: Scalars['Int8'];
-  NameSignal: NameSignal;
-  NameSignalSubgraphRelation: NameSignalSubgraphRelation;
-  NameSignalSubgraphRelation_filter: NameSignalSubgraphRelation_filter;
-  NameSignalTransaction: NameSignalTransaction;
-  NameSignalTransaction_filter: NameSignalTransaction_filter;
-  NameSignal_filter: NameSignal_filter;
-  Network: Network;
-  Network_filter: Network_filter;
-  Pool: Pool;
-  Pool_filter: Pool_filter;
-  RetryableTicket: RetryableTicket;
-  RetryableTicketRedeemAttempt: RetryableTicketRedeemAttempt;
-  RetryableTicketRedeemAttempt_filter: RetryableTicketRedeemAttempt_filter;
-  RetryableTicket_filter: RetryableTicket_filter;
-  RewardCutHistoryEntity: RewardCutHistoryEntity;
-  RewardCutHistoryEntity_filter: RewardCutHistoryEntity_filter;
-  Signal: Signal;
-  SignalSubgraphDeploymentRelation: SignalSubgraphDeploymentRelation;
-  SignalSubgraphDeploymentRelation_filter: SignalSubgraphDeploymentRelation_filter;
-  SignalTransaction: SignalTransaction;
-  SignalTransaction_filter: SignalTransaction_filter;
-  Signal_filter: Signal_filter;
-  String: Scalars['String'];
-  Subgraph: Subgraph;
-  SubgraphDeployment: SubgraphDeployment;
-  SubgraphDeploymentMetadata: SubgraphDeploymentMetadata;
-  SubgraphDeploymentMetadata_filter: SubgraphDeploymentMetadata_filter;
-  SubgraphDeployment_filter: SubgraphDeployment_filter;
-  SubgraphMetadata: SubgraphMetadata;
-  SubgraphMetadata_filter: SubgraphMetadata_filter;
-  SubgraphVersion: SubgraphVersion;
-  SubgraphVersionMetadata: SubgraphVersionMetadata;
-  SubgraphVersionMetadata_filter: SubgraphVersionMetadata_filter;
-  SubgraphVersion_filter: SubgraphVersion_filter;
-  Subgraph_filter: Subgraph_filter;
-  TokenLockWallet: TokenLockWallet;
-  TokenLockWallet_filter: TokenLockWallet_filter;
-  TokenManager: TokenManager;
-  TokenManager_filter: TokenManager_filter;
-  Transaction: ResolversParentTypes['BridgeDepositTransaction'] | ResolversParentTypes['BridgeWithdrawalTransaction'] | ResolversParentTypes['NameSignalTransaction'] | ResolversParentTypes['SignalTransaction'];
-  Transaction_filter: Transaction_filter;
-  _Block_: _Block_;
-  _Meta_: _Meta_;
-}>;
-
-export type entityDirectiveArgs = { };
-
-export type entityDirectiveResolver<Result, Parent, ContextType = MeshContext, Args = entityDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type subgraphIdDirectiveArgs = {
-  id: Scalars['String'];
-};
-
-export type subgraphIdDirectiveResolver<Result, Parent, ContextType = MeshContext, Args = subgraphIdDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type derivedFromDirectiveArgs = {
-  field: Scalars['String'];
-};
-
-export type derivedFromDirectiveResolver<Result, Parent, ContextType = MeshContext, Args = derivedFromDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type QueryResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  graphNetwork?: Resolver<Maybe<ResolversTypes['GraphNetwork']>, ParentType, ContextType, RequireFields<QuerygraphNetworkArgs, 'id' | 'subgraphError'>>;
-  graphNetworks?: Resolver<Array<ResolversTypes['GraphNetwork']>, ParentType, ContextType, RequireFields<QuerygraphNetworksArgs, 'skip' | 'first' | 'subgraphError'>>;
-  graphAccount?: Resolver<Maybe<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<QuerygraphAccountArgs, 'id' | 'subgraphError'>>;
-  graphAccounts?: Resolver<Array<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<QuerygraphAccountsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  accountMetadata?: Resolver<Array<ResolversTypes['AccountMetadata']>, ParentType, ContextType, RequireFields<QueryaccountMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  graphAccountName?: Resolver<Maybe<ResolversTypes['GraphAccountName']>, ParentType, ContextType, RequireFields<QuerygraphAccountNameArgs, 'id' | 'subgraphError'>>;
-  graphAccountNames?: Resolver<Array<ResolversTypes['GraphAccountName']>, ParentType, ContextType, RequireFields<QuerygraphAccountNamesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraph?: Resolver<Maybe<ResolversTypes['Subgraph']>, ParentType, ContextType, RequireFields<QuerysubgraphArgs, 'id' | 'subgraphError'>>;
-  subgraphs?: Resolver<Array<ResolversTypes['Subgraph']>, ParentType, ContextType, RequireFields<QuerysubgraphsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphMetadata?: Resolver<Array<ResolversTypes['SubgraphMetadata']>, ParentType, ContextType, RequireFields<QuerysubgraphMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  currentSubgraphDeploymentRelation?: Resolver<Maybe<ResolversTypes['CurrentSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<QuerycurrentSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
-  currentSubgraphDeploymentRelations?: Resolver<Array<ResolversTypes['CurrentSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<QuerycurrentSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  network?: Resolver<Maybe<ResolversTypes['Network']>, ParentType, ContextType, RequireFields<QuerynetworkArgs, 'id' | 'subgraphError'>>;
-  networks?: Resolver<Array<ResolversTypes['Network']>, ParentType, ContextType, RequireFields<QuerynetworksArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphVersion?: Resolver<Maybe<ResolversTypes['SubgraphVersion']>, ParentType, ContextType, RequireFields<QuerysubgraphVersionArgs, 'id' | 'subgraphError'>>;
-  subgraphVersions?: Resolver<Array<ResolversTypes['SubgraphVersion']>, ParentType, ContextType, RequireFields<QuerysubgraphVersionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphVersionMetadata?: Resolver<Array<ResolversTypes['SubgraphVersionMetadata']>, ParentType, ContextType, RequireFields<QuerysubgraphVersionMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphDeployment?: Resolver<Maybe<ResolversTypes['SubgraphDeployment']>, ParentType, ContextType, RequireFields<QuerysubgraphDeploymentArgs, 'id' | 'subgraphError'>>;
-  subgraphDeployments?: Resolver<Array<ResolversTypes['SubgraphDeployment']>, ParentType, ContextType, RequireFields<QuerysubgraphDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphDeploymentMetadata?: Resolver<Array<ResolversTypes['SubgraphDeploymentMetadata']>, ParentType, ContextType, RequireFields<QuerysubgraphDeploymentMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  indexer?: Resolver<Maybe<ResolversTypes['Indexer']>, ParentType, ContextType, RequireFields<QueryindexerArgs, 'id' | 'subgraphError'>>;
-  indexers?: Resolver<Array<ResolversTypes['Indexer']>, ParentType, ContextType, RequireFields<QueryindexersArgs, 'skip' | 'first' | 'subgraphError'>>;
-  allocation?: Resolver<Maybe<ResolversTypes['Allocation']>, ParentType, ContextType, RequireFields<QueryallocationArgs, 'id' | 'subgraphError'>>;
-  allocations?: Resolver<Array<ResolversTypes['Allocation']>, ParentType, ContextType, RequireFields<QueryallocationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  pool?: Resolver<Maybe<ResolversTypes['Pool']>, ParentType, ContextType, RequireFields<QuerypoolArgs, 'id' | 'subgraphError'>>;
-  pools?: Resolver<Array<ResolversTypes['Pool']>, ParentType, ContextType, RequireFields<QuerypoolsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  delegator?: Resolver<Maybe<ResolversTypes['Delegator']>, ParentType, ContextType, RequireFields<QuerydelegatorArgs, 'id' | 'subgraphError'>>;
-  delegators?: Resolver<Array<ResolversTypes['Delegator']>, ParentType, ContextType, RequireFields<QuerydelegatorsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  delegatedStake?: Resolver<Maybe<ResolversTypes['DelegatedStake']>, ParentType, ContextType, RequireFields<QuerydelegatedStakeArgs, 'id' | 'subgraphError'>>;
-  delegatedStakes?: Resolver<Array<ResolversTypes['DelegatedStake']>, ParentType, ContextType, RequireFields<QuerydelegatedStakesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  curator?: Resolver<Maybe<ResolversTypes['Curator']>, ParentType, ContextType, RequireFields<QuerycuratorArgs, 'id' | 'subgraphError'>>;
-  curators?: Resolver<Array<ResolversTypes['Curator']>, ParentType, ContextType, RequireFields<QuerycuratorsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  signal?: Resolver<Maybe<ResolversTypes['Signal']>, ParentType, ContextType, RequireFields<QuerysignalArgs, 'id' | 'subgraphError'>>;
-  signals?: Resolver<Array<ResolversTypes['Signal']>, ParentType, ContextType, RequireFields<QuerysignalsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  nameSignal?: Resolver<Maybe<ResolversTypes['NameSignal']>, ParentType, ContextType, RequireFields<QuerynameSignalArgs, 'id' | 'subgraphError'>>;
-  nameSignals?: Resolver<Array<ResolversTypes['NameSignal']>, ParentType, ContextType, RequireFields<QuerynameSignalsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  nameSignalSubgraphRelation?: Resolver<Maybe<ResolversTypes['NameSignalSubgraphRelation']>, ParentType, ContextType, RequireFields<QuerynameSignalSubgraphRelationArgs, 'id' | 'subgraphError'>>;
-  nameSignalSubgraphRelations?: Resolver<Array<ResolversTypes['NameSignalSubgraphRelation']>, ParentType, ContextType, RequireFields<QuerynameSignalSubgraphRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  signalSubgraphDeploymentRelation?: Resolver<Maybe<ResolversTypes['SignalSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<QuerysignalSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
-  signalSubgraphDeploymentRelations?: Resolver<Array<ResolversTypes['SignalSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<QuerysignalSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  dispute?: Resolver<Maybe<ResolversTypes['Dispute']>, ParentType, ContextType, RequireFields<QuerydisputeArgs, 'id' | 'subgraphError'>>;
-  disputes?: Resolver<Array<ResolversTypes['Dispute']>, ParentType, ContextType, RequireFields<QuerydisputesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  attestation?: Resolver<Maybe<ResolversTypes['Attestation']>, ParentType, ContextType, RequireFields<QueryattestationArgs, 'id' | 'subgraphError'>>;
-  attestations?: Resolver<Array<ResolversTypes['Attestation']>, ParentType, ContextType, RequireFields<QueryattestationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  epoch?: Resolver<Maybe<ResolversTypes['Epoch']>, ParentType, ContextType, RequireFields<QueryepochArgs, 'id' | 'subgraphError'>>;
-  epoches?: Resolver<Array<ResolversTypes['Epoch']>, ParentType, ContextType, RequireFields<QueryepochesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  nameSignalTransaction?: Resolver<Maybe<ResolversTypes['NameSignalTransaction']>, ParentType, ContextType, RequireFields<QuerynameSignalTransactionArgs, 'id' | 'subgraphError'>>;
-  nameSignalTransactions?: Resolver<Array<ResolversTypes['NameSignalTransaction']>, ParentType, ContextType, RequireFields<QuerynameSignalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  signalTransaction?: Resolver<Maybe<ResolversTypes['SignalTransaction']>, ParentType, ContextType, RequireFields<QuerysignalTransactionArgs, 'id' | 'subgraphError'>>;
-  signalTransactions?: Resolver<Array<ResolversTypes['SignalTransaction']>, ParentType, ContextType, RequireFields<QuerysignalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  bridgeWithdrawalTransaction?: Resolver<Maybe<ResolversTypes['BridgeWithdrawalTransaction']>, ParentType, ContextType, RequireFields<QuerybridgeWithdrawalTransactionArgs, 'id' | 'subgraphError'>>;
-  bridgeWithdrawalTransactions?: Resolver<Array<ResolversTypes['BridgeWithdrawalTransaction']>, ParentType, ContextType, RequireFields<QuerybridgeWithdrawalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  bridgeDepositTransaction?: Resolver<Maybe<ResolversTypes['BridgeDepositTransaction']>, ParentType, ContextType, RequireFields<QuerybridgeDepositTransactionArgs, 'id' | 'subgraphError'>>;
-  bridgeDepositTransactions?: Resolver<Array<ResolversTypes['BridgeDepositTransaction']>, ParentType, ContextType, RequireFields<QuerybridgeDepositTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  retryableTicket?: Resolver<Maybe<ResolversTypes['RetryableTicket']>, ParentType, ContextType, RequireFields<QueryretryableTicketArgs, 'id' | 'subgraphError'>>;
-  retryableTickets?: Resolver<Array<ResolversTypes['RetryableTicket']>, ParentType, ContextType, RequireFields<QueryretryableTicketsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  retryableTicketRedeemAttempt?: Resolver<Maybe<ResolversTypes['RetryableTicketRedeemAttempt']>, ParentType, ContextType, RequireFields<QueryretryableTicketRedeemAttemptArgs, 'id' | 'subgraphError'>>;
-  retryableTicketRedeemAttempts?: Resolver<Array<ResolversTypes['RetryableTicketRedeemAttempt']>, ParentType, ContextType, RequireFields<QueryretryableTicketRedeemAttemptsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  tokenManager?: Resolver<Maybe<ResolversTypes['TokenManager']>, ParentType, ContextType, RequireFields<QuerytokenManagerArgs, 'id' | 'subgraphError'>>;
-  tokenManagers?: Resolver<Array<ResolversTypes['TokenManager']>, ParentType, ContextType, RequireFields<QuerytokenManagersArgs, 'skip' | 'first' | 'subgraphError'>>;
-  authorizedFunction?: Resolver<Maybe<ResolversTypes['AuthorizedFunction']>, ParentType, ContextType, RequireFields<QueryauthorizedFunctionArgs, 'id' | 'subgraphError'>>;
-  authorizedFunctions?: Resolver<Array<ResolversTypes['AuthorizedFunction']>, ParentType, ContextType, RequireFields<QueryauthorizedFunctionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  tokenLockWallet?: Resolver<Maybe<ResolversTypes['TokenLockWallet']>, ParentType, ContextType, RequireFields<QuerytokenLockWalletArgs, 'id' | 'subgraphError'>>;
-  tokenLockWallets?: Resolver<Array<ResolversTypes['TokenLockWallet']>, ParentType, ContextType, RequireFields<QuerytokenLockWalletsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  indexerDeployment?: Resolver<Maybe<ResolversTypes['IndexerDeployment']>, ParentType, ContextType, RequireFields<QueryindexerDeploymentArgs, 'id' | 'subgraphError'>>;
-  indexerDeployments?: Resolver<Array<ResolversTypes['IndexerDeployment']>, ParentType, ContextType, RequireFields<QueryindexerDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  rewardCutHistoryEntity?: Resolver<Maybe<ResolversTypes['RewardCutHistoryEntity']>, ParentType, ContextType, RequireFields<QueryrewardCutHistoryEntityArgs, 'id' | 'subgraphError'>>;
-  rewardCutHistoryEntities?: Resolver<Array<ResolversTypes['RewardCutHistoryEntity']>, ParentType, ContextType, RequireFields<QueryrewardCutHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  delegationPoolHistoryEntity?: Resolver<Maybe<ResolversTypes['DelegationPoolHistoryEntity']>, ParentType, ContextType, RequireFields<QuerydelegationPoolHistoryEntityArgs, 'id' | 'subgraphError'>>;
-  delegationPoolHistoryEntities?: Resolver<Array<ResolversTypes['DelegationPoolHistoryEntity']>, ParentType, ContextType, RequireFields<QuerydelegationPoolHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  transaction?: Resolver<Maybe<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<QuerytransactionArgs, 'id' | 'subgraphError'>>;
-  transactions?: Resolver<Array<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<QuerytransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  curatorSearch?: Resolver<Array<ResolversTypes['Curator']>, ParentType, ContextType, RequireFields<QuerycuratorSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
-  delegatorSearch?: Resolver<Array<ResolversTypes['Delegator']>, ParentType, ContextType, RequireFields<QuerydelegatorSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
-  indexerSearch?: Resolver<Array<ResolversTypes['Indexer']>, ParentType, ContextType, RequireFields<QueryindexerSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
-  accountSearch?: Resolver<Array<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<QueryaccountSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
-  _meta?: Resolver<Maybe<ResolversTypes['_Meta_']>, ParentType, ContextType, Partial<Query_metaArgs>>;
-}>;
-
-export type SubscriptionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
-  graphNetwork?: SubscriptionResolver<Maybe<ResolversTypes['GraphNetwork']>, "graphNetwork", ParentType, ContextType, RequireFields<SubscriptiongraphNetworkArgs, 'id' | 'subgraphError'>>;
-  graphNetworks?: SubscriptionResolver<Array<ResolversTypes['GraphNetwork']>, "graphNetworks", ParentType, ContextType, RequireFields<SubscriptiongraphNetworksArgs, 'skip' | 'first' | 'subgraphError'>>;
-  graphAccount?: SubscriptionResolver<Maybe<ResolversTypes['GraphAccount']>, "graphAccount", ParentType, ContextType, RequireFields<SubscriptiongraphAccountArgs, 'id' | 'subgraphError'>>;
-  graphAccounts?: SubscriptionResolver<Array<ResolversTypes['GraphAccount']>, "graphAccounts", ParentType, ContextType, RequireFields<SubscriptiongraphAccountsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  accountMetadata?: SubscriptionResolver<Array<ResolversTypes['AccountMetadata']>, "accountMetadata", ParentType, ContextType, RequireFields<SubscriptionaccountMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  graphAccountName?: SubscriptionResolver<Maybe<ResolversTypes['GraphAccountName']>, "graphAccountName", ParentType, ContextType, RequireFields<SubscriptiongraphAccountNameArgs, 'id' | 'subgraphError'>>;
-  graphAccountNames?: SubscriptionResolver<Array<ResolversTypes['GraphAccountName']>, "graphAccountNames", ParentType, ContextType, RequireFields<SubscriptiongraphAccountNamesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraph?: SubscriptionResolver<Maybe<ResolversTypes['Subgraph']>, "subgraph", ParentType, ContextType, RequireFields<SubscriptionsubgraphArgs, 'id' | 'subgraphError'>>;
-  subgraphs?: SubscriptionResolver<Array<ResolversTypes['Subgraph']>, "subgraphs", ParentType, ContextType, RequireFields<SubscriptionsubgraphsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphMetadata?: SubscriptionResolver<Array<ResolversTypes['SubgraphMetadata']>, "subgraphMetadata", ParentType, ContextType, RequireFields<SubscriptionsubgraphMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  currentSubgraphDeploymentRelation?: SubscriptionResolver<Maybe<ResolversTypes['CurrentSubgraphDeploymentRelation']>, "currentSubgraphDeploymentRelation", ParentType, ContextType, RequireFields<SubscriptioncurrentSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
-  currentSubgraphDeploymentRelations?: SubscriptionResolver<Array<ResolversTypes['CurrentSubgraphDeploymentRelation']>, "currentSubgraphDeploymentRelations", ParentType, ContextType, RequireFields<SubscriptioncurrentSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  network?: SubscriptionResolver<Maybe<ResolversTypes['Network']>, "network", ParentType, ContextType, RequireFields<SubscriptionnetworkArgs, 'id' | 'subgraphError'>>;
-  networks?: SubscriptionResolver<Array<ResolversTypes['Network']>, "networks", ParentType, ContextType, RequireFields<SubscriptionnetworksArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphVersion?: SubscriptionResolver<Maybe<ResolversTypes['SubgraphVersion']>, "subgraphVersion", ParentType, ContextType, RequireFields<SubscriptionsubgraphVersionArgs, 'id' | 'subgraphError'>>;
-  subgraphVersions?: SubscriptionResolver<Array<ResolversTypes['SubgraphVersion']>, "subgraphVersions", ParentType, ContextType, RequireFields<SubscriptionsubgraphVersionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphVersionMetadata?: SubscriptionResolver<Array<ResolversTypes['SubgraphVersionMetadata']>, "subgraphVersionMetadata", ParentType, ContextType, RequireFields<SubscriptionsubgraphVersionMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphDeployment?: SubscriptionResolver<Maybe<ResolversTypes['SubgraphDeployment']>, "subgraphDeployment", ParentType, ContextType, RequireFields<SubscriptionsubgraphDeploymentArgs, 'id' | 'subgraphError'>>;
-  subgraphDeployments?: SubscriptionResolver<Array<ResolversTypes['SubgraphDeployment']>, "subgraphDeployments", ParentType, ContextType, RequireFields<SubscriptionsubgraphDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphDeploymentMetadata?: SubscriptionResolver<Array<ResolversTypes['SubgraphDeploymentMetadata']>, "subgraphDeploymentMetadata", ParentType, ContextType, RequireFields<SubscriptionsubgraphDeploymentMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  indexer?: SubscriptionResolver<Maybe<ResolversTypes['Indexer']>, "indexer", ParentType, ContextType, RequireFields<SubscriptionindexerArgs, 'id' | 'subgraphError'>>;
-  indexers?: SubscriptionResolver<Array<ResolversTypes['Indexer']>, "indexers", ParentType, ContextType, RequireFields<SubscriptionindexersArgs, 'skip' | 'first' | 'subgraphError'>>;
-  allocation?: SubscriptionResolver<Maybe<ResolversTypes['Allocation']>, "allocation", ParentType, ContextType, RequireFields<SubscriptionallocationArgs, 'id' | 'subgraphError'>>;
-  allocations?: SubscriptionResolver<Array<ResolversTypes['Allocation']>, "allocations", ParentType, ContextType, RequireFields<SubscriptionallocationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  pool?: SubscriptionResolver<Maybe<ResolversTypes['Pool']>, "pool", ParentType, ContextType, RequireFields<SubscriptionpoolArgs, 'id' | 'subgraphError'>>;
-  pools?: SubscriptionResolver<Array<ResolversTypes['Pool']>, "pools", ParentType, ContextType, RequireFields<SubscriptionpoolsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  delegator?: SubscriptionResolver<Maybe<ResolversTypes['Delegator']>, "delegator", ParentType, ContextType, RequireFields<SubscriptiondelegatorArgs, 'id' | 'subgraphError'>>;
-  delegators?: SubscriptionResolver<Array<ResolversTypes['Delegator']>, "delegators", ParentType, ContextType, RequireFields<SubscriptiondelegatorsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  delegatedStake?: SubscriptionResolver<Maybe<ResolversTypes['DelegatedStake']>, "delegatedStake", ParentType, ContextType, RequireFields<SubscriptiondelegatedStakeArgs, 'id' | 'subgraphError'>>;
-  delegatedStakes?: SubscriptionResolver<Array<ResolversTypes['DelegatedStake']>, "delegatedStakes", ParentType, ContextType, RequireFields<SubscriptiondelegatedStakesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  curator?: SubscriptionResolver<Maybe<ResolversTypes['Curator']>, "curator", ParentType, ContextType, RequireFields<SubscriptioncuratorArgs, 'id' | 'subgraphError'>>;
-  curators?: SubscriptionResolver<Array<ResolversTypes['Curator']>, "curators", ParentType, ContextType, RequireFields<SubscriptioncuratorsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  signal?: SubscriptionResolver<Maybe<ResolversTypes['Signal']>, "signal", ParentType, ContextType, RequireFields<SubscriptionsignalArgs, 'id' | 'subgraphError'>>;
-  signals?: SubscriptionResolver<Array<ResolversTypes['Signal']>, "signals", ParentType, ContextType, RequireFields<SubscriptionsignalsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  nameSignal?: SubscriptionResolver<Maybe<ResolversTypes['NameSignal']>, "nameSignal", ParentType, ContextType, RequireFields<SubscriptionnameSignalArgs, 'id' | 'subgraphError'>>;
-  nameSignals?: SubscriptionResolver<Array<ResolversTypes['NameSignal']>, "nameSignals", ParentType, ContextType, RequireFields<SubscriptionnameSignalsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  nameSignalSubgraphRelation?: SubscriptionResolver<Maybe<ResolversTypes['NameSignalSubgraphRelation']>, "nameSignalSubgraphRelation", ParentType, ContextType, RequireFields<SubscriptionnameSignalSubgraphRelationArgs, 'id' | 'subgraphError'>>;
-  nameSignalSubgraphRelations?: SubscriptionResolver<Array<ResolversTypes['NameSignalSubgraphRelation']>, "nameSignalSubgraphRelations", ParentType, ContextType, RequireFields<SubscriptionnameSignalSubgraphRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  signalSubgraphDeploymentRelation?: SubscriptionResolver<Maybe<ResolversTypes['SignalSubgraphDeploymentRelation']>, "signalSubgraphDeploymentRelation", ParentType, ContextType, RequireFields<SubscriptionsignalSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
-  signalSubgraphDeploymentRelations?: SubscriptionResolver<Array<ResolversTypes['SignalSubgraphDeploymentRelation']>, "signalSubgraphDeploymentRelations", ParentType, ContextType, RequireFields<SubscriptionsignalSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  dispute?: SubscriptionResolver<Maybe<ResolversTypes['Dispute']>, "dispute", ParentType, ContextType, RequireFields<SubscriptiondisputeArgs, 'id' | 'subgraphError'>>;
-  disputes?: SubscriptionResolver<Array<ResolversTypes['Dispute']>, "disputes", ParentType, ContextType, RequireFields<SubscriptiondisputesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  attestation?: SubscriptionResolver<Maybe<ResolversTypes['Attestation']>, "attestation", ParentType, ContextType, RequireFields<SubscriptionattestationArgs, 'id' | 'subgraphError'>>;
-  attestations?: SubscriptionResolver<Array<ResolversTypes['Attestation']>, "attestations", ParentType, ContextType, RequireFields<SubscriptionattestationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  epoch?: SubscriptionResolver<Maybe<ResolversTypes['Epoch']>, "epoch", ParentType, ContextType, RequireFields<SubscriptionepochArgs, 'id' | 'subgraphError'>>;
-  epoches?: SubscriptionResolver<Array<ResolversTypes['Epoch']>, "epoches", ParentType, ContextType, RequireFields<SubscriptionepochesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  nameSignalTransaction?: SubscriptionResolver<Maybe<ResolversTypes['NameSignalTransaction']>, "nameSignalTransaction", ParentType, ContextType, RequireFields<SubscriptionnameSignalTransactionArgs, 'id' | 'subgraphError'>>;
-  nameSignalTransactions?: SubscriptionResolver<Array<ResolversTypes['NameSignalTransaction']>, "nameSignalTransactions", ParentType, ContextType, RequireFields<SubscriptionnameSignalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  signalTransaction?: SubscriptionResolver<Maybe<ResolversTypes['SignalTransaction']>, "signalTransaction", ParentType, ContextType, RequireFields<SubscriptionsignalTransactionArgs, 'id' | 'subgraphError'>>;
-  signalTransactions?: SubscriptionResolver<Array<ResolversTypes['SignalTransaction']>, "signalTransactions", ParentType, ContextType, RequireFields<SubscriptionsignalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  bridgeWithdrawalTransaction?: SubscriptionResolver<Maybe<ResolversTypes['BridgeWithdrawalTransaction']>, "bridgeWithdrawalTransaction", ParentType, ContextType, RequireFields<SubscriptionbridgeWithdrawalTransactionArgs, 'id' | 'subgraphError'>>;
-  bridgeWithdrawalTransactions?: SubscriptionResolver<Array<ResolversTypes['BridgeWithdrawalTransaction']>, "bridgeWithdrawalTransactions", ParentType, ContextType, RequireFields<SubscriptionbridgeWithdrawalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  bridgeDepositTransaction?: SubscriptionResolver<Maybe<ResolversTypes['BridgeDepositTransaction']>, "bridgeDepositTransaction", ParentType, ContextType, RequireFields<SubscriptionbridgeDepositTransactionArgs, 'id' | 'subgraphError'>>;
-  bridgeDepositTransactions?: SubscriptionResolver<Array<ResolversTypes['BridgeDepositTransaction']>, "bridgeDepositTransactions", ParentType, ContextType, RequireFields<SubscriptionbridgeDepositTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  retryableTicket?: SubscriptionResolver<Maybe<ResolversTypes['RetryableTicket']>, "retryableTicket", ParentType, ContextType, RequireFields<SubscriptionretryableTicketArgs, 'id' | 'subgraphError'>>;
-  retryableTickets?: SubscriptionResolver<Array<ResolversTypes['RetryableTicket']>, "retryableTickets", ParentType, ContextType, RequireFields<SubscriptionretryableTicketsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  retryableTicketRedeemAttempt?: SubscriptionResolver<Maybe<ResolversTypes['RetryableTicketRedeemAttempt']>, "retryableTicketRedeemAttempt", ParentType, ContextType, RequireFields<SubscriptionretryableTicketRedeemAttemptArgs, 'id' | 'subgraphError'>>;
-  retryableTicketRedeemAttempts?: SubscriptionResolver<Array<ResolversTypes['RetryableTicketRedeemAttempt']>, "retryableTicketRedeemAttempts", ParentType, ContextType, RequireFields<SubscriptionretryableTicketRedeemAttemptsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  tokenManager?: SubscriptionResolver<Maybe<ResolversTypes['TokenManager']>, "tokenManager", ParentType, ContextType, RequireFields<SubscriptiontokenManagerArgs, 'id' | 'subgraphError'>>;
-  tokenManagers?: SubscriptionResolver<Array<ResolversTypes['TokenManager']>, "tokenManagers", ParentType, ContextType, RequireFields<SubscriptiontokenManagersArgs, 'skip' | 'first' | 'subgraphError'>>;
-  authorizedFunction?: SubscriptionResolver<Maybe<ResolversTypes['AuthorizedFunction']>, "authorizedFunction", ParentType, ContextType, RequireFields<SubscriptionauthorizedFunctionArgs, 'id' | 'subgraphError'>>;
-  authorizedFunctions?: SubscriptionResolver<Array<ResolversTypes['AuthorizedFunction']>, "authorizedFunctions", ParentType, ContextType, RequireFields<SubscriptionauthorizedFunctionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  tokenLockWallet?: SubscriptionResolver<Maybe<ResolversTypes['TokenLockWallet']>, "tokenLockWallet", ParentType, ContextType, RequireFields<SubscriptiontokenLockWalletArgs, 'id' | 'subgraphError'>>;
-  tokenLockWallets?: SubscriptionResolver<Array<ResolversTypes['TokenLockWallet']>, "tokenLockWallets", ParentType, ContextType, RequireFields<SubscriptiontokenLockWalletsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  indexerDeployment?: SubscriptionResolver<Maybe<ResolversTypes['IndexerDeployment']>, "indexerDeployment", ParentType, ContextType, RequireFields<SubscriptionindexerDeploymentArgs, 'id' | 'subgraphError'>>;
-  indexerDeployments?: SubscriptionResolver<Array<ResolversTypes['IndexerDeployment']>, "indexerDeployments", ParentType, ContextType, RequireFields<SubscriptionindexerDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  rewardCutHistoryEntity?: SubscriptionResolver<Maybe<ResolversTypes['RewardCutHistoryEntity']>, "rewardCutHistoryEntity", ParentType, ContextType, RequireFields<SubscriptionrewardCutHistoryEntityArgs, 'id' | 'subgraphError'>>;
-  rewardCutHistoryEntities?: SubscriptionResolver<Array<ResolversTypes['RewardCutHistoryEntity']>, "rewardCutHistoryEntities", ParentType, ContextType, RequireFields<SubscriptionrewardCutHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  delegationPoolHistoryEntity?: SubscriptionResolver<Maybe<ResolversTypes['DelegationPoolHistoryEntity']>, "delegationPoolHistoryEntity", ParentType, ContextType, RequireFields<SubscriptiondelegationPoolHistoryEntityArgs, 'id' | 'subgraphError'>>;
-  delegationPoolHistoryEntities?: SubscriptionResolver<Array<ResolversTypes['DelegationPoolHistoryEntity']>, "delegationPoolHistoryEntities", ParentType, ContextType, RequireFields<SubscriptiondelegationPoolHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  transaction?: SubscriptionResolver<Maybe<ResolversTypes['Transaction']>, "transaction", ParentType, ContextType, RequireFields<SubscriptiontransactionArgs, 'id' | 'subgraphError'>>;
-  transactions?: SubscriptionResolver<Array<ResolversTypes['Transaction']>, "transactions", ParentType, ContextType, RequireFields<SubscriptiontransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  _meta?: SubscriptionResolver<Maybe<ResolversTypes['_Meta_']>, "_meta", ParentType, ContextType, Partial<Subscription_metaArgs>>;
-}>;
-
-export type AccountMetadataResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['AccountMetadata'] = ResolversParentTypes['AccountMetadata']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  isOrganization?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  codeRepository?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  website?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  displayName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type AllocationResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Allocation'] = ResolversParentTypes['Allocation']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  indexer?: Resolver<ResolversTypes['Indexer'], ParentType, ContextType>;
-  creator?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  activeForIndexer?: Resolver<Maybe<ResolversTypes['Indexer']>, ParentType, ContextType>;
-  subgraphDeployment?: Resolver<ResolversTypes['SubgraphDeployment'], ParentType, ContextType>;
-  allocatedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  effectiveAllocation?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  createdAtEpoch?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  createdAtBlockHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  createdAtBlockNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  closedAtEpoch?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  closedAtBlockHash?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  closedAtBlockNumber?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  queryFeesCollected?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  queryFeeRebates?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  distributedRebates?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  curatorRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  indexingRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  indexingIndexerRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  indexingDelegatorRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  poolClosedIn?: Resolver<Maybe<ResolversTypes['Pool']>, ParentType, ContextType>;
-  delegationFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['AllocationStatus'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  closedAt?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  poi?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  indexingRewardCutAtStart?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  indexingRewardEffectiveCutAtStart?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  queryFeeCutAtStart?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  queryFeeEffectiveCutAtStart?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  indexingRewardCutAtClose?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  indexingRewardEffectiveCutAtClose?: Resolver<Maybe<ResolversTypes['BigDecimal']>, ParentType, ContextType>;
-  queryFeeCutAtClose?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  queryFeeEffectiveCutAtClose?: Resolver<Maybe<ResolversTypes['BigDecimal']>, ParentType, ContextType>;
-  totalReturn?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  annualizedReturn?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  statusInt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  totalDelegatedTokensAtClose?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type AttestationResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Attestation'] = ResolversParentTypes['Attestation']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  subgraphDeployment?: Resolver<ResolversTypes['SubgraphDeployment'], ParentType, ContextType>;
-  requestCID?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  responseCID?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  gasUsed?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  responseNumBytes?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  v?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  r?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  s?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type AuthorizedFunctionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['AuthorizedFunction'] = ResolversParentTypes['AuthorizedFunction']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  target?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  sigHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  manager?: Resolver<ResolversTypes['TokenManager'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export interface BigDecimalScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigDecimal'], any> {
-  name: 'BigDecimal';
-}
-
-export interface BigIntScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['BigInt'], any> {
-  name: 'BigInt';
-}
-
-export type BridgeDepositTransactionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['BridgeDepositTransaction'] = ResolversParentTypes['BridgeDepositTransaction']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  blockNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  signer?: Resolver<ResolversTypes['GraphAccount'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['TransactionType'], ParentType, ContextType>;
-  txHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  from?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  to?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  amount?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  l1Token?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  retryableTicketId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  routed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type BridgeWithdrawalTransactionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['BridgeWithdrawalTransaction'] = ResolversParentTypes['BridgeWithdrawalTransaction']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  blockNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  signer?: Resolver<ResolversTypes['GraphAccount'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['TransactionType'], ParentType, ContextType>;
-  txHash?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  from?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  to?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  amount?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  l1Token?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  transactionIndex?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export interface BytesScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Bytes'], any> {
-  name: 'Bytes';
-}
-
-export type CuratorResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Curator'] = ResolversParentTypes['Curator']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  account?: Resolver<ResolversTypes['GraphAccount'], ParentType, ContextType>;
-  totalSignalledTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalUnsignalledTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  signals?: Resolver<Array<ResolversTypes['Signal']>, ParentType, ContextType, RequireFields<CuratorsignalsArgs, 'skip' | 'first'>>;
-  defaultDisplayName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  totalNameSignalledTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalNameUnsignalledTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalWithdrawnTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  nameSignals?: Resolver<Array<ResolversTypes['NameSignal']>, ParentType, ContextType, RequireFields<CuratornameSignalsArgs, 'skip' | 'first'>>;
-  realizedRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  annualizedReturn?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  totalReturn?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  signalingEfficiency?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  totalNameSignal?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  totalNameSignalAverageCostBasis?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  totalAverageCostBasisPerNameSignal?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  totalSignal?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  totalSignalAverageCostBasis?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  totalAverageCostBasisPerSignal?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  signalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  currentSignalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  activeSignalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  nameSignalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  currentNameSignalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  activeNameSignalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  combinedSignalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  activeCombinedSignalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  allCurrentGRTValue?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  PLGrt?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  unrealizedPLGrt?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  realizedPLGrt?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  lastSignaledAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  lastUnsignaledAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type CurrentSubgraphDeploymentRelationResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['CurrentSubgraphDeploymentRelation'] = ResolversParentTypes['CurrentSubgraphDeploymentRelation']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  subgraph?: Resolver<ResolversTypes['Subgraph'], ParentType, ContextType>;
-  deployment?: Resolver<ResolversTypes['SubgraphDeployment'], ParentType, ContextType>;
-  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type DelegatedStakeResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['DelegatedStake'] = ResolversParentTypes['DelegatedStake']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  indexer?: Resolver<ResolversTypes['Indexer'], ParentType, ContextType>;
-  delegator?: Resolver<ResolversTypes['Delegator'], ParentType, ContextType>;
-  stakedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  unstakedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  lockedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  lockedUntil?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  shareAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  personalExchangeRate?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  realizedRewards?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  lastDelegatedAt?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  lastUndelegatedAt?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  transferredToL2?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  transferredToL2At?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  transferredToL2AtBlockNumber?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  transferredToL2AtTx?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  stakedTokensTransferredToL2?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  idOnL2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  idOnL1?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  delegatorId?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  unreleasedRewardsPercent?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  unreleasedReward?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  totalRewards?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  currentDelegationAmount?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type DelegationPoolHistoryEntityResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['DelegationPoolHistoryEntity'] = ResolversParentTypes['DelegationPoolHistoryEntity']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  indexer?: Resolver<ResolversTypes['GraphAccount'], ParentType, ContextType>;
-  stakedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  delegatedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  blockNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  epoch?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type DelegatorResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Delegator'] = ResolversParentTypes['Delegator']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  account?: Resolver<ResolversTypes['GraphAccount'], ParentType, ContextType>;
-  stakes?: Resolver<Array<ResolversTypes['DelegatedStake']>, ParentType, ContextType, RequireFields<DelegatorstakesArgs, 'skip' | 'first'>>;
-  totalStakedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalUnstakedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  totalRealizedRewards?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  stakesCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  activeStakesCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  defaultDisplayName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  unreleasedReward?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  unreleasedPercent?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  currentStaked?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  totalRewards?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  lastDelegatedAt?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  lastUndelegatedAt?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type DisputeResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Dispute'] = ResolversParentTypes['Dispute']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  subgraphDeployment?: Resolver<ResolversTypes['SubgraphDeployment'], ParentType, ContextType>;
-  fisherman?: Resolver<ResolversTypes['GraphAccount'], ParentType, ContextType>;
-  deposit?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  closedAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  status?: Resolver<ResolversTypes['DisputeStatus'], ParentType, ContextType>;
-  tokensSlashed?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  tokensBurned?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  tokensRewarded?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['DisputeType'], ParentType, ContextType>;
-  indexer?: Resolver<ResolversTypes['GraphAccount'], ParentType, ContextType>;
-  attestation?: Resolver<Maybe<ResolversTypes['Attestation']>, ParentType, ContextType>;
-  linkedDispute?: Resolver<Maybe<ResolversTypes['Dispute']>, ParentType, ContextType>;
-  allocation?: Resolver<Maybe<ResolversTypes['Allocation']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type EpochResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Epoch'] = ResolversParentTypes['Epoch']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  startBlock?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  endBlock?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  signalledTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  stakeDeposited?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalQueryFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  taxedQueryFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  queryFeesCollected?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  curatorQueryFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  queryFeeRebates?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalIndexerRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalDelegatorRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type GraphAccountResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['GraphAccount'] = ResolversParentTypes['GraphAccount']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  names?: Resolver<Array<ResolversTypes['GraphAccountName']>, ParentType, ContextType, RequireFields<GraphAccountnamesArgs, 'skip' | 'first'>>;
-  defaultName?: Resolver<Maybe<ResolversTypes['GraphAccountName']>, ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  defaultDisplayName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  metadataHash?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  metadata?: Resolver<Maybe<ResolversTypes['AccountMetadata']>, ParentType, ContextType>;
-  operatorOf?: Resolver<Array<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<GraphAccountoperatorOfArgs, 'skip' | 'first'>>;
-  operators?: Resolver<Array<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<GraphAccountoperatorsArgs, 'skip' | 'first'>>;
-  balance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  balanceReceivedFromL1Signalling?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  balanceReceivedFromL1Delegation?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  curationApproval?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  stakingApproval?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  gnsApproval?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  subgraphs?: Resolver<Array<ResolversTypes['Subgraph']>, ParentType, ContextType, RequireFields<GraphAccountsubgraphsArgs, 'skip' | 'first'>>;
-  developerCreatedAt?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  subgraphQueryFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  createdDisputes?: Resolver<Array<ResolversTypes['Dispute']>, ParentType, ContextType, RequireFields<GraphAccountcreatedDisputesArgs, 'skip' | 'first'>>;
-  disputesAgainst?: Resolver<Array<ResolversTypes['Dispute']>, ParentType, ContextType, RequireFields<GraphAccountdisputesAgainstArgs, 'skip' | 'first'>>;
-  curator?: Resolver<Maybe<ResolversTypes['Curator']>, ParentType, ContextType>;
-  indexer?: Resolver<Maybe<ResolversTypes['Indexer']>, ParentType, ContextType>;
-  delegator?: Resolver<Maybe<ResolversTypes['Delegator']>, ParentType, ContextType>;
-  nameSignalTransactions?: Resolver<Array<ResolversTypes['NameSignalTransaction']>, ParentType, ContextType, RequireFields<GraphAccountnameSignalTransactionsArgs, 'skip' | 'first'>>;
-  bridgeWithdrawalTransactions?: Resolver<Array<ResolversTypes['BridgeWithdrawalTransaction']>, ParentType, ContextType, RequireFields<GraphAccountbridgeWithdrawalTransactionsArgs, 'skip' | 'first'>>;
-  bridgeDepositTransactions?: Resolver<Array<ResolversTypes['BridgeDepositTransaction']>, ParentType, ContextType, RequireFields<GraphAccountbridgeDepositTransactionsArgs, 'skip' | 'first'>>;
-  tokenLockWallets?: Resolver<Array<ResolversTypes['TokenLockWallet']>, ParentType, ContextType, RequireFields<GraphAccounttokenLockWalletsArgs, 'skip' | 'first'>>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type GraphAccountNameResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['GraphAccountName'] = ResolversParentTypes['GraphAccountName']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  nameSystem?: Resolver<ResolversTypes['NameSystem'], ParentType, ContextType>;
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  graphAccount?: Resolver<Maybe<ResolversTypes['GraphAccount']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type GraphNetworkResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['GraphNetwork'] = ResolversParentTypes['GraphNetwork']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  controller?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  graphToken?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  epochManager?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  epochManagerImplementations?: Resolver<Array<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  curation?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  curationImplementations?: Resolver<Array<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  staking?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  stakingImplementations?: Resolver<Array<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  disputeManager?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  gns?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  serviceRegistry?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  rewardsManager?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  rewardsManagerImplementations?: Resolver<Array<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  isPaused?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  isPartialPaused?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  governor?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  pauseGuardian?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  curationPercentage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  protocolFeePercentage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  delegationRatio?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  channelDisputeEpochs?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  maxAllocationEpochs?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  thawingPeriod?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  delegationParametersCooldown?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  minimumIndexerStake?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  slashers?: Resolver<Maybe<Array<ResolversTypes['Bytes']>>, ParentType, ContextType>;
-  delegationUnbondingPeriod?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  rebateRatio?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  rebateAlpha?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  rebateLambda?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  delegationTaxPercentage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  assetHolders?: Resolver<Maybe<Array<ResolversTypes['Bytes']>>, ParentType, ContextType>;
-  totalTokensStakedTransferredToL2?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalDelegatedTokensTransferredToL2?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalSignalledTokensTransferredToL2?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalTokensStaked?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalTokensClaimable?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalUnstakedTokensLocked?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalTokensAllocated?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalDelegatedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalTokensSignalled?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalTokensSignalledAutoMigrate?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  totalTokensSignalledDirectly?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  totalQueryFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalIndexerQueryFeesCollected?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalIndexerQueryFeeRebates?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalDelegatorQueryFeeRebates?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalCuratorQueryFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalTaxedQueryFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalUnclaimedQueryFeeRebates?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalIndexingRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalIndexingDelegatorRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalIndexingIndexerRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  networkGRTIssuance?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  networkGRTIssuancePerBlock?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  subgraphAvailabilityOracle?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  defaultReserveRatio?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  minimumCurationDeposit?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  curationTaxPercentage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  ownerTaxPercentage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  totalSupply?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  GRTinUSD?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  GRTinETH?: Resolver<Maybe<ResolversTypes['BigDecimal']>, ParentType, ContextType>;
-  totalGRTMinted?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalGRTBurned?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  epochLength?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  lastRunEpoch?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  lastLengthUpdateEpoch?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  lastLengthUpdateBlock?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  currentEpoch?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  indexerCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  stakedIndexersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  delegatorCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  activeDelegatorCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  delegationCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  activeDelegationCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  curatorCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  activeCuratorCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  subgraphCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  activeSubgraphCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  subgraphDeploymentCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  epochCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  arbitrator?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  querySlashingPercentage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  indexingSlashingPercentage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  slashingPercentage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  minimumDisputeDeposit?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  fishermanRewardPercentage?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  totalGRTDeposited?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalGRTWithdrawnConfirmed?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalGRTMintedFromL2?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalGRTDepositedConfirmed?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalGRTWithdrawn?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  currentL1BlockNumber?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IndexerResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Indexer'] = ResolversParentTypes['Indexer']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  account?: Resolver<ResolversTypes['GraphAccount'], ParentType, ContextType>;
-  url?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  geoHash?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  defaultDisplayName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  stakedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  allocatedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  unstakedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  lockedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  tokensLockedUntil?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  allocations?: Resolver<Array<ResolversTypes['Allocation']>, ParentType, ContextType, RequireFields<IndexerallocationsArgs, 'skip' | 'first'>>;
-  totalAllocations?: Resolver<Array<ResolversTypes['Allocation']>, ParentType, ContextType, RequireFields<IndexertotalAllocationsArgs, 'skip' | 'first'>>;
-  allocationCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  totalAllocationCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  queryFeesCollected?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  queryFeeRebates?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  rewardsEarned?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  indexerIndexingRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  delegatorIndexingRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  indexerRewardsOwnGenerationRatio?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  transferredToL2?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  firstTransferredToL2At?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  firstTransferredToL2AtBlockNumber?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  firstTransferredToL2AtTx?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  lastTransferredToL2At?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  lastTransferredToL2AtBlockNumber?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  lastTransferredToL2AtTx?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  stakedTokensTransferredToL2?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  idOnL2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  idOnL1?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  delegatedCapacity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  tokenCapacity?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  availableStake?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  delegators?: Resolver<Array<ResolversTypes['DelegatedStake']>, ParentType, ContextType, RequireFields<IndexerdelegatorsArgs, 'skip' | 'first'>>;
-  delegatedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  ownStakeRatio?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  delegatedStakeRatio?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  delegatorShares?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  delegationExchangeRate?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  indexingRewardCut?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  indexingRewardEffectiveCut?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  overDelegationDilution?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  delegatorQueryFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  queryFeeCut?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  queryFeeEffectiveCut?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  delegatorParameterCooldown?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  lastDelegationParameterUpdate?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  forcedClosures?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  totalReturn?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  annualizedReturn?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  stakingEfficiency?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  notAllocatedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  delegationRemaining?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  indexerQueryFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  delegatorsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type IndexerDeploymentResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['IndexerDeployment'] = ResolversParentTypes['IndexerDeployment']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  allocations?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export interface Int8ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Int8'], any> {
-  name: 'Int8';
-}
-
-export type NameSignalResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['NameSignal'] = ResolversParentTypes['NameSignal']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  curator?: Resolver<ResolversTypes['Curator'], ParentType, ContextType>;
-  subgraph?: Resolver<ResolversTypes['Subgraph'], ParentType, ContextType>;
-  signalledTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  unsignalledTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  withdrawnTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  nameSignal?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  signal?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  signalledTokensSentToL2?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  signalledTokensReceivedOnL2?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  transferredToL2?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  transferredToL2At?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  transferredToL2AtBlockNumber?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  transferredToL2AtTx?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  idOnL2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  idOnL1?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  lastNameSignalChange?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  realizedRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  averageCostBasis?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  averageCostBasisPerSignal?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  nameSignalAverageCostBasis?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  nameSignalAverageCostBasisPerSignal?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  signalAverageCostBasis?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  signalAverageCostBasisPerSignal?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  entityVersion?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  linkedEntity?: Resolver<Maybe<ResolversTypes['NameSignal']>, ParentType, ContextType>;
-  currentGRTValue?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  PLGrt?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  unrealizedPLGrt?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  realizedPLGrt?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  lastBuyInPrice?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type NameSignalSubgraphRelationResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['NameSignalSubgraphRelation'] = ResolversParentTypes['NameSignalSubgraphRelation']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  nameSignal?: Resolver<ResolversTypes['NameSignal'], ParentType, ContextType>;
-  subgraph?: Resolver<ResolversTypes['Subgraph'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type NameSignalTransactionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['NameSignalTransaction'] = ResolversParentTypes['NameSignalTransaction']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  blockNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  signer?: Resolver<ResolversTypes['GraphAccount'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['TransactionType'], ParentType, ContextType>;
-  nameSignal?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  versionSignal?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  tokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  subgraph?: Resolver<ResolversTypes['Subgraph'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type NetworkResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Network'] = ResolversParentTypes['Network']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type PoolResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Pool'] = ResolversParentTypes['Pool']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  allocation?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  totalQueryFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  claimedFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  curatorRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  closedAllocations?: Resolver<Array<ResolversTypes['Allocation']>, ParentType, ContextType, RequireFields<PoolclosedAllocationsArgs, 'skip' | 'first'>>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type RetryableTicketResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['RetryableTicket'] = ResolversParentTypes['RetryableTicket']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  txHash?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  redeemAttempts?: Resolver<Array<ResolversTypes['RetryableTicketRedeemAttempt']>, ParentType, ContextType, RequireFields<RetryableTicketredeemAttemptsArgs, 'skip' | 'first'>>;
-  redeemCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type RetryableTicketRedeemAttemptResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['RetryableTicketRedeemAttempt'] = ResolversParentTypes['RetryableTicketRedeemAttempt']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  ticketId?: Resolver<ResolversTypes['RetryableTicket'], ParentType, ContextType>;
-  txHash?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  sequenceNumber?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type RewardCutHistoryEntityResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['RewardCutHistoryEntity'] = ResolversParentTypes['RewardCutHistoryEntity']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  indexer?: Resolver<ResolversTypes['GraphAccount'], ParentType, ContextType>;
-  indexingRewardCut?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  indexingRewardEffectiveCut?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  queryFeeCut?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  queryFeeEffectiveCut?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  blockNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  epoch?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type SignalResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Signal'] = ResolversParentTypes['Signal']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  curator?: Resolver<ResolversTypes['Curator'], ParentType, ContextType>;
-  subgraphDeployment?: Resolver<ResolversTypes['SubgraphDeployment'], ParentType, ContextType>;
-  signalledTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  unsignalledTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  signal?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  averageCostBasis?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  averageCostBasisPerSignal?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  lastSignalChange?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  realizedRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  lastUpdatedAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  createdAtBlock?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  lastUpdatedAtBlock?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  currentGRTValue?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  PLGrt?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  unrealizedPLGrt?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  realizedPLGrt?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  lastBuyInPrice?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type SignalSubgraphDeploymentRelationResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['SignalSubgraphDeploymentRelation'] = ResolversParentTypes['SignalSubgraphDeploymentRelation']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  signal?: Resolver<ResolversTypes['Signal'], ParentType, ContextType>;
-  subgraphDeployment?: Resolver<ResolversTypes['SubgraphDeployment'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type SignalTransactionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['SignalTransaction'] = ResolversParentTypes['SignalTransaction']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  blockNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  signer?: Resolver<ResolversTypes['GraphAccount'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['TransactionType'], ParentType, ContextType>;
-  signal?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  tokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  subgraphDeployment?: Resolver<ResolversTypes['SubgraphDeployment'], ParentType, ContextType>;
-  withdrawalFees?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type SubgraphResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Subgraph'] = ResolversParentTypes['Subgraph']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  owner?: Resolver<ResolversTypes['GraphAccount'], ParentType, ContextType>;
-  currentVersion?: Resolver<Maybe<ResolversTypes['SubgraphVersion']>, ParentType, ContextType>;
-  pastVersions?: Resolver<Array<ResolversTypes['SubgraphVersion']>, ParentType, ContextType, RequireFields<SubgraphpastVersionsArgs, 'skip' | 'first'>>;
-  versions?: Resolver<Array<ResolversTypes['SubgraphVersion']>, ParentType, ContextType, RequireFields<SubgraphversionsArgs, 'skip' | 'first'>>;
-  versionCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  updatedAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  active?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  migrated?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  startedTransferToL2?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  startedTransferToL2At?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  startedTransferToL2AtBlockNumber?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  startedTransferToL2AtTx?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  transferredToL2?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  transferredToL2At?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  transferredToL2AtBlockNumber?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  transferredToL2AtTx?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  signalledTokensSentToL2?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  signalledTokensReceivedOnL2?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  idOnL2?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  idOnL1?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  nftID?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  oldID?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  creatorAddress?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  subgraphNumber?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  initializing?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  entityVersion?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  linkedEntity?: Resolver<Maybe<ResolversTypes['Subgraph']>, ParentType, ContextType>;
-  signalledTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  unsignalledTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  currentSignalledTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  nameSignalAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  signalAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  reserveRatio?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  withdrawableTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  withdrawnTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  nameSignals?: Resolver<Array<ResolversTypes['NameSignal']>, ParentType, ContextType, RequireFields<SubgraphnameSignalsArgs, 'skip' | 'first'>>;
-  nameSignalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  currentNameSignalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  metadataHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  ipfsMetadataHash?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  metadata?: Resolver<Maybe<ResolversTypes['SubgraphMetadata']>, ParentType, ContextType>;
-  currentVersionRelationEntity?: Resolver<Maybe<ResolversTypes['CurrentSubgraphDeploymentRelation']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type SubgraphDeploymentResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['SubgraphDeployment'] = ResolversParentTypes['SubgraphDeployment']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  ipfsHash?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  versions?: Resolver<Array<ResolversTypes['SubgraphVersion']>, ParentType, ContextType, RequireFields<SubgraphDeploymentversionsArgs, 'skip' | 'first'>>;
-  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  deniedAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  originalName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  stakedTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  indexerAllocations?: Resolver<Array<ResolversTypes['Allocation']>, ParentType, ContextType, RequireFields<SubgraphDeploymentindexerAllocationsArgs, 'skip' | 'first'>>;
-  indexingRewardAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  indexingIndexerRewardAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  indexingDelegatorRewardAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  queryFeesAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  queryFeeRebates?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  curatorFeeRewards?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  signalledTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  unsignalledTokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  signalAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  pricePerShare?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  curatorSignals?: Resolver<Array<ResolversTypes['Signal']>, ParentType, ContextType, RequireFields<SubgraphDeploymentcuratorSignalsArgs, 'skip' | 'first'>>;
-  reserveRatio?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  metadata?: Resolver<Maybe<ResolversTypes['SubgraphDeploymentMetadata']>, ParentType, ContextType>;
-  subgraphCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  activeSubgraphCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  deprecatedSubgraphCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  transferredToL2?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  transferredToL2At?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  transferredToL2AtBlockNumber?: Resolver<Maybe<ResolversTypes['BigInt']>, ParentType, ContextType>;
-  transferredToL2AtTx?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  signalledTokensSentToL2?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  signalledTokensReceivedOnL2?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  currentSignalCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  indexersCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  allocationsCount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  rewardsProportion?: Resolver<ResolversTypes['BigDecimal'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type SubgraphDeploymentMetadataResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['SubgraphDeploymentMetadata'] = ResolversParentTypes['SubgraphDeploymentMetadata']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  manifest?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  network?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  schemaIpfsHash?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type SubgraphMetadataResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['SubgraphMetadata'] = ResolversParentTypes['SubgraphMetadata']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  nftImage?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  codeRepository?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  website?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  displayName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type SubgraphVersionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['SubgraphVersion'] = ResolversParentTypes['SubgraphVersion']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  subgraph?: Resolver<ResolversTypes['Subgraph'], ParentType, ContextType>;
-  subgraphDeployment?: Resolver<ResolversTypes['SubgraphDeployment'], ParentType, ContextType>;
-  version?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  createdAt?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  metadataHash?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  metadata?: Resolver<Maybe<ResolversTypes['SubgraphVersionMetadata']>, ParentType, ContextType>;
-  entityVersion?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  linkedEntity?: Resolver<Maybe<ResolversTypes['SubgraphVersion']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type SubgraphVersionMetadataResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['SubgraphVersionMetadata'] = ResolversParentTypes['SubgraphVersionMetadata']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  label?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type TokenLockWalletResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['TokenLockWallet'] = ResolversParentTypes['TokenLockWallet']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  manager?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  initHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  beneficiary?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  token?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  managedAmount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  startTime?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  endTime?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  periods?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  releaseStartTime?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  vestingCliffTime?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  revocable?: Resolver<Maybe<ResolversTypes['Revocability']>, ParentType, ContextType>;
-  tokenDestinationsApproved?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  tokensReleased?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  tokensWithdrawn?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  tokensRevoked?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  blockNumberCreated?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  txHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type TokenManagerResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['TokenManager'] = ResolversParentTypes['TokenManager']> = ResolversObject<{
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  masterCopy?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
-  tokens?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  tokenDestinations?: Resolver<Maybe<Array<ResolversTypes['Bytes']>>, ParentType, ContextType>;
-  authorizedFunctions?: Resolver<Maybe<Array<ResolversTypes['AuthorizedFunction']>>, ParentType, ContextType, RequireFields<TokenManagerauthorizedFunctionsArgs, 'skip' | 'first'>>;
-  tokenLockCount?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type TransactionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Transaction'] = ResolversParentTypes['Transaction']> = ResolversObject<{
-  __resolveType: TypeResolveFn<'BridgeDepositTransaction' | 'BridgeWithdrawalTransaction' | 'NameSignalTransaction' | 'SignalTransaction', ParentType, ContextType>;
-  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  blockNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  timestamp?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  signer?: Resolver<ResolversTypes['GraphAccount'], ParentType, ContextType>;
-  type?: Resolver<ResolversTypes['TransactionType'], ParentType, ContextType>;
-}>;
-
-export type _Block_Resolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['_Block_'] = ResolversParentTypes['_Block_']> = ResolversObject<{
-  hash?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
-  number?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
-  timestamp?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type _Meta_Resolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['_Meta_'] = ResolversParentTypes['_Meta_']> = ResolversObject<{
-  block?: Resolver<ResolversTypes['_Block_'], ParentType, ContextType>;
-  deployment?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
-  hasIndexingErrors?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
-  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type Resolvers<ContextType = MeshContext> = ResolversObject<{
-  Query?: QueryResolvers<ContextType>;
-  Subscription?: SubscriptionResolvers<ContextType>;
-  AccountMetadata?: AccountMetadataResolvers<ContextType>;
-  Allocation?: AllocationResolvers<ContextType>;
-  Attestation?: AttestationResolvers<ContextType>;
-  AuthorizedFunction?: AuthorizedFunctionResolvers<ContextType>;
-  BigDecimal?: GraphQLScalarType;
-  BigInt?: GraphQLScalarType;
-  BridgeDepositTransaction?: BridgeDepositTransactionResolvers<ContextType>;
-  BridgeWithdrawalTransaction?: BridgeWithdrawalTransactionResolvers<ContextType>;
-  Bytes?: GraphQLScalarType;
-  Curator?: CuratorResolvers<ContextType>;
-  CurrentSubgraphDeploymentRelation?: CurrentSubgraphDeploymentRelationResolvers<ContextType>;
-  DelegatedStake?: DelegatedStakeResolvers<ContextType>;
-  DelegationPoolHistoryEntity?: DelegationPoolHistoryEntityResolvers<ContextType>;
-  Delegator?: DelegatorResolvers<ContextType>;
-  Dispute?: DisputeResolvers<ContextType>;
-  Epoch?: EpochResolvers<ContextType>;
-  GraphAccount?: GraphAccountResolvers<ContextType>;
-  GraphAccountName?: GraphAccountNameResolvers<ContextType>;
-  GraphNetwork?: GraphNetworkResolvers<ContextType>;
-  Indexer?: IndexerResolvers<ContextType>;
-  IndexerDeployment?: IndexerDeploymentResolvers<ContextType>;
-  Int8?: GraphQLScalarType;
-  NameSignal?: NameSignalResolvers<ContextType>;
-  NameSignalSubgraphRelation?: NameSignalSubgraphRelationResolvers<ContextType>;
-  NameSignalTransaction?: NameSignalTransactionResolvers<ContextType>;
-  Network?: NetworkResolvers<ContextType>;
-  Pool?: PoolResolvers<ContextType>;
-  RetryableTicket?: RetryableTicketResolvers<ContextType>;
-  RetryableTicketRedeemAttempt?: RetryableTicketRedeemAttemptResolvers<ContextType>;
-  RewardCutHistoryEntity?: RewardCutHistoryEntityResolvers<ContextType>;
-  Signal?: SignalResolvers<ContextType>;
-  SignalSubgraphDeploymentRelation?: SignalSubgraphDeploymentRelationResolvers<ContextType>;
-  SignalTransaction?: SignalTransactionResolvers<ContextType>;
-  Subgraph?: SubgraphResolvers<ContextType>;
-  SubgraphDeployment?: SubgraphDeploymentResolvers<ContextType>;
-  SubgraphDeploymentMetadata?: SubgraphDeploymentMetadataResolvers<ContextType>;
-  SubgraphMetadata?: SubgraphMetadataResolvers<ContextType>;
-  SubgraphVersion?: SubgraphVersionResolvers<ContextType>;
-  SubgraphVersionMetadata?: SubgraphVersionMetadataResolvers<ContextType>;
-  TokenLockWallet?: TokenLockWalletResolvers<ContextType>;
-  TokenManager?: TokenManagerResolvers<ContextType>;
-  Transaction?: TransactionResolvers<ContextType>;
-  _Block_?: _Block_Resolvers<ContextType>;
-  _Meta_?: _Meta_Resolvers<ContextType>;
-}>;
-
-export type DirectiveResolvers<ContextType = MeshContext> = ResolversObject<{
-  entity?: entityDirectiveResolver<any, any, ContextType>;
-  subgraphId?: subgraphIdDirectiveResolver<any, any, ContextType>;
-  derivedFrom?: derivedFromDirectiveResolver<any, any, ContextType>;
-}>;
-
-export type MeshContext = ArbitrumTypes.Context & MainnetTypes.Context & BaseMeshContext;
-
-
-import { fileURLToPath } from '@graphql-mesh/utils';
-const baseDir = pathModule.join(pathModule.dirname(fileURLToPath(import.meta.url)), '..');
-
-const importFn: ImportFn = <T>(moduleId: string) => {
-  const relativeModuleId = (pathModule.isAbsolute(moduleId) ? pathModule.relative(baseDir, moduleId) : moduleId).split('\\').join('/').replace(baseDir + '/', '');
-  switch(relativeModuleId) {
-    case ".graphclient/sources/arbitrum/introspectionSchema":
-      return Promise.resolve(importedModule$0) as T;
-    
-    case ".graphclient/sources/mainnet/introspectionSchema":
-      return Promise.resolve(importedModule$1) as T;
-    
-    default:
-      return Promise.reject(new Error(`Cannot find module '${relativeModuleId}'.`));
-  }
-};
-
-const rootStore = new MeshStore('.graphclient', new FsStoreStorageAdapter({
-  cwd: baseDir,
-  importFn,
-  fileType: "ts",
-}), {
-  readonly: true,
-  validate: false
-});
-
-export const rawServeConfig: YamlConfig.Config['serve'] = undefined as any
-export async function getMeshOptions(): Promise<GetMeshOptions> {
-const pubsub = new PubSub();
-const sourcesStore = rootStore.child('sources');
-const logger = new DefaultLogger("GraphClient");
-const cache = new (MeshCache as any)({
-      ...({} as any),
-      importFn,
-      store: rootStore.child('cache'),
-      pubsub,
-      logger,
-    } as any)
-
-const sources: MeshResolvedSource[] = [];
-const transforms: MeshTransform[] = [];
-const additionalEnvelopPlugins: MeshPlugin<any>[] = [];
-const mainnetTransforms = [];
-const arbitrumTransforms = [];
-const additionalTypeDefs = [] as any[];
-const mainnetHandler = new GraphqlHandler({
-              name: "mainnet",
-              config: {"endpoint":"https://gateway-arbitrum.network.thegraph.com/api/dc9b1200d80a1c064c90462b9c04f264/subgraphs/id/AwyZBdna4vTAHiqBWsrQ5ErFRMi6HCgGEkQMgNBseWTL"},
-              baseDir,
-              cache,
-              pubsub,
-              store: sourcesStore.child("mainnet"),
-              logger: logger.child("mainnet"),
-              importFn,
-            });
-const arbitrumHandler = new GraphqlHandler({
-              name: "arbitrum",
-              config: {"endpoint":"https://gateway-arbitrum.network.thegraph.com/api/dc9b1200d80a1c064c90462b9c04f264/subgraphs/id/DjUVVVSuKcCCTZSVzVXLioSd7AdqwGEyBrY4Ru5tuqzX"},
-              baseDir,
-              cache,
-              pubsub,
-              store: sourcesStore.child("arbitrum"),
-              logger: logger.child("arbitrum"),
-              importFn,
-            });
-sources[0] = {
-          name: 'mainnet',
-          handler: mainnetHandler,
-          transforms: mainnetTransforms
-        }
-sources[1] = {
-          name: 'arbitrum',
-          handler: arbitrumHandler,
-          transforms: arbitrumTransforms
-        }
-const additionalResolvers = [] as any[]
-const merger = new(StitchingMerger as any)({
-        cache,
-        pubsub,
-        logger: logger.child('stitchingMerger'),
-        store: rootStore.child('stitchingMerger')
-      })
-
-  return {
-    sources,
-    transforms,
-    additionalTypeDefs,
-    additionalResolvers,
-    cache,
-    pubsub,
-    merger,
-    logger,
-    additionalEnvelopPlugins,
-    get documents() {
-      return [
-      {
-        document: SubgraphsDocument,
-        get rawSDL() {
-          return printWithCache(SubgraphsDocument);
-        },
-        location: 'SubgraphsDocument.graphql'
-      }
-    ];
-    },
-    fetchFn,
+  export type QuerySdk = {
+      /** null **/
+  graphNetwork: InContextSdkMethod<Query['graphNetwork'], QuerygraphNetworkArgs, MeshContext>,
+  /** null **/
+  graphNetworks: InContextSdkMethod<Query['graphNetworks'], QuerygraphNetworksArgs, MeshContext>,
+  /** null **/
+  graphAccount: InContextSdkMethod<Query['graphAccount'], QuerygraphAccountArgs, MeshContext>,
+  /** null **/
+  graphAccounts: InContextSdkMethod<Query['graphAccounts'], QuerygraphAccountsArgs, MeshContext>,
+  /** null **/
+  accountMetadata: InContextSdkMethod<Query['accountMetadata'], QueryaccountMetadataArgs, MeshContext>,
+  /** null **/
+  graphAccountName: InContextSdkMethod<Query['graphAccountName'], QuerygraphAccountNameArgs, MeshContext>,
+  /** null **/
+  graphAccountNames: InContextSdkMethod<Query['graphAccountNames'], QuerygraphAccountNamesArgs, MeshContext>,
+  /** null **/
+  subgraph: InContextSdkMethod<Query['subgraph'], QuerysubgraphArgs, MeshContext>,
+  /** null **/
+  subgraphs: InContextSdkMethod<Query['subgraphs'], QuerysubgraphsArgs, MeshContext>,
+  /** null **/
+  subgraphMetadata: InContextSdkMethod<Query['subgraphMetadata'], QuerysubgraphMetadataArgs, MeshContext>,
+  /** null **/
+  currentSubgraphDeploymentRelation: InContextSdkMethod<Query['currentSubgraphDeploymentRelation'], QuerycurrentSubgraphDeploymentRelationArgs, MeshContext>,
+  /** null **/
+  currentSubgraphDeploymentRelations: InContextSdkMethod<Query['currentSubgraphDeploymentRelations'], QuerycurrentSubgraphDeploymentRelationsArgs, MeshContext>,
+  /** null **/
+  network: InContextSdkMethod<Query['network'], QuerynetworkArgs, MeshContext>,
+  /** null **/
+  networks: InContextSdkMethod<Query['networks'], QuerynetworksArgs, MeshContext>,
+  /** null **/
+  subgraphVersion: InContextSdkMethod<Query['subgraphVersion'], QuerysubgraphVersionArgs, MeshContext>,
+  /** null **/
+  subgraphVersions: InContextSdkMethod<Query['subgraphVersions'], QuerysubgraphVersionsArgs, MeshContext>,
+  /** null **/
+  subgraphVersionMetadata: InContextSdkMethod<Query['subgraphVersionMetadata'], QuerysubgraphVersionMetadataArgs, MeshContext>,
+  /** null **/
+  subgraphDeployment: InContextSdkMethod<Query['subgraphDeployment'], QuerysubgraphDeploymentArgs, MeshContext>,
+  /** null **/
+  subgraphDeployments: InContextSdkMethod<Query['subgraphDeployments'], QuerysubgraphDeploymentsArgs, MeshContext>,
+  /** null **/
+  subgraphDeploymentMetadata: InContextSdkMethod<Query['subgraphDeploymentMetadata'], QuerysubgraphDeploymentMetadataArgs, MeshContext>,
+  /** null **/
+  indexer: InContextSdkMethod<Query['indexer'], QueryindexerArgs, MeshContext>,
+  /** null **/
+  indexers: InContextSdkMethod<Query['indexers'], QueryindexersArgs, MeshContext>,
+  /** null **/
+  allocation: InContextSdkMethod<Query['allocation'], QueryallocationArgs, MeshContext>,
+  /** null **/
+  allocations: InContextSdkMethod<Query['allocations'], QueryallocationsArgs, MeshContext>,
+  /** null **/
+  pool: InContextSdkMethod<Query['pool'], QuerypoolArgs, MeshContext>,
+  /** null **/
+  pools: InContextSdkMethod<Query['pools'], QuerypoolsArgs, MeshContext>,
+  /** null **/
+  delegator: InContextSdkMethod<Query['delegator'], QuerydelegatorArgs, MeshContext>,
+  /** null **/
+  delegators: InContextSdkMethod<Query['delegators'], QuerydelegatorsArgs, MeshContext>,
+  /** null **/
+  delegatedStake: InContextSdkMethod<Query['delegatedStake'], QuerydelegatedStakeArgs, MeshContext>,
+  /** null **/
+  delegatedStakes: InContextSdkMethod<Query['delegatedStakes'], QuerydelegatedStakesArgs, MeshContext>,
+  /** null **/
+  curator: InContextSdkMethod<Query['curator'], QuerycuratorArgs, MeshContext>,
+  /** null **/
+  curators: InContextSdkMethod<Query['curators'], QuerycuratorsArgs, MeshContext>,
+  /** null **/
+  signal: InContextSdkMethod<Query['signal'], QuerysignalArgs, MeshContext>,
+  /** null **/
+  signals: InContextSdkMethod<Query['signals'], QuerysignalsArgs, MeshContext>,
+  /** null **/
+  nameSignal: InContextSdkMethod<Query['nameSignal'], QuerynameSignalArgs, MeshContext>,
+  /** null **/
+  nameSignals: InContextSdkMethod<Query['nameSignals'], QuerynameSignalsArgs, MeshContext>,
+  /** null **/
+  nameSignalSubgraphRelation: InContextSdkMethod<Query['nameSignalSubgraphRelation'], QuerynameSignalSubgraphRelationArgs, MeshContext>,
+  /** null **/
+  nameSignalSubgraphRelations: InContextSdkMethod<Query['nameSignalSubgraphRelations'], QuerynameSignalSubgraphRelationsArgs, MeshContext>,
+  /** null **/
+  signalSubgraphDeploymentRelation: InContextSdkMethod<Query['signalSubgraphDeploymentRelation'], QuerysignalSubgraphDeploymentRelationArgs, MeshContext>,
+  /** null **/
+  signalSubgraphDeploymentRelations: InContextSdkMethod<Query['signalSubgraphDeploymentRelations'], QuerysignalSubgraphDeploymentRelationsArgs, MeshContext>,
+  /** null **/
+  dispute: InContextSdkMethod<Query['dispute'], QuerydisputeArgs, MeshContext>,
+  /** null **/
+  disputes: InContextSdkMethod<Query['disputes'], QuerydisputesArgs, MeshContext>,
+  /** null **/
+  attestation: InContextSdkMethod<Query['attestation'], QueryattestationArgs, MeshContext>,
+  /** null **/
+  attestations: InContextSdkMethod<Query['attestations'], QueryattestationsArgs, MeshContext>,
+  /** null **/
+  epoch: InContextSdkMethod<Query['epoch'], QueryepochArgs, MeshContext>,
+  /** null **/
+  epoches: InContextSdkMethod<Query['epoches'], QueryepochesArgs, MeshContext>,
+  /** null **/
+  nameSignalTransaction: InContextSdkMethod<Query['nameSignalTransaction'], QuerynameSignalTransactionArgs, MeshContext>,
+  /** null **/
+  nameSignalTransactions: InContextSdkMethod<Query['nameSignalTransactions'], QuerynameSignalTransactionsArgs, MeshContext>,
+  /** null **/
+  signalTransaction: InContextSdkMethod<Query['signalTransaction'], QuerysignalTransactionArgs, MeshContext>,
+  /** null **/
+  signalTransactions: InContextSdkMethod<Query['signalTransactions'], QuerysignalTransactionsArgs, MeshContext>,
+  /** null **/
+  bridgeWithdrawalTransaction: InContextSdkMethod<Query['bridgeWithdrawalTransaction'], QuerybridgeWithdrawalTransactionArgs, MeshContext>,
+  /** null **/
+  bridgeWithdrawalTransactions: InContextSdkMethod<Query['bridgeWithdrawalTransactions'], QuerybridgeWithdrawalTransactionsArgs, MeshContext>,
+  /** null **/
+  bridgeDepositTransaction: InContextSdkMethod<Query['bridgeDepositTransaction'], QuerybridgeDepositTransactionArgs, MeshContext>,
+  /** null **/
+  bridgeDepositTransactions: InContextSdkMethod<Query['bridgeDepositTransactions'], QuerybridgeDepositTransactionsArgs, MeshContext>,
+  /** null **/
+  retryableTicket: InContextSdkMethod<Query['retryableTicket'], QueryretryableTicketArgs, MeshContext>,
+  /** null **/
+  retryableTickets: InContextSdkMethod<Query['retryableTickets'], QueryretryableTicketsArgs, MeshContext>,
+  /** null **/
+  retryableTicketRedeemAttempt: InContextSdkMethod<Query['retryableTicketRedeemAttempt'], QueryretryableTicketRedeemAttemptArgs, MeshContext>,
+  /** null **/
+  retryableTicketRedeemAttempts: InContextSdkMethod<Query['retryableTicketRedeemAttempts'], QueryretryableTicketRedeemAttemptsArgs, MeshContext>,
+  /** null **/
+  tokenManager: InContextSdkMethod<Query['tokenManager'], QuerytokenManagerArgs, MeshContext>,
+  /** null **/
+  tokenManagers: InContextSdkMethod<Query['tokenManagers'], QuerytokenManagersArgs, MeshContext>,
+  /** null **/
+  authorizedFunction: InContextSdkMethod<Query['authorizedFunction'], QueryauthorizedFunctionArgs, MeshContext>,
+  /** null **/
+  authorizedFunctions: InContextSdkMethod<Query['authorizedFunctions'], QueryauthorizedFunctionsArgs, MeshContext>,
+  /** null **/
+  tokenLockWallet: InContextSdkMethod<Query['tokenLockWallet'], QuerytokenLockWalletArgs, MeshContext>,
+  /** null **/
+  tokenLockWallets: InContextSdkMethod<Query['tokenLockWallets'], QuerytokenLockWalletsArgs, MeshContext>,
+  /** null **/
+  indexerDeployment: InContextSdkMethod<Query['indexerDeployment'], QueryindexerDeploymentArgs, MeshContext>,
+  /** null **/
+  indexerDeployments: InContextSdkMethod<Query['indexerDeployments'], QueryindexerDeploymentsArgs, MeshContext>,
+  /** null **/
+  rewardCutHistoryEntity: InContextSdkMethod<Query['rewardCutHistoryEntity'], QueryrewardCutHistoryEntityArgs, MeshContext>,
+  /** null **/
+  rewardCutHistoryEntities: InContextSdkMethod<Query['rewardCutHistoryEntities'], QueryrewardCutHistoryEntitiesArgs, MeshContext>,
+  /** null **/
+  delegationPoolHistoryEntity: InContextSdkMethod<Query['delegationPoolHistoryEntity'], QuerydelegationPoolHistoryEntityArgs, MeshContext>,
+  /** null **/
+  delegationPoolHistoryEntities: InContextSdkMethod<Query['delegationPoolHistoryEntities'], QuerydelegationPoolHistoryEntitiesArgs, MeshContext>,
+  /** null **/
+  transaction: InContextSdkMethod<Query['transaction'], QuerytransactionArgs, MeshContext>,
+  /** null **/
+  transactions: InContextSdkMethod<Query['transactions'], QuerytransactionsArgs, MeshContext>,
+  /** null **/
+  curatorSearch: InContextSdkMethod<Query['curatorSearch'], QuerycuratorSearchArgs, MeshContext>,
+  /** null **/
+  delegatorSearch: InContextSdkMethod<Query['delegatorSearch'], QuerydelegatorSearchArgs, MeshContext>,
+  /** null **/
+  indexerSearch: InContextSdkMethod<Query['indexerSearch'], QueryindexerSearchArgs, MeshContext>,
+  /** null **/
+  accountSearch: InContextSdkMethod<Query['accountSearch'], QueryaccountSearchArgs, MeshContext>,
+  /** Access to subgraph metadata **/
+  _meta: InContextSdkMethod<Query['_meta'], Query_metaArgs, MeshContext>
   };
-}
 
-export function createBuiltMeshHTTPHandler<TServerContext = {}>(): MeshHTTPHandler<TServerContext> {
-  return createMeshHTTPHandler<TServerContext>({
-    baseDir,
-    getBuiltMesh: getBuiltGraphClient,
-    rawServeConfig: undefined,
-  })
-}
-
-
-let meshInstance$: Promise<MeshInstance> | undefined;
-
-export function getBuiltGraphClient(): Promise<MeshInstance> {
-  if (meshInstance$ == null) {
-    meshInstance$ = getMeshOptions().then(meshOptions => getMesh(meshOptions)).then(mesh => {
-      const id = mesh.pubsub.subscribe('destroy', () => {
-        meshInstance$ = undefined;
-        mesh.pubsub.unsubscribe(id);
-      });
-      return mesh;
-    });
-  }
-  return meshInstance$;
-}
-
-export const execute: ExecuteMeshFn = (...args) => getBuiltGraphClient().then(({ execute }) => execute(...args));
-
-export const subscribe: SubscribeMeshFn = (...args) => getBuiltGraphClient().then(({ subscribe }) => subscribe(...args));
-export function getBuiltGraphSDK<TGlobalContext = any, TOperationContext = any>(globalContext?: TGlobalContext) {
-  const sdkRequester$ = getBuiltGraphClient().then(({ sdkRequesterFactory }) => sdkRequesterFactory(globalContext));
-  return getSdk<TOperationContext, TGlobalContext>((...args) => sdkRequester$.then(sdkRequester => sdkRequester(...args)));
-}
-export type SubgraphsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type SubgraphsQuery = { subgraphs: Array<(
-    Pick<Subgraph, 'id'>
-    & { metadata?: Maybe<Pick<SubgraphMetadata, 'displayName'>> }
-  )> };
-
-
-export const SubgraphsDocument = gql`
-    query Subgraphs {
-  subgraphs {
-    id
-    metadata {
-      displayName
-    }
-  }
-}
-    ` as unknown as DocumentNode<SubgraphsQuery, SubgraphsQueryVariables>;
-
-
-export type Requester<C = {}, E = unknown> = <R, V>(doc: DocumentNode, vars?: V, options?: C) => Promise<R> | AsyncIterable<R>
-export function getSdk<C, E>(requester: Requester<C, E>) {
-  return {
-    Subgraphs(variables?: SubgraphsQueryVariables, options?: C): Promise<SubgraphsQuery> {
-      return requester<SubgraphsQuery, SubgraphsQueryVariables>(SubgraphsDocument, variables, options) as Promise<SubgraphsQuery>;
-    }
+  export type MutationSdk = {
+    
   };
+
+  export type SubscriptionSdk = {
+      /** null **/
+  graphNetwork: InContextSdkMethod<Subscription['graphNetwork'], SubscriptiongraphNetworkArgs, MeshContext>,
+  /** null **/
+  graphNetworks: InContextSdkMethod<Subscription['graphNetworks'], SubscriptiongraphNetworksArgs, MeshContext>,
+  /** null **/
+  graphAccount: InContextSdkMethod<Subscription['graphAccount'], SubscriptiongraphAccountArgs, MeshContext>,
+  /** null **/
+  graphAccounts: InContextSdkMethod<Subscription['graphAccounts'], SubscriptiongraphAccountsArgs, MeshContext>,
+  /** null **/
+  accountMetadata: InContextSdkMethod<Subscription['accountMetadata'], SubscriptionaccountMetadataArgs, MeshContext>,
+  /** null **/
+  graphAccountName: InContextSdkMethod<Subscription['graphAccountName'], SubscriptiongraphAccountNameArgs, MeshContext>,
+  /** null **/
+  graphAccountNames: InContextSdkMethod<Subscription['graphAccountNames'], SubscriptiongraphAccountNamesArgs, MeshContext>,
+  /** null **/
+  subgraph: InContextSdkMethod<Subscription['subgraph'], SubscriptionsubgraphArgs, MeshContext>,
+  /** null **/
+  subgraphs: InContextSdkMethod<Subscription['subgraphs'], SubscriptionsubgraphsArgs, MeshContext>,
+  /** null **/
+  subgraphMetadata: InContextSdkMethod<Subscription['subgraphMetadata'], SubscriptionsubgraphMetadataArgs, MeshContext>,
+  /** null **/
+  currentSubgraphDeploymentRelation: InContextSdkMethod<Subscription['currentSubgraphDeploymentRelation'], SubscriptioncurrentSubgraphDeploymentRelationArgs, MeshContext>,
+  /** null **/
+  currentSubgraphDeploymentRelations: InContextSdkMethod<Subscription['currentSubgraphDeploymentRelations'], SubscriptioncurrentSubgraphDeploymentRelationsArgs, MeshContext>,
+  /** null **/
+  network: InContextSdkMethod<Subscription['network'], SubscriptionnetworkArgs, MeshContext>,
+  /** null **/
+  networks: InContextSdkMethod<Subscription['networks'], SubscriptionnetworksArgs, MeshContext>,
+  /** null **/
+  subgraphVersion: InContextSdkMethod<Subscription['subgraphVersion'], SubscriptionsubgraphVersionArgs, MeshContext>,
+  /** null **/
+  subgraphVersions: InContextSdkMethod<Subscription['subgraphVersions'], SubscriptionsubgraphVersionsArgs, MeshContext>,
+  /** null **/
+  subgraphVersionMetadata: InContextSdkMethod<Subscription['subgraphVersionMetadata'], SubscriptionsubgraphVersionMetadataArgs, MeshContext>,
+  /** null **/
+  subgraphDeployment: InContextSdkMethod<Subscription['subgraphDeployment'], SubscriptionsubgraphDeploymentArgs, MeshContext>,
+  /** null **/
+  subgraphDeployments: InContextSdkMethod<Subscription['subgraphDeployments'], SubscriptionsubgraphDeploymentsArgs, MeshContext>,
+  /** null **/
+  subgraphDeploymentMetadata: InContextSdkMethod<Subscription['subgraphDeploymentMetadata'], SubscriptionsubgraphDeploymentMetadataArgs, MeshContext>,
+  /** null **/
+  indexer: InContextSdkMethod<Subscription['indexer'], SubscriptionindexerArgs, MeshContext>,
+  /** null **/
+  indexers: InContextSdkMethod<Subscription['indexers'], SubscriptionindexersArgs, MeshContext>,
+  /** null **/
+  allocation: InContextSdkMethod<Subscription['allocation'], SubscriptionallocationArgs, MeshContext>,
+  /** null **/
+  allocations: InContextSdkMethod<Subscription['allocations'], SubscriptionallocationsArgs, MeshContext>,
+  /** null **/
+  pool: InContextSdkMethod<Subscription['pool'], SubscriptionpoolArgs, MeshContext>,
+  /** null **/
+  pools: InContextSdkMethod<Subscription['pools'], SubscriptionpoolsArgs, MeshContext>,
+  /** null **/
+  delegator: InContextSdkMethod<Subscription['delegator'], SubscriptiondelegatorArgs, MeshContext>,
+  /** null **/
+  delegators: InContextSdkMethod<Subscription['delegators'], SubscriptiondelegatorsArgs, MeshContext>,
+  /** null **/
+  delegatedStake: InContextSdkMethod<Subscription['delegatedStake'], SubscriptiondelegatedStakeArgs, MeshContext>,
+  /** null **/
+  delegatedStakes: InContextSdkMethod<Subscription['delegatedStakes'], SubscriptiondelegatedStakesArgs, MeshContext>,
+  /** null **/
+  curator: InContextSdkMethod<Subscription['curator'], SubscriptioncuratorArgs, MeshContext>,
+  /** null **/
+  curators: InContextSdkMethod<Subscription['curators'], SubscriptioncuratorsArgs, MeshContext>,
+  /** null **/
+  signal: InContextSdkMethod<Subscription['signal'], SubscriptionsignalArgs, MeshContext>,
+  /** null **/
+  signals: InContextSdkMethod<Subscription['signals'], SubscriptionsignalsArgs, MeshContext>,
+  /** null **/
+  nameSignal: InContextSdkMethod<Subscription['nameSignal'], SubscriptionnameSignalArgs, MeshContext>,
+  /** null **/
+  nameSignals: InContextSdkMethod<Subscription['nameSignals'], SubscriptionnameSignalsArgs, MeshContext>,
+  /** null **/
+  nameSignalSubgraphRelation: InContextSdkMethod<Subscription['nameSignalSubgraphRelation'], SubscriptionnameSignalSubgraphRelationArgs, MeshContext>,
+  /** null **/
+  nameSignalSubgraphRelations: InContextSdkMethod<Subscription['nameSignalSubgraphRelations'], SubscriptionnameSignalSubgraphRelationsArgs, MeshContext>,
+  /** null **/
+  signalSubgraphDeploymentRelation: InContextSdkMethod<Subscription['signalSubgraphDeploymentRelation'], SubscriptionsignalSubgraphDeploymentRelationArgs, MeshContext>,
+  /** null **/
+  signalSubgraphDeploymentRelations: InContextSdkMethod<Subscription['signalSubgraphDeploymentRelations'], SubscriptionsignalSubgraphDeploymentRelationsArgs, MeshContext>,
+  /** null **/
+  dispute: InContextSdkMethod<Subscription['dispute'], SubscriptiondisputeArgs, MeshContext>,
+  /** null **/
+  disputes: InContextSdkMethod<Subscription['disputes'], SubscriptiondisputesArgs, MeshContext>,
+  /** null **/
+  attestation: InContextSdkMethod<Subscription['attestation'], SubscriptionattestationArgs, MeshContext>,
+  /** null **/
+  attestations: InContextSdkMethod<Subscription['attestations'], SubscriptionattestationsArgs, MeshContext>,
+  /** null **/
+  epoch: InContextSdkMethod<Subscription['epoch'], SubscriptionepochArgs, MeshContext>,
+  /** null **/
+  epoches: InContextSdkMethod<Subscription['epoches'], SubscriptionepochesArgs, MeshContext>,
+  /** null **/
+  nameSignalTransaction: InContextSdkMethod<Subscription['nameSignalTransaction'], SubscriptionnameSignalTransactionArgs, MeshContext>,
+  /** null **/
+  nameSignalTransactions: InContextSdkMethod<Subscription['nameSignalTransactions'], SubscriptionnameSignalTransactionsArgs, MeshContext>,
+  /** null **/
+  signalTransaction: InContextSdkMethod<Subscription['signalTransaction'], SubscriptionsignalTransactionArgs, MeshContext>,
+  /** null **/
+  signalTransactions: InContextSdkMethod<Subscription['signalTransactions'], SubscriptionsignalTransactionsArgs, MeshContext>,
+  /** null **/
+  bridgeWithdrawalTransaction: InContextSdkMethod<Subscription['bridgeWithdrawalTransaction'], SubscriptionbridgeWithdrawalTransactionArgs, MeshContext>,
+  /** null **/
+  bridgeWithdrawalTransactions: InContextSdkMethod<Subscription['bridgeWithdrawalTransactions'], SubscriptionbridgeWithdrawalTransactionsArgs, MeshContext>,
+  /** null **/
+  bridgeDepositTransaction: InContextSdkMethod<Subscription['bridgeDepositTransaction'], SubscriptionbridgeDepositTransactionArgs, MeshContext>,
+  /** null **/
+  bridgeDepositTransactions: InContextSdkMethod<Subscription['bridgeDepositTransactions'], SubscriptionbridgeDepositTransactionsArgs, MeshContext>,
+  /** null **/
+  retryableTicket: InContextSdkMethod<Subscription['retryableTicket'], SubscriptionretryableTicketArgs, MeshContext>,
+  /** null **/
+  retryableTickets: InContextSdkMethod<Subscription['retryableTickets'], SubscriptionretryableTicketsArgs, MeshContext>,
+  /** null **/
+  retryableTicketRedeemAttempt: InContextSdkMethod<Subscription['retryableTicketRedeemAttempt'], SubscriptionretryableTicketRedeemAttemptArgs, MeshContext>,
+  /** null **/
+  retryableTicketRedeemAttempts: InContextSdkMethod<Subscription['retryableTicketRedeemAttempts'], SubscriptionretryableTicketRedeemAttemptsArgs, MeshContext>,
+  /** null **/
+  tokenManager: InContextSdkMethod<Subscription['tokenManager'], SubscriptiontokenManagerArgs, MeshContext>,
+  /** null **/
+  tokenManagers: InContextSdkMethod<Subscription['tokenManagers'], SubscriptiontokenManagersArgs, MeshContext>,
+  /** null **/
+  authorizedFunction: InContextSdkMethod<Subscription['authorizedFunction'], SubscriptionauthorizedFunctionArgs, MeshContext>,
+  /** null **/
+  authorizedFunctions: InContextSdkMethod<Subscription['authorizedFunctions'], SubscriptionauthorizedFunctionsArgs, MeshContext>,
+  /** null **/
+  tokenLockWallet: InContextSdkMethod<Subscription['tokenLockWallet'], SubscriptiontokenLockWalletArgs, MeshContext>,
+  /** null **/
+  tokenLockWallets: InContextSdkMethod<Subscription['tokenLockWallets'], SubscriptiontokenLockWalletsArgs, MeshContext>,
+  /** null **/
+  indexerDeployment: InContextSdkMethod<Subscription['indexerDeployment'], SubscriptionindexerDeploymentArgs, MeshContext>,
+  /** null **/
+  indexerDeployments: InContextSdkMethod<Subscription['indexerDeployments'], SubscriptionindexerDeploymentsArgs, MeshContext>,
+  /** null **/
+  rewardCutHistoryEntity: InContextSdkMethod<Subscription['rewardCutHistoryEntity'], SubscriptionrewardCutHistoryEntityArgs, MeshContext>,
+  /** null **/
+  rewardCutHistoryEntities: InContextSdkMethod<Subscription['rewardCutHistoryEntities'], SubscriptionrewardCutHistoryEntitiesArgs, MeshContext>,
+  /** null **/
+  delegationPoolHistoryEntity: InContextSdkMethod<Subscription['delegationPoolHistoryEntity'], SubscriptiondelegationPoolHistoryEntityArgs, MeshContext>,
+  /** null **/
+  delegationPoolHistoryEntities: InContextSdkMethod<Subscription['delegationPoolHistoryEntities'], SubscriptiondelegationPoolHistoryEntitiesArgs, MeshContext>,
+  /** null **/
+  transaction: InContextSdkMethod<Subscription['transaction'], SubscriptiontransactionArgs, MeshContext>,
+  /** null **/
+  transactions: InContextSdkMethod<Subscription['transactions'], SubscriptiontransactionsArgs, MeshContext>,
+  /** Access to subgraph metadata **/
+  _meta: InContextSdkMethod<Subscription['_meta'], Subscription_metaArgs, MeshContext>
+  };
+
+  export type Context = {
+      ["arbitrum"]: { Query: QuerySdk, Mutation: MutationSdk, Subscription: SubscriptionSdk },
+      
+    };
 }
-export type Sdk = ReturnType<typeof getSdk>;
