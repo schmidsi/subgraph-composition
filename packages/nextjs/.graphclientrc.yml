@@ -10,3 +10,20 @@ sources:
 
 documents:
   - "./queries/**/*.graphql"
+
+additionalTypeDefs: |
+  enum CHAIN {
+    ARBITRUM
+    MAINNET
+  }
+
+  extend type Subgraph {
+    deployedChain: CHAIN
+  }
+
+  extend type Query {
+    crossSubgraphs(skip: Int = 0, first: Int, orderBy: Subgraph_orderBy, orderDirection: OrderDirection, where: Subgraph_filter, block: Block_height): [Subgraph!]!
+  }
+
+additionalResolvers:
+  - ./utils/graphclient/resolvers.ts

@@ -3,27 +3,14 @@ import { GraphQLResolveInfo, SelectionSetNode, FieldNode, GraphQLScalarType, Gra
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 import { gql } from '@graphql-mesh/utils';
 
-import type { GetMeshOptions } from '@graphql-mesh/runtime';
-import type { YamlConfig } from '@graphql-mesh/types';
-import { PubSub } from '@graphql-mesh/utils';
-import { DefaultLogger } from '@graphql-mesh/utils';
-import MeshCache from "@graphql-mesh/cache-localforage";
-import { fetch as fetchFn } from '@whatwg-node/fetch';
-
-import { MeshResolvedSource } from '@graphql-mesh/runtime';
-import { MeshTransform, MeshPlugin } from '@graphql-mesh/types';
-import GraphqlHandler from "@graphql-mesh/graphql"
-import StitchingMerger from "@graphql-mesh/merger-stitching";
-import { printWithCache } from '@graphql-mesh/utils';
+import { findAndParseConfig } from '@graphql-mesh/cli';
 import { createMeshHTTPHandler, MeshHTTPHandler } from '@graphql-mesh/http';
 import { getMesh, ExecuteMeshFn, SubscribeMeshFn, MeshContext as BaseMeshContext, MeshInstance } from '@graphql-mesh/runtime';
 import { MeshStore, FsStoreStorageAdapter } from '@graphql-mesh/store';
 import { path as pathModule } from '@graphql-mesh/cross-helpers';
 import { ImportFn } from '@graphql-mesh/types';
-import type { MainnetTypes } from './sources/mainnet/types';
 import type { ArbitrumTypes } from './sources/arbitrum/types';
-import * as importedModule$0 from "./sources/arbitrum/introspectionSchema";
-import * as importedModule$1 from "./sources/mainnet/introspectionSchema";
+import type { MainnetTypes } from './sources/mainnet/types';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -125,6 +112,7 @@ export type Query = {
   accountSearch: Array<GraphAccount>;
   /** Access to subgraph metadata */
   _meta?: Maybe<_Meta_>;
+  crossSubgraphs: Array<Subgraph>;
 };
 
 
@@ -825,6 +813,16 @@ export type QueryaccountSearchArgs = {
 
 
 export type Query_metaArgs = {
+  block?: InputMaybe<Block_height>;
+};
+
+
+export type QuerycrossSubgraphsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Subgraph_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Subgraph_filter>;
   block?: InputMaybe<Block_height>;
 };
 
@@ -9292,6 +9290,7 @@ export type Subgraph = {
   ipfsMetadataHash?: Maybe<Scalars['String']>;
   metadata?: Maybe<SubgraphMetadata>;
   currentVersionRelationEntity?: Maybe<CurrentSubgraphDeploymentRelation>;
+  deployedChain?: Maybe<CHAIN>;
 };
 
 
@@ -11399,6 +11398,10 @@ export type _SubgraphErrorPolicy_ =
   /** If the subgraph has indexing errors, data will be omitted. The default. */
   | 'deny';
 
+export type CHAIN =
+  | 'ARBITRUM'
+  | 'MAINNET';
+
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
 
@@ -11622,6 +11625,7 @@ export type ResolversTypes = ResolversObject<{
   _Block_: ResolverTypeWrapper<_Block_>;
   _Meta_: ResolverTypeWrapper<_Meta_>;
   _SubgraphErrorPolicy_: _SubgraphErrorPolicy_;
+  CHAIN: CHAIN;
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -11813,6 +11817,7 @@ export type QueryResolvers<ContextType = MeshContext, ParentType extends Resolve
   indexerSearch?: Resolver<Array<ResolversTypes['Indexer']>, ParentType, ContextType, RequireFields<QueryindexerSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
   accountSearch?: Resolver<Array<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<QueryaccountSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
   _meta?: Resolver<Maybe<ResolversTypes['_Meta_']>, ParentType, ContextType, Partial<Query_metaArgs>>;
+  crossSubgraphs?: Resolver<Array<ResolversTypes['Subgraph']>, ParentType, ContextType, RequireFields<QuerycrossSubgraphsArgs, 'skip'>>;
 }>;
 
 export type SubscriptionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
@@ -12546,6 +12551,7 @@ export type SubgraphResolvers<ContextType = MeshContext, ParentType extends Reso
   ipfsMetadataHash?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   metadata?: Resolver<Maybe<ResolversTypes['SubgraphMetadata']>, ParentType, ContextType>;
   currentVersionRelationEntity?: Resolver<Maybe<ResolversTypes['CurrentSubgraphDeploymentRelation']>, ParentType, ContextType>;
+  deployedChain?: Resolver<Maybe<ResolversTypes['CHAIN']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -12736,7 +12742,7 @@ export type DirectiveResolvers<ContextType = MeshContext> = ResolversObject<{
   derivedFrom?: derivedFromDirectiveResolver<any, any, ContextType>;
 }>;
 
-export type MeshContext = ArbitrumTypes.Context & MainnetTypes.Context & BaseMeshContext;
+export type MeshContext = MainnetTypes.Context & ArbitrumTypes.Context & BaseMeshContext;
 
 
 import { fileURLToPath } from '@graphql-mesh/utils';
@@ -12745,12 +12751,6 @@ const baseDir = pathModule.join(pathModule.dirname(fileURLToPath(import.meta.url
 const importFn: ImportFn = <T>(moduleId: string) => {
   const relativeModuleId = (pathModule.isAbsolute(moduleId) ? pathModule.relative(baseDir, moduleId) : moduleId).split('\\').join('/').replace(baseDir + '/', '');
   switch(relativeModuleId) {
-    case ".graphclient/sources/arbitrum/introspectionSchema":
-      return Promise.resolve(importedModule$0) as T;
-    
-    case ".graphclient/sources/mainnet/introspectionSchema":
-      return Promise.resolve(importedModule$1) as T;
-    
     default:
       return Promise.reject(new Error(`Cannot find module '${relativeModuleId}'.`));
   }
@@ -12765,86 +12765,15 @@ const rootStore = new MeshStore('.graphclient', new FsStoreStorageAdapter({
   validate: false
 });
 
-export const rawServeConfig: YamlConfig.Config['serve'] = undefined as any
-export async function getMeshOptions(): Promise<GetMeshOptions> {
-const pubsub = new PubSub();
-const sourcesStore = rootStore.child('sources');
-const logger = new DefaultLogger("GraphClient");
-const cache = new (MeshCache as any)({
-      ...({} as any),
-      importFn,
-      store: rootStore.child('cache'),
-      pubsub,
-      logger,
-    } as any)
-
-const sources: MeshResolvedSource[] = [];
-const transforms: MeshTransform[] = [];
-const additionalEnvelopPlugins: MeshPlugin<any>[] = [];
-const mainnetTransforms = [];
-const arbitrumTransforms = [];
-const additionalTypeDefs = [] as any[];
-const mainnetHandler = new GraphqlHandler({
-              name: "mainnet",
-              config: {"endpoint":"https://gateway-arbitrum.network.thegraph.com/api/dc9b1200d80a1c064c90462b9c04f264/subgraphs/id/AwyZBdna4vTAHiqBWsrQ5ErFRMi6HCgGEkQMgNBseWTL"},
-              baseDir,
-              cache,
-              pubsub,
-              store: sourcesStore.child("mainnet"),
-              logger: logger.child("mainnet"),
-              importFn,
-            });
-const arbitrumHandler = new GraphqlHandler({
-              name: "arbitrum",
-              config: {"endpoint":"https://gateway-arbitrum.network.thegraph.com/api/dc9b1200d80a1c064c90462b9c04f264/subgraphs/id/DjUVVVSuKcCCTZSVzVXLioSd7AdqwGEyBrY4Ru5tuqzX"},
-              baseDir,
-              cache,
-              pubsub,
-              store: sourcesStore.child("arbitrum"),
-              logger: logger.child("arbitrum"),
-              importFn,
-            });
-sources[0] = {
-          name: 'mainnet',
-          handler: mainnetHandler,
-          transforms: mainnetTransforms
-        }
-sources[1] = {
-          name: 'arbitrum',
-          handler: arbitrumHandler,
-          transforms: arbitrumTransforms
-        }
-const additionalResolvers = [] as any[]
-const merger = new(StitchingMerger as any)({
-        cache,
-        pubsub,
-        logger: logger.child('stitchingMerger'),
-        store: rootStore.child('stitchingMerger')
-      })
-
-  return {
-    sources,
-    transforms,
-    additionalTypeDefs,
-    additionalResolvers,
-    cache,
-    pubsub,
-    merger,
-    logger,
-    additionalEnvelopPlugins,
-    get documents() {
-      return [
-      {
-        document: SubgraphsDocument,
-        get rawSDL() {
-          return printWithCache(SubgraphsDocument);
-        },
-        location: 'SubgraphsDocument.graphql'
-      }
-    ];
-    },
-    fetchFn,
-  };
+export function getMeshOptions() {
+  console.warn('WARNING: These artifacts are built for development mode. Please run "graphclient build" to build production artifacts');
+  return findAndParseConfig({
+    dir: baseDir,
+    artifactsDir: ".graphclient",
+    configName: "graphclient",
+    additionalPackagePrefixes: ["@graphprotocol/client-"],
+    initialLoggerPrefix: "GraphClient",
+  });
 }
 
 export function createBuiltMeshHTTPHandler<TServerContext = {}>(): MeshHTTPHandler<TServerContext> {
@@ -12854,7 +12783,6 @@ export function createBuiltMeshHTTPHandler<TServerContext = {}>(): MeshHTTPHandl
     rawServeConfig: undefined,
   })
 }
-
 
 let meshInstance$: Promise<MeshInstance> | undefined;
 
@@ -12881,16 +12809,22 @@ export function getBuiltGraphSDK<TGlobalContext = any, TOperationContext = any>(
 export type SubgraphsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type SubgraphsQuery = { subgraphs: Array<(
-    Pick<Subgraph, 'id'>
+export type SubgraphsQuery = { crossSubgraphs: Array<(
+    Pick<Subgraph, 'id' | 'deployedChain'>
     & { metadata?: Maybe<Pick<SubgraphMetadata, 'displayName'>> }
   )> };
 
 
 export const SubgraphsDocument = gql`
     query Subgraphs {
-  subgraphs {
+  crossSubgraphs(
+    first: 10
+    orderBy: currentSignalledTokens
+    orderDirection: desc
+    where: {entityVersion: 2}
+  ) {
     id
+    deployedChain
     metadata {
       displayName
     }

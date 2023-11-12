@@ -1015,6 +1015,7 @@ type Query {
   ): [GraphAccount!]!
   """Access to subgraph metadata"""
   _meta(block: Block_height): _Meta_
+  crossSubgraphs(skip: Int = 0, first: Int, orderBy: Subgraph_orderBy, orderDirection: OrderDirection, where: Subgraph_filter, block: Block_height): [Subgraph!]!
 }
 
 type Subscription {
@@ -9692,6 +9693,7 @@ type Subgraph {
   ipfsMetadataHash: String
   metadata: SubgraphMetadata
   currentVersionRelationEntity: CurrentSubgraphDeploymentRelation
+  deployedChain: CHAIN
 }
 
 """
@@ -11720,4 +11722,9 @@ enum _SubgraphErrorPolicy_ {
   If the subgraph has indexing errors, data will be omitted. The default.
   """
   deny
+}
+
+enum CHAIN {
+  ARBITRUM
+  MAINNET
 }

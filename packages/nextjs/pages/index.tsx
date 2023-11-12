@@ -26,8 +26,10 @@ const Home: NextPage = () => {
 
         <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
           <ul>
-            {result?.data?.subgraphs.map(subgraph => (
-              <li key={subgraph.id}>{subgraph.metadata?.displayName}</li>
+            {result?.data?.crossSubgraphs.map(subgraph => (
+              <li key={subgraph.id}>
+                {subgraph.metadata?.displayName} - {subgraph.deployedChain}
+              </li>
             ))}
           </ul>
         </div>

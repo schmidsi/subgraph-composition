@@ -2,6 +2,12 @@
 
 [![Cover Image](cover.png)](https://bit.ly/47afnwj)
 
+## Problem statement
+
+Subgraphs that are published to The Graph Network can either be published to The Graph Smart Contracts on Arbitrum One or Ethereum Mainnet. In order to have an overview over all subgraphs on The Graph Network we need to combine the data from both chains. This is a common problem in the blockchain space: Many protocols have smart contracts on multiple chains.
+
+While reading this, it might be a bit confusing as we talk about "subgraphs" as the thing that is published to The Graph Network, but also a way to read from the blockchain, since we are using The Graph Network subgraphs as an example.
+
 ## Steps
 
 ### Create new Scaffold-ETH project
@@ -111,11 +117,11 @@ http://localhost:4000/
 
 ### Hook up Graph Client to React
 
-Let's start with a very simple query and hook it to React:
+Let's start with a simple query and hook it to React:
 
 ```graphql
 query Subgraphs {
-  subgraphs {
+  subgraphs(first: 10, orderBy: currentSignalledTokens, orderDirection: desc, where: { entityVersion: 2 })
     id
     metadata {
       displayName
@@ -125,6 +131,8 @@ query Subgraphs {
 ```
 
 _hint_: Be sure to use named queries (`query Subgraphs {}`) instead of anonymous queries (`{}`) because Graph Client does not support anonymous queries.
+
+_note_: The `where: { entityVersion: 2 }` filter is an implementation detail that only applies to that particular subgraph. For other subgraphs, this is not needed.
 
 1. Get a query
 
@@ -231,15 +239,140 @@ sources:
 # ... rest of the file
 ```
 
-2.
+2. Extend the schema
+
+A fundemantal idea of schema stiching is that we can extend a GraphQL schema. Graph Client supports this too and makes it as simple as possible. We can now extend the schema to add some cross-chain fields.
+
+Add the following lines to [`.graphclientrc.yml`](./packages/nextjs/.graphclientrc.yml):
+
+```yml
+additionalTypeDefs: |
+  enum CHAIN {
+    ARBITRUM
+    MAINNET
+  }
+
+  extend type Subgraph {
+    deployedChain: CHAIN
+  }
+
+  extend type Query {
+    crossSubgraphs(skip: Int = 0, first: Int, orderBy: Subgraph_orderBy, orderDirection: OrderDirection, where: Subgraph_filter, block: Block_height): [Subgraph!]!
+  }
+```
+
+In the code above, we first define an `enum` that helps to identify on which chain a subgraph is deployed. Then we extend the `Subgraph` type with a new field `deployedChain`. Finally, we extend the root `Query` type with a new field `crossSubgraphs` that allows us to query subgraphs across chains. Note that the arguments to `crossSubgraphs` is the same as `subgraphs`: `skip`, `first`, `orderBy`, `orderDirection`, `where` and `block`.
+
+3. Reference the custom resolvers
+
+In order to make the new fields work, we need to add custom resolvers. Add the following lines to [`.graphclientrc.yml`](./packages/nextjs/.graphclientrc.yml):
+
+```yml
+additionalResolvers:
+  - ./utils/graphclient/resolvers.ts
+```
+
+This instructs Graph Client to load custom resolvers from [./utils/graphclient/resolvers.ts](./utils/graphclient/resolvers.ts).
+
+4. Implement the custom resolvers
+
+Create the file [./utils/graphclient/resolvers.ts](./utils/graphclient/resolvers.ts) with the following content:
+
+````ts
+import { Resolvers } from "../.graphclient";
+
+const chains = ["arbitrum", "mainnet"];
+
+export const resolvers: Resolvers = {
+  Query: {
+    crossSubgraphs: async (root: any, args: any, context: any, info: any) => {
+      const results = await Promise.all(
+        chains.map(source =>
+          context[source].Query.subgraphs({
+            root,
+            args,
+            context,
+            info,
+          }).then((subgraphs: any) =>
+            subgraphs.map((subgraph: any) => ({ ...subgraph, deployedChain: source.toUpperCase() })),
+          ),
+        ),
+      ).then(allSubgraphs => allSubgraphs.flat());
+
+      return results;
+    },
+  },
+};
+```
+
+This simple resolver just sends the same query to both subgraphs and combines the results. Note that we also add the `deployedChain` field to the result. This is a very simple example. In a real-world example you might want to implement more logic to sort the results properly.
+
+### Query the new combined field
+
+1. Change the query to use the new field
+
+```graphql
+query Subgraphs {
+  crossSubgraphs(first: 10, orderBy: currentSignalledTokens, orderDirection: desc, where: { entityVersion: 2 }) {
+    id
+    deployedChain
+    metadata {
+      displayName
+    }
+  }
+}
+```
+
+_Note_: We changed the query from `subgraphs` to `crossSubgraphs` but kept the arguments. Also, we now query the `deployedChain` field.
+
+2. Rebuild Graph Client helper files
+
+```bash
+yarn graphclient build
+```
+
+3. Change the React code to use the new query
+
+```tsx
+<ul>
+  {result?.data?.crossSubgraphs.map(subgraph => (
+    <li key={subgraph.id}>
+      {subgraph.metadata?.displayName} - {subgraph.deployedChain}
+    </li>
+  ))}
+</ul>
+```
+
+See that the filed is now named `crossSubgraphs` and we also display the `deployedChain` field.
+
+## Conclusion
+
+We now learned how to combine the schema of multiple subgraphs together and create custom resolvers on top of that.
 
 ## Caveats
+
+### Re-run Graph Client build every time
 
 If you change the queries or configuration files, always rebuild the Graph Client helper files:
 
 ```bash
 yarn graphclient build
 ```
+
+### Graph Client dev server messes up the build files
+
+If you ever see this error in your terminal:
+
+```
+error - ./node_modules/@graphql-mesh/cli/node_modules/ts-node/dist-raw/node-internal-modules-cjs-helpers.js:35:0
+Module not found: Can't resolve 'module'
+```
+
+Then you need to rebuild the Graph Client helper files:
+
+```bash
+yarn graphclient build
+````
 
 ## Notes
 

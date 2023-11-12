@@ -1,6 +1,7 @@
 query Subgraphs {
-  subgraphs {
+  crossSubgraphs(first: 10, orderBy: currentSignalledTokens, orderDirection: desc, where: { entityVersion: 2 }) {
     id
+    deployedChain
     metadata {
       displayName
     }
