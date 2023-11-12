@@ -278,7 +278,7 @@ This instructs Graph Client to load custom resolvers from [./utils/graphclient/r
 
 Create the file [./utils/graphclient/resolvers.ts](./utils/graphclient/resolvers.ts) with the following content:
 
-````ts
+```ts
 import { Resolvers } from "../.graphclient";
 
 const chains = ["arbitrum", "mainnet"];
@@ -287,17 +287,20 @@ export const resolvers: Resolvers = {
   Query: {
     crossSubgraphs: async (root: any, args: any, context: any, info: any) => {
       const results = await Promise.all(
-        chains.map(source =>
+        chains.map((source) =>
           context[source].Query.subgraphs({
             root,
             args,
             context,
             info,
           }).then((subgraphs: any) =>
-            subgraphs.map((subgraph: any) => ({ ...subgraph, deployedChain: source.toUpperCase() })),
-          ),
-        ),
-      ).then(allSubgraphs => allSubgraphs.flat());
+            subgraphs.map((subgraph: any) => ({
+              ...subgraph,
+              deployedChain: source.toUpperCase(),
+            }))
+          )
+        )
+      ).then((allSubgraphs) => allSubgraphs.flat());
 
       return results;
     },
@@ -313,7 +316,12 @@ This simple resolver just sends the same query to both subgraphs and combines th
 
 ```graphql
 query Subgraphs {
-  crossSubgraphs(first: 10, orderBy: currentSignalledTokens, orderDirection: desc, where: { entityVersion: 2 }) {
+  crossSubgraphs(
+    first: 10
+    orderBy: currentSignalledTokens
+    orderDirection: desc
+    where: { entityVersion: 2 }
+  ) {
     id
     deployedChain
     metadata {
@@ -335,7 +343,7 @@ yarn graphclient build
 
 ```tsx
 <ul>
-  {result?.data?.crossSubgraphs.map(subgraph => (
+  {result?.data?.crossSubgraphs.map((subgraph) => (
     <li key={subgraph.id}>
       {subgraph.metadata?.displayName} - {subgraph.deployedChain}
     </li>
@@ -372,7 +380,7 @@ Then you need to rebuild the Graph Client helper files:
 
 ```bash
 yarn graphclient build
-````
+```
 
 ## Notes
 
