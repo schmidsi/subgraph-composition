@@ -121,7 +121,7 @@ Let's start with a simple query and hook it to React:
 
 ```graphql
 query Subgraphs {
-  subgraphs(first: 10, orderBy: currentSignalledTokens, orderDirection: desc, where: { entityVersion: 2 })
+  subgraphs(first: 10, orderBy: currentSignalledTokens, orderDirection: desc, where: { entityVersion: 2 }) {
     id
     metadata {
       displayName
