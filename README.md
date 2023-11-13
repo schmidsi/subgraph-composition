@@ -146,7 +146,7 @@ We can use the GraphiQL explorer to build a more complex query. Just click on th
 
 2. Store the query in a file
 
-With Graph Client, we can separate GraphQL queries from our React components. This is a good practice because it makes our code more readable and maintainable. I suggest to use the path: [`./queries/Subgraphs.gql`](./queries/Subgraphs.gql). Also, Graph Client generates TypeScript types for us, so we can use them in our React components.
+With Graph Client, we can separate GraphQL queries from our React components. This is a good practice because it makes our code more readable and maintainable. I suggest to use the path: [`./queries/Subgraphs.graphql`](./queries/Subgraphs.gql). Also, Graph Client generates TypeScript types for us, so we can use them in our React components.
 
 And then extend [`.graphclientrc.yml`](./packages/nextjs/.graphclientrc.yml) with the following:
 
