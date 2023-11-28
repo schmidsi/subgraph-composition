@@ -215,7 +215,7 @@ export default Home;
 
 _hint_: In the example above, we use the bare functions provided by Graph Client directly. Graph Client also nicely integrates with [Apollo](https://github.com/graphprotocol/graph-client/tree/main/examples/apollo), [URQL](https://github.com/graphprotocol/graph-client/blob/main/examples/urql) and [React Query](https://github.com/graphprotocol/graph-client/blob/main/examples/react-query).
 
-Now we can navigate to http://localhost:4000/ and see a list of subgraph names.
+Now we can navigate to http://localhost:3000/ and see a list of subgraph names.
 
 ### Combine multiple subgraphs
 
