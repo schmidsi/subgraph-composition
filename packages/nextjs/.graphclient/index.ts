@@ -3,19 +3,7 @@ import { GraphQLResolveInfo, SelectionSetNode, FieldNode, GraphQLScalarType, Gra
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 import { gql } from '@graphql-mesh/utils';
 
-import type { GetMeshOptions } from '@graphql-mesh/runtime';
-import type { YamlConfig } from '@graphql-mesh/types';
-import { PubSub } from '@graphql-mesh/utils';
-import { DefaultLogger } from '@graphql-mesh/utils';
-import MeshCache from "@graphql-mesh/cache-localforage";
-import { fetch as fetchFn } from '@whatwg-node/fetch';
-
-import { MeshResolvedSource } from '@graphql-mesh/runtime';
-import { MeshTransform, MeshPlugin } from '@graphql-mesh/types';
-import GraphqlHandler from "@graphql-mesh/graphql"
-import { parse } from 'graphql';
-import StitchingMerger from "@graphql-mesh/merger-stitching";
-import { printWithCache } from '@graphql-mesh/utils';
+import { findAndParseConfig } from '@graphql-mesh/cli';
 import { createMeshHTTPHandler, MeshHTTPHandler } from '@graphql-mesh/http';
 import { getMesh, ExecuteMeshFn, SubscribeMeshFn, MeshContext as BaseMeshContext, MeshInstance } from '@graphql-mesh/runtime';
 import { MeshStore, FsStoreStorageAdapter } from '@graphql-mesh/store';
@@ -23,8 +11,6 @@ import { path as pathModule } from '@graphql-mesh/cross-helpers';
 import { ImportFn } from '@graphql-mesh/types';
 import type { ArbitrumTypes } from './sources/arbitrum/types';
 import type { MainnetTypes } from './sources/mainnet/types';
-import * as importedModule$0 from "./sources/mainnet/introspectionSchema";
-import * as importedModule$1 from "./sources/arbitrum/introspectionSchema";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -48,98 +34,178 @@ export type Scalars = {
 };
 
 export type Query = {
-  graphNetwork?: Maybe<GraphNetwork>;
-  graphNetworks: Array<GraphNetwork>;
-  graphAccount?: Maybe<GraphAccount>;
-  graphAccounts: Array<GraphAccount>;
-  accountMetadata: Array<AccountMetadata>;
-  graphAccountName?: Maybe<GraphAccountName>;
-  graphAccountNames: Array<GraphAccountName>;
-  subgraph?: Maybe<Subgraph>;
-  subgraphs: Array<Subgraph>;
-  subgraphMetadata: Array<SubgraphMetadata>;
-  currentSubgraphDeploymentRelation?: Maybe<CurrentSubgraphDeploymentRelation>;
-  currentSubgraphDeploymentRelations: Array<CurrentSubgraphDeploymentRelation>;
-  network?: Maybe<Network>;
-  networks: Array<Network>;
-  subgraphVersion?: Maybe<SubgraphVersion>;
-  subgraphVersions: Array<SubgraphVersion>;
-  subgraphVersionMetadata: Array<SubgraphVersionMetadata>;
-  subgraphDeployment?: Maybe<SubgraphDeployment>;
-  subgraphDeployments: Array<SubgraphDeployment>;
-  subgraphDeploymentMetadata: Array<SubgraphDeploymentMetadata>;
-  indexer?: Maybe<Indexer>;
-  indexers: Array<Indexer>;
-  allocation?: Maybe<Allocation>;
-  allocations: Array<Allocation>;
-  pool?: Maybe<Pool>;
-  pools: Array<Pool>;
-  delegator?: Maybe<Delegator>;
-  delegators: Array<Delegator>;
-  delegatedStake?: Maybe<DelegatedStake>;
-  delegatedStakes: Array<DelegatedStake>;
-  curator?: Maybe<Curator>;
-  curators: Array<Curator>;
-  signal?: Maybe<Signal>;
-  signals: Array<Signal>;
-  nameSignal?: Maybe<NameSignal>;
-  nameSignals: Array<NameSignal>;
-  nameSignalSubgraphRelation?: Maybe<NameSignalSubgraphRelation>;
-  nameSignalSubgraphRelations: Array<NameSignalSubgraphRelation>;
-  signalSubgraphDeploymentRelation?: Maybe<SignalSubgraphDeploymentRelation>;
-  signalSubgraphDeploymentRelations: Array<SignalSubgraphDeploymentRelation>;
-  dispute?: Maybe<Dispute>;
-  disputes: Array<Dispute>;
-  attestation?: Maybe<Attestation>;
-  attestations: Array<Attestation>;
-  epoch?: Maybe<Epoch>;
-  epoches: Array<Epoch>;
-  nameSignalTransaction?: Maybe<NameSignalTransaction>;
-  nameSignalTransactions: Array<NameSignalTransaction>;
-  signalTransaction?: Maybe<SignalTransaction>;
-  signalTransactions: Array<SignalTransaction>;
-  bridgeWithdrawalTransaction?: Maybe<BridgeWithdrawalTransaction>;
-  bridgeWithdrawalTransactions: Array<BridgeWithdrawalTransaction>;
-  bridgeDepositTransaction?: Maybe<BridgeDepositTransaction>;
-  bridgeDepositTransactions: Array<BridgeDepositTransaction>;
-  retryableTicket?: Maybe<RetryableTicket>;
-  retryableTickets: Array<RetryableTicket>;
-  retryableTicketRedeemAttempt?: Maybe<RetryableTicketRedeemAttempt>;
-  retryableTicketRedeemAttempts: Array<RetryableTicketRedeemAttempt>;
-  tokenManager?: Maybe<TokenManager>;
-  tokenManagers: Array<TokenManager>;
-  authorizedFunction?: Maybe<AuthorizedFunction>;
-  authorizedFunctions: Array<AuthorizedFunction>;
-  tokenLockWallet?: Maybe<TokenLockWallet>;
-  tokenLockWallets: Array<TokenLockWallet>;
-  indexerDeployment?: Maybe<IndexerDeployment>;
-  indexerDeployments: Array<IndexerDeployment>;
-  rewardCutHistoryEntity?: Maybe<RewardCutHistoryEntity>;
-  rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
-  delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
-  delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
-  indexersRecalculateQueue?: Maybe<IndexersRecalculateQueue>;
-  indexersRecalculateQueues: Array<IndexersRecalculateQueue>;
-  transaction?: Maybe<Transaction>;
-  transactions: Array<Transaction>;
-  curatorSearch: Array<Curator>;
-  delegatorSearch: Array<Delegator>;
-  indexerSearch: Array<Indexer>;
-  accountSearch: Array<GraphAccount>;
+  mainnet_graphNetwork?: Maybe<GraphNetwork>;
+  mainnet_graphNetworks: Array<GraphNetwork>;
+  mainnet_graphAccount?: Maybe<GraphAccount>;
+  mainnet_graphAccounts: Array<GraphAccount>;
+  mainnet_accountMetadata: Array<AccountMetadata>;
+  mainnet_graphAccountName?: Maybe<GraphAccountName>;
+  mainnet_graphAccountNames: Array<GraphAccountName>;
+  mainnet_subgraph?: Maybe<Subgraph>;
+  mainnet_subgraphs: Array<Subgraph>;
+  mainnet_subgraphMetadata: Array<SubgraphMetadata>;
+  mainnet_currentSubgraphDeploymentRelation?: Maybe<CurrentSubgraphDeploymentRelation>;
+  mainnet_currentSubgraphDeploymentRelations: Array<CurrentSubgraphDeploymentRelation>;
+  mainnet_network?: Maybe<Network>;
+  mainnet_networks: Array<Network>;
+  mainnet_subgraphVersion?: Maybe<SubgraphVersion>;
+  mainnet_subgraphVersions: Array<SubgraphVersion>;
+  mainnet_subgraphVersionMetadata: Array<SubgraphVersionMetadata>;
+  mainnet_subgraphDeployment?: Maybe<SubgraphDeployment>;
+  mainnet_subgraphDeployments: Array<SubgraphDeployment>;
+  mainnet_subgraphDeploymentMetadata: Array<SubgraphDeploymentMetadata>;
+  mainnet_indexer?: Maybe<Indexer>;
+  mainnet_indexers: Array<Indexer>;
+  mainnet_allocation?: Maybe<Allocation>;
+  mainnet_allocations: Array<Allocation>;
+  mainnet_pool?: Maybe<Pool>;
+  mainnet_pools: Array<Pool>;
+  mainnet_delegator?: Maybe<Delegator>;
+  mainnet_delegators: Array<Delegator>;
+  mainnet_delegatedStake?: Maybe<DelegatedStake>;
+  mainnet_delegatedStakes: Array<DelegatedStake>;
+  mainnet_curator?: Maybe<Curator>;
+  mainnet_curators: Array<Curator>;
+  mainnet_signal?: Maybe<Signal>;
+  mainnet_signals: Array<Signal>;
+  mainnet_nameSignal?: Maybe<NameSignal>;
+  mainnet_nameSignals: Array<NameSignal>;
+  mainnet_nameSignalSubgraphRelation?: Maybe<NameSignalSubgraphRelation>;
+  mainnet_nameSignalSubgraphRelations: Array<NameSignalSubgraphRelation>;
+  mainnet_signalSubgraphDeploymentRelation?: Maybe<SignalSubgraphDeploymentRelation>;
+  mainnet_signalSubgraphDeploymentRelations: Array<SignalSubgraphDeploymentRelation>;
+  mainnet_dispute?: Maybe<Dispute>;
+  mainnet_disputes: Array<Dispute>;
+  mainnet_attestation?: Maybe<Attestation>;
+  mainnet_attestations: Array<Attestation>;
+  mainnet_epoch?: Maybe<Epoch>;
+  mainnet_epoches: Array<Epoch>;
+  mainnet_nameSignalTransaction?: Maybe<NameSignalTransaction>;
+  mainnet_nameSignalTransactions: Array<NameSignalTransaction>;
+  mainnet_signalTransaction?: Maybe<SignalTransaction>;
+  mainnet_signalTransactions: Array<SignalTransaction>;
+  mainnet_bridgeWithdrawalTransaction?: Maybe<BridgeWithdrawalTransaction>;
+  mainnet_bridgeWithdrawalTransactions: Array<BridgeWithdrawalTransaction>;
+  mainnet_bridgeDepositTransaction?: Maybe<BridgeDepositTransaction>;
+  mainnet_bridgeDepositTransactions: Array<BridgeDepositTransaction>;
+  mainnet_retryableTicket?: Maybe<RetryableTicket>;
+  mainnet_retryableTickets: Array<RetryableTicket>;
+  mainnet_retryableTicketRedeemAttempt?: Maybe<RetryableTicketRedeemAttempt>;
+  mainnet_retryableTicketRedeemAttempts: Array<RetryableTicketRedeemAttempt>;
+  mainnet_tokenManager?: Maybe<TokenManager>;
+  mainnet_tokenManagers: Array<TokenManager>;
+  mainnet_authorizedFunction?: Maybe<AuthorizedFunction>;
+  mainnet_authorizedFunctions: Array<AuthorizedFunction>;
+  mainnet_tokenLockWallet?: Maybe<TokenLockWallet>;
+  mainnet_tokenLockWallets: Array<TokenLockWallet>;
+  mainnet_indexerDeployment?: Maybe<IndexerDeployment>;
+  mainnet_indexerDeployments: Array<IndexerDeployment>;
+  mainnet_rewardCutHistoryEntity?: Maybe<RewardCutHistoryEntity>;
+  mainnet_rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
+  mainnet_delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
+  mainnet_delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
+  mainnet_indexersRecalculateQueue?: Maybe<IndexersRecalculateQueue>;
+  mainnet_indexersRecalculateQueues: Array<IndexersRecalculateQueue>;
+  mainnet_transaction?: Maybe<Transaction>;
+  mainnet_transactions: Array<Transaction>;
+  mainnet_curatorSearch: Array<Curator>;
+  mainnet_delegatorSearch: Array<Delegator>;
+  mainnet_indexerSearch: Array<Indexer>;
+  mainnet_accountSearch: Array<GraphAccount>;
   /** Access to subgraph metadata */
-  _meta?: Maybe<_Meta_>;
+  mainnet__meta?: Maybe<_Meta_>;
+  arbitrum_graphNetwork?: Maybe<GraphNetwork>;
+  arbitrum_graphNetworks: Array<GraphNetwork>;
+  arbitrum_graphAccount?: Maybe<GraphAccount>;
+  arbitrum_graphAccounts: Array<GraphAccount>;
+  arbitrum_accountMetadata: Array<AccountMetadata>;
+  arbitrum_graphAccountName?: Maybe<GraphAccountName>;
+  arbitrum_graphAccountNames: Array<GraphAccountName>;
+  arbitrum_subgraph?: Maybe<Subgraph>;
+  arbitrum_subgraphs: Array<Subgraph>;
+  arbitrum_subgraphMetadata: Array<SubgraphMetadata>;
+  arbitrum_currentSubgraphDeploymentRelation?: Maybe<CurrentSubgraphDeploymentRelation>;
+  arbitrum_currentSubgraphDeploymentRelations: Array<CurrentSubgraphDeploymentRelation>;
+  arbitrum_network?: Maybe<Network>;
+  arbitrum_networks: Array<Network>;
+  arbitrum_subgraphVersion?: Maybe<SubgraphVersion>;
+  arbitrum_subgraphVersions: Array<SubgraphVersion>;
+  arbitrum_subgraphVersionMetadata: Array<SubgraphVersionMetadata>;
+  arbitrum_subgraphDeployment?: Maybe<SubgraphDeployment>;
+  arbitrum_subgraphDeployments: Array<SubgraphDeployment>;
+  arbitrum_subgraphDeploymentMetadata: Array<SubgraphDeploymentMetadata>;
+  arbitrum_indexer?: Maybe<Indexer>;
+  arbitrum_indexers: Array<Indexer>;
+  arbitrum_allocation?: Maybe<Allocation>;
+  arbitrum_allocations: Array<Allocation>;
+  arbitrum_pool?: Maybe<Pool>;
+  arbitrum_pools: Array<Pool>;
+  arbitrum_delegator?: Maybe<Delegator>;
+  arbitrum_delegators: Array<Delegator>;
+  arbitrum_delegatedStake?: Maybe<DelegatedStake>;
+  arbitrum_delegatedStakes: Array<DelegatedStake>;
+  arbitrum_curator?: Maybe<Curator>;
+  arbitrum_curators: Array<Curator>;
+  arbitrum_signal?: Maybe<Signal>;
+  arbitrum_signals: Array<Signal>;
+  arbitrum_nameSignal?: Maybe<NameSignal>;
+  arbitrum_nameSignals: Array<NameSignal>;
+  arbitrum_nameSignalSubgraphRelation?: Maybe<NameSignalSubgraphRelation>;
+  arbitrum_nameSignalSubgraphRelations: Array<NameSignalSubgraphRelation>;
+  arbitrum_signalSubgraphDeploymentRelation?: Maybe<SignalSubgraphDeploymentRelation>;
+  arbitrum_signalSubgraphDeploymentRelations: Array<SignalSubgraphDeploymentRelation>;
+  arbitrum_dispute?: Maybe<Dispute>;
+  arbitrum_disputes: Array<Dispute>;
+  arbitrum_attestation?: Maybe<Attestation>;
+  arbitrum_attestations: Array<Attestation>;
+  arbitrum_epoch?: Maybe<Epoch>;
+  arbitrum_epoches: Array<Epoch>;
+  arbitrum_nameSignalTransaction?: Maybe<NameSignalTransaction>;
+  arbitrum_nameSignalTransactions: Array<NameSignalTransaction>;
+  arbitrum_signalTransaction?: Maybe<SignalTransaction>;
+  arbitrum_signalTransactions: Array<SignalTransaction>;
+  arbitrum_bridgeWithdrawalTransaction?: Maybe<BridgeWithdrawalTransaction>;
+  arbitrum_bridgeWithdrawalTransactions: Array<BridgeWithdrawalTransaction>;
+  arbitrum_bridgeDepositTransaction?: Maybe<BridgeDepositTransaction>;
+  arbitrum_bridgeDepositTransactions: Array<BridgeDepositTransaction>;
+  arbitrum_retryableTicket?: Maybe<RetryableTicket>;
+  arbitrum_retryableTickets: Array<RetryableTicket>;
+  arbitrum_retryableTicketRedeemAttempt?: Maybe<RetryableTicketRedeemAttempt>;
+  arbitrum_retryableTicketRedeemAttempts: Array<RetryableTicketRedeemAttempt>;
+  arbitrum_tokenManager?: Maybe<TokenManager>;
+  arbitrum_tokenManagers: Array<TokenManager>;
+  arbitrum_authorizedFunction?: Maybe<AuthorizedFunction>;
+  arbitrum_authorizedFunctions: Array<AuthorizedFunction>;
+  arbitrum_tokenLockWallet?: Maybe<TokenLockWallet>;
+  arbitrum_tokenLockWallets: Array<TokenLockWallet>;
+  arbitrum_indexerDeployment?: Maybe<IndexerDeployment>;
+  arbitrum_indexerDeployments: Array<IndexerDeployment>;
+  arbitrum_rewardCutHistoryEntity?: Maybe<RewardCutHistoryEntity>;
+  arbitrum_rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
+  arbitrum_delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
+  arbitrum_delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
+  arbitrum_indexersRecalculateQueue?: Maybe<IndexersRecalculateQueue>;
+  arbitrum_indexersRecalculateQueues: Array<IndexersRecalculateQueue>;
+  arbitrum_transaction?: Maybe<Transaction>;
+  arbitrum_transactions: Array<Transaction>;
+  arbitrum_curatorSearch: Array<Curator>;
+  arbitrum_delegatorSearch: Array<Delegator>;
+  arbitrum_indexerSearch: Array<Indexer>;
+  arbitrum_accountSearch: Array<GraphAccount>;
+  /** Access to subgraph metadata */
+  arbitrum__meta?: Maybe<_Meta_>;
   crossSubgraphs: Array<Subgraph>;
 };
 
 
-export type QuerygraphNetworkArgs = {
+export type Querymainnet_graphNetworkArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerygraphNetworksArgs = {
+export type Querymainnet_graphNetworksArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GraphNetwork_orderBy>;
@@ -150,14 +216,14 @@ export type QuerygraphNetworksArgs = {
 };
 
 
-export type QuerygraphAccountArgs = {
+export type Querymainnet_graphAccountArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerygraphAccountsArgs = {
+export type Querymainnet_graphAccountsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GraphAccount_orderBy>;
@@ -168,7 +234,7 @@ export type QuerygraphAccountsArgs = {
 };
 
 
-export type QueryaccountMetadataArgs = {
+export type Querymainnet_accountMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<AccountMetadata_orderBy>;
@@ -179,14 +245,14 @@ export type QueryaccountMetadataArgs = {
 };
 
 
-export type QuerygraphAccountNameArgs = {
+export type Querymainnet_graphAccountNameArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerygraphAccountNamesArgs = {
+export type Querymainnet_graphAccountNamesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GraphAccountName_orderBy>;
@@ -197,14 +263,14 @@ export type QuerygraphAccountNamesArgs = {
 };
 
 
-export type QuerysubgraphArgs = {
+export type Querymainnet_subgraphArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerysubgraphsArgs = {
+export type Querymainnet_subgraphsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Subgraph_orderBy>;
@@ -215,7 +281,7 @@ export type QuerysubgraphsArgs = {
 };
 
 
-export type QuerysubgraphMetadataArgs = {
+export type Querymainnet_subgraphMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphMetadata_orderBy>;
@@ -226,14 +292,14 @@ export type QuerysubgraphMetadataArgs = {
 };
 
 
-export type QuerycurrentSubgraphDeploymentRelationArgs = {
+export type Querymainnet_currentSubgraphDeploymentRelationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerycurrentSubgraphDeploymentRelationsArgs = {
+export type Querymainnet_currentSubgraphDeploymentRelationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<CurrentSubgraphDeploymentRelation_orderBy>;
@@ -244,14 +310,14 @@ export type QuerycurrentSubgraphDeploymentRelationsArgs = {
 };
 
 
-export type QuerynetworkArgs = {
+export type Querymainnet_networkArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerynetworksArgs = {
+export type Querymainnet_networksArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Network_orderBy>;
@@ -262,14 +328,14 @@ export type QuerynetworksArgs = {
 };
 
 
-export type QuerysubgraphVersionArgs = {
+export type Querymainnet_subgraphVersionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerysubgraphVersionsArgs = {
+export type Querymainnet_subgraphVersionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphVersion_orderBy>;
@@ -280,7 +346,7 @@ export type QuerysubgraphVersionsArgs = {
 };
 
 
-export type QuerysubgraphVersionMetadataArgs = {
+export type Querymainnet_subgraphVersionMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphVersionMetadata_orderBy>;
@@ -291,14 +357,14 @@ export type QuerysubgraphVersionMetadataArgs = {
 };
 
 
-export type QuerysubgraphDeploymentArgs = {
+export type Querymainnet_subgraphDeploymentArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerysubgraphDeploymentsArgs = {
+export type Querymainnet_subgraphDeploymentsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphDeployment_orderBy>;
@@ -309,7 +375,7 @@ export type QuerysubgraphDeploymentsArgs = {
 };
 
 
-export type QuerysubgraphDeploymentMetadataArgs = {
+export type Querymainnet_subgraphDeploymentMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphDeploymentMetadata_orderBy>;
@@ -320,14 +386,14 @@ export type QuerysubgraphDeploymentMetadataArgs = {
 };
 
 
-export type QueryindexerArgs = {
+export type Querymainnet_indexerArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryindexersArgs = {
+export type Querymainnet_indexersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Indexer_orderBy>;
@@ -338,14 +404,14 @@ export type QueryindexersArgs = {
 };
 
 
-export type QueryallocationArgs = {
+export type Querymainnet_allocationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryallocationsArgs = {
+export type Querymainnet_allocationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Allocation_orderBy>;
@@ -356,14 +422,14 @@ export type QueryallocationsArgs = {
 };
 
 
-export type QuerypoolArgs = {
+export type Querymainnet_poolArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerypoolsArgs = {
+export type Querymainnet_poolsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Pool_orderBy>;
@@ -374,14 +440,14 @@ export type QuerypoolsArgs = {
 };
 
 
-export type QuerydelegatorArgs = {
+export type Querymainnet_delegatorArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerydelegatorsArgs = {
+export type Querymainnet_delegatorsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Delegator_orderBy>;
@@ -392,14 +458,14 @@ export type QuerydelegatorsArgs = {
 };
 
 
-export type QuerydelegatedStakeArgs = {
+export type Querymainnet_delegatedStakeArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerydelegatedStakesArgs = {
+export type Querymainnet_delegatedStakesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<DelegatedStake_orderBy>;
@@ -410,14 +476,14 @@ export type QuerydelegatedStakesArgs = {
 };
 
 
-export type QuerycuratorArgs = {
+export type Querymainnet_curatorArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerycuratorsArgs = {
+export type Querymainnet_curatorsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Curator_orderBy>;
@@ -428,14 +494,14 @@ export type QuerycuratorsArgs = {
 };
 
 
-export type QuerysignalArgs = {
+export type Querymainnet_signalArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerysignalsArgs = {
+export type Querymainnet_signalsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Signal_orderBy>;
@@ -446,14 +512,14 @@ export type QuerysignalsArgs = {
 };
 
 
-export type QuerynameSignalArgs = {
+export type Querymainnet_nameSignalArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerynameSignalsArgs = {
+export type Querymainnet_nameSignalsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<NameSignal_orderBy>;
@@ -464,14 +530,14 @@ export type QuerynameSignalsArgs = {
 };
 
 
-export type QuerynameSignalSubgraphRelationArgs = {
+export type Querymainnet_nameSignalSubgraphRelationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerynameSignalSubgraphRelationsArgs = {
+export type Querymainnet_nameSignalSubgraphRelationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<NameSignalSubgraphRelation_orderBy>;
@@ -482,14 +548,14 @@ export type QuerynameSignalSubgraphRelationsArgs = {
 };
 
 
-export type QuerysignalSubgraphDeploymentRelationArgs = {
+export type Querymainnet_signalSubgraphDeploymentRelationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerysignalSubgraphDeploymentRelationsArgs = {
+export type Querymainnet_signalSubgraphDeploymentRelationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SignalSubgraphDeploymentRelation_orderBy>;
@@ -500,14 +566,14 @@ export type QuerysignalSubgraphDeploymentRelationsArgs = {
 };
 
 
-export type QuerydisputeArgs = {
+export type Querymainnet_disputeArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerydisputesArgs = {
+export type Querymainnet_disputesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Dispute_orderBy>;
@@ -518,14 +584,14 @@ export type QuerydisputesArgs = {
 };
 
 
-export type QueryattestationArgs = {
+export type Querymainnet_attestationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryattestationsArgs = {
+export type Querymainnet_attestationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Attestation_orderBy>;
@@ -536,14 +602,14 @@ export type QueryattestationsArgs = {
 };
 
 
-export type QueryepochArgs = {
+export type Querymainnet_epochArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryepochesArgs = {
+export type Querymainnet_epochesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Epoch_orderBy>;
@@ -554,14 +620,14 @@ export type QueryepochesArgs = {
 };
 
 
-export type QuerynameSignalTransactionArgs = {
+export type Querymainnet_nameSignalTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerynameSignalTransactionsArgs = {
+export type Querymainnet_nameSignalTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<NameSignalTransaction_orderBy>;
@@ -572,14 +638,14 @@ export type QuerynameSignalTransactionsArgs = {
 };
 
 
-export type QuerysignalTransactionArgs = {
+export type Querymainnet_signalTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerysignalTransactionsArgs = {
+export type Querymainnet_signalTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SignalTransaction_orderBy>;
@@ -590,14 +656,14 @@ export type QuerysignalTransactionsArgs = {
 };
 
 
-export type QuerybridgeWithdrawalTransactionArgs = {
+export type Querymainnet_bridgeWithdrawalTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerybridgeWithdrawalTransactionsArgs = {
+export type Querymainnet_bridgeWithdrawalTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<BridgeWithdrawalTransaction_orderBy>;
@@ -608,14 +674,14 @@ export type QuerybridgeWithdrawalTransactionsArgs = {
 };
 
 
-export type QuerybridgeDepositTransactionArgs = {
+export type Querymainnet_bridgeDepositTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerybridgeDepositTransactionsArgs = {
+export type Querymainnet_bridgeDepositTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<BridgeDepositTransaction_orderBy>;
@@ -626,14 +692,14 @@ export type QuerybridgeDepositTransactionsArgs = {
 };
 
 
-export type QueryretryableTicketArgs = {
+export type Querymainnet_retryableTicketArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryretryableTicketsArgs = {
+export type Querymainnet_retryableTicketsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<RetryableTicket_orderBy>;
@@ -644,14 +710,14 @@ export type QueryretryableTicketsArgs = {
 };
 
 
-export type QueryretryableTicketRedeemAttemptArgs = {
+export type Querymainnet_retryableTicketRedeemAttemptArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryretryableTicketRedeemAttemptsArgs = {
+export type Querymainnet_retryableTicketRedeemAttemptsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<RetryableTicketRedeemAttempt_orderBy>;
@@ -662,14 +728,14 @@ export type QueryretryableTicketRedeemAttemptsArgs = {
 };
 
 
-export type QuerytokenManagerArgs = {
+export type Querymainnet_tokenManagerArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerytokenManagersArgs = {
+export type Querymainnet_tokenManagersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<TokenManager_orderBy>;
@@ -680,14 +746,14 @@ export type QuerytokenManagersArgs = {
 };
 
 
-export type QueryauthorizedFunctionArgs = {
+export type Querymainnet_authorizedFunctionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryauthorizedFunctionsArgs = {
+export type Querymainnet_authorizedFunctionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<AuthorizedFunction_orderBy>;
@@ -698,14 +764,14 @@ export type QueryauthorizedFunctionsArgs = {
 };
 
 
-export type QuerytokenLockWalletArgs = {
+export type Querymainnet_tokenLockWalletArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerytokenLockWalletsArgs = {
+export type Querymainnet_tokenLockWalletsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<TokenLockWallet_orderBy>;
@@ -716,14 +782,14 @@ export type QuerytokenLockWalletsArgs = {
 };
 
 
-export type QueryindexerDeploymentArgs = {
+export type Querymainnet_indexerDeploymentArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryindexerDeploymentsArgs = {
+export type Querymainnet_indexerDeploymentsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<IndexerDeployment_orderBy>;
@@ -734,14 +800,14 @@ export type QueryindexerDeploymentsArgs = {
 };
 
 
-export type QueryrewardCutHistoryEntityArgs = {
+export type Querymainnet_rewardCutHistoryEntityArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryrewardCutHistoryEntitiesArgs = {
+export type Querymainnet_rewardCutHistoryEntitiesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<RewardCutHistoryEntity_orderBy>;
@@ -752,14 +818,14 @@ export type QueryrewardCutHistoryEntitiesArgs = {
 };
 
 
-export type QuerydelegationPoolHistoryEntityArgs = {
+export type Querymainnet_delegationPoolHistoryEntityArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerydelegationPoolHistoryEntitiesArgs = {
+export type Querymainnet_delegationPoolHistoryEntitiesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<DelegationPoolHistoryEntity_orderBy>;
@@ -770,14 +836,14 @@ export type QuerydelegationPoolHistoryEntitiesArgs = {
 };
 
 
-export type QueryindexersRecalculateQueueArgs = {
+export type Querymainnet_indexersRecalculateQueueArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryindexersRecalculateQueuesArgs = {
+export type Querymainnet_indexersRecalculateQueuesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<IndexersRecalculateQueue_orderBy>;
@@ -788,14 +854,14 @@ export type QueryindexersRecalculateQueuesArgs = {
 };
 
 
-export type QuerytransactionArgs = {
+export type Querymainnet_transactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerytransactionsArgs = {
+export type Querymainnet_transactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Transaction_orderBy>;
@@ -806,7 +872,7 @@ export type QuerytransactionsArgs = {
 };
 
 
-export type QuerycuratorSearchArgs = {
+export type Querymainnet_curatorSearchArgs = {
   text: Scalars['String'];
   first?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -816,7 +882,7 @@ export type QuerycuratorSearchArgs = {
 };
 
 
-export type QuerydelegatorSearchArgs = {
+export type Querymainnet_delegatorSearchArgs = {
   text: Scalars['String'];
   first?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -826,7 +892,7 @@ export type QuerydelegatorSearchArgs = {
 };
 
 
-export type QueryindexerSearchArgs = {
+export type Querymainnet_indexerSearchArgs = {
   text: Scalars['String'];
   first?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -836,7 +902,7 @@ export type QueryindexerSearchArgs = {
 };
 
 
-export type QueryaccountSearchArgs = {
+export type Querymainnet_accountSearchArgs = {
   text: Scalars['String'];
   first?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -846,7 +912,726 @@ export type QueryaccountSearchArgs = {
 };
 
 
-export type Query_metaArgs = {
+export type Querymainnet__metaArgs = {
+  block?: InputMaybe<Block_height>;
+};
+
+
+export type Queryarbitrum_graphNetworkArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_graphNetworksArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<GraphNetwork_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<GraphNetwork_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_graphAccountArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_graphAccountsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<GraphAccount_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<GraphAccount_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_accountMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<AccountMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<AccountMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_graphAccountNameArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_graphAccountNamesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<GraphAccountName_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<GraphAccountName_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_subgraphArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_subgraphsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Subgraph_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Subgraph_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_subgraphMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_currentSubgraphDeploymentRelationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_currentSubgraphDeploymentRelationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<CurrentSubgraphDeploymentRelation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<CurrentSubgraphDeploymentRelation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_networkArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_networksArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Network_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Network_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_subgraphVersionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_subgraphVersionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphVersion_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphVersion_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_subgraphVersionMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphVersionMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphVersionMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_subgraphDeploymentArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_subgraphDeploymentsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphDeployment_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphDeployment_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_subgraphDeploymentMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphDeploymentMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphDeploymentMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_indexerArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_indexersArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Indexer_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Indexer_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_allocationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_allocationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Allocation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Allocation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_poolArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_poolsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Pool_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Pool_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_delegatorArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_delegatorsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Delegator_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Delegator_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_delegatedStakeArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_delegatedStakesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<DelegatedStake_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<DelegatedStake_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_curatorArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_curatorsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Curator_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Curator_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_signalArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_signalsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Signal_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Signal_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_nameSignalArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_nameSignalsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameSignal_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<NameSignal_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_nameSignalSubgraphRelationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_nameSignalSubgraphRelationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameSignalSubgraphRelation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<NameSignalSubgraphRelation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_signalSubgraphDeploymentRelationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_signalSubgraphDeploymentRelationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SignalSubgraphDeploymentRelation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SignalSubgraphDeploymentRelation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_disputeArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_disputesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Dispute_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Dispute_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_attestationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_attestationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Attestation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Attestation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_epochArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_epochesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Epoch_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Epoch_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_nameSignalTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_nameSignalTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameSignalTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<NameSignalTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_signalTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_signalTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SignalTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SignalTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_bridgeWithdrawalTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_bridgeWithdrawalTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<BridgeWithdrawalTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<BridgeWithdrawalTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_bridgeDepositTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_bridgeDepositTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<BridgeDepositTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<BridgeDepositTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_retryableTicketArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_retryableTicketsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<RetryableTicket_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<RetryableTicket_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_retryableTicketRedeemAttemptArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_retryableTicketRedeemAttemptsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<RetryableTicketRedeemAttempt_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<RetryableTicketRedeemAttempt_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_tokenManagerArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_tokenManagersArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<TokenManager_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<TokenManager_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_authorizedFunctionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_authorizedFunctionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<AuthorizedFunction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<AuthorizedFunction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_tokenLockWalletArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_tokenLockWalletsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<TokenLockWallet_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<TokenLockWallet_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_indexerDeploymentArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_indexerDeploymentsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<IndexerDeployment_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<IndexerDeployment_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_rewardCutHistoryEntityArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_rewardCutHistoryEntitiesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<RewardCutHistoryEntity_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<RewardCutHistoryEntity_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_delegationPoolHistoryEntityArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_delegationPoolHistoryEntitiesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<DelegationPoolHistoryEntity_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<DelegationPoolHistoryEntity_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_indexersRecalculateQueueArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_indexersRecalculateQueuesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<IndexersRecalculateQueue_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<IndexersRecalculateQueue_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_transactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_transactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Transaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Transaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_curatorSearchArgs = {
+  text: Scalars['String'];
+  first?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  block?: InputMaybe<Block_height>;
+  where?: InputMaybe<Curator_filter>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_delegatorSearchArgs = {
+  text: Scalars['String'];
+  first?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  block?: InputMaybe<Block_height>;
+  where?: InputMaybe<Delegator_filter>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_indexerSearchArgs = {
+  text: Scalars['String'];
+  first?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  block?: InputMaybe<Block_height>;
+  where?: InputMaybe<Indexer_filter>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum_accountSearchArgs = {
+  text: Scalars['String'];
+  first?: InputMaybe<Scalars['Int']>;
+  skip?: InputMaybe<Scalars['Int']>;
+  block?: InputMaybe<Block_height>;
+  where?: InputMaybe<GraphAccount_filter>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Queryarbitrum__metaArgs = {
   block?: InputMaybe<Block_height>;
 };
 
@@ -861,93 +1646,169 @@ export type QuerycrossSubgraphsArgs = {
 };
 
 export type Subscription = {
-  graphNetwork?: Maybe<GraphNetwork>;
-  graphNetworks: Array<GraphNetwork>;
-  graphAccount?: Maybe<GraphAccount>;
-  graphAccounts: Array<GraphAccount>;
-  accountMetadata: Array<AccountMetadata>;
-  graphAccountName?: Maybe<GraphAccountName>;
-  graphAccountNames: Array<GraphAccountName>;
-  subgraph?: Maybe<Subgraph>;
-  subgraphs: Array<Subgraph>;
-  subgraphMetadata: Array<SubgraphMetadata>;
-  currentSubgraphDeploymentRelation?: Maybe<CurrentSubgraphDeploymentRelation>;
-  currentSubgraphDeploymentRelations: Array<CurrentSubgraphDeploymentRelation>;
-  network?: Maybe<Network>;
-  networks: Array<Network>;
-  subgraphVersion?: Maybe<SubgraphVersion>;
-  subgraphVersions: Array<SubgraphVersion>;
-  subgraphVersionMetadata: Array<SubgraphVersionMetadata>;
-  subgraphDeployment?: Maybe<SubgraphDeployment>;
-  subgraphDeployments: Array<SubgraphDeployment>;
-  subgraphDeploymentMetadata: Array<SubgraphDeploymentMetadata>;
-  indexer?: Maybe<Indexer>;
-  indexers: Array<Indexer>;
-  allocation?: Maybe<Allocation>;
-  allocations: Array<Allocation>;
-  pool?: Maybe<Pool>;
-  pools: Array<Pool>;
-  delegator?: Maybe<Delegator>;
-  delegators: Array<Delegator>;
-  delegatedStake?: Maybe<DelegatedStake>;
-  delegatedStakes: Array<DelegatedStake>;
-  curator?: Maybe<Curator>;
-  curators: Array<Curator>;
-  signal?: Maybe<Signal>;
-  signals: Array<Signal>;
-  nameSignal?: Maybe<NameSignal>;
-  nameSignals: Array<NameSignal>;
-  nameSignalSubgraphRelation?: Maybe<NameSignalSubgraphRelation>;
-  nameSignalSubgraphRelations: Array<NameSignalSubgraphRelation>;
-  signalSubgraphDeploymentRelation?: Maybe<SignalSubgraphDeploymentRelation>;
-  signalSubgraphDeploymentRelations: Array<SignalSubgraphDeploymentRelation>;
-  dispute?: Maybe<Dispute>;
-  disputes: Array<Dispute>;
-  attestation?: Maybe<Attestation>;
-  attestations: Array<Attestation>;
-  epoch?: Maybe<Epoch>;
-  epoches: Array<Epoch>;
-  nameSignalTransaction?: Maybe<NameSignalTransaction>;
-  nameSignalTransactions: Array<NameSignalTransaction>;
-  signalTransaction?: Maybe<SignalTransaction>;
-  signalTransactions: Array<SignalTransaction>;
-  bridgeWithdrawalTransaction?: Maybe<BridgeWithdrawalTransaction>;
-  bridgeWithdrawalTransactions: Array<BridgeWithdrawalTransaction>;
-  bridgeDepositTransaction?: Maybe<BridgeDepositTransaction>;
-  bridgeDepositTransactions: Array<BridgeDepositTransaction>;
-  retryableTicket?: Maybe<RetryableTicket>;
-  retryableTickets: Array<RetryableTicket>;
-  retryableTicketRedeemAttempt?: Maybe<RetryableTicketRedeemAttempt>;
-  retryableTicketRedeemAttempts: Array<RetryableTicketRedeemAttempt>;
-  tokenManager?: Maybe<TokenManager>;
-  tokenManagers: Array<TokenManager>;
-  authorizedFunction?: Maybe<AuthorizedFunction>;
-  authorizedFunctions: Array<AuthorizedFunction>;
-  tokenLockWallet?: Maybe<TokenLockWallet>;
-  tokenLockWallets: Array<TokenLockWallet>;
-  indexerDeployment?: Maybe<IndexerDeployment>;
-  indexerDeployments: Array<IndexerDeployment>;
-  rewardCutHistoryEntity?: Maybe<RewardCutHistoryEntity>;
-  rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
-  delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
-  delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
-  indexersRecalculateQueue?: Maybe<IndexersRecalculateQueue>;
-  indexersRecalculateQueues: Array<IndexersRecalculateQueue>;
-  transaction?: Maybe<Transaction>;
-  transactions: Array<Transaction>;
+  mainnet_graphNetwork?: Maybe<GraphNetwork>;
+  mainnet_graphNetworks: Array<GraphNetwork>;
+  mainnet_graphAccount?: Maybe<GraphAccount>;
+  mainnet_graphAccounts: Array<GraphAccount>;
+  mainnet_accountMetadata: Array<AccountMetadata>;
+  mainnet_graphAccountName?: Maybe<GraphAccountName>;
+  mainnet_graphAccountNames: Array<GraphAccountName>;
+  mainnet_subgraph?: Maybe<Subgraph>;
+  mainnet_subgraphs: Array<Subgraph>;
+  mainnet_subgraphMetadata: Array<SubgraphMetadata>;
+  mainnet_currentSubgraphDeploymentRelation?: Maybe<CurrentSubgraphDeploymentRelation>;
+  mainnet_currentSubgraphDeploymentRelations: Array<CurrentSubgraphDeploymentRelation>;
+  mainnet_network?: Maybe<Network>;
+  mainnet_networks: Array<Network>;
+  mainnet_subgraphVersion?: Maybe<SubgraphVersion>;
+  mainnet_subgraphVersions: Array<SubgraphVersion>;
+  mainnet_subgraphVersionMetadata: Array<SubgraphVersionMetadata>;
+  mainnet_subgraphDeployment?: Maybe<SubgraphDeployment>;
+  mainnet_subgraphDeployments: Array<SubgraphDeployment>;
+  mainnet_subgraphDeploymentMetadata: Array<SubgraphDeploymentMetadata>;
+  mainnet_indexer?: Maybe<Indexer>;
+  mainnet_indexers: Array<Indexer>;
+  mainnet_allocation?: Maybe<Allocation>;
+  mainnet_allocations: Array<Allocation>;
+  mainnet_pool?: Maybe<Pool>;
+  mainnet_pools: Array<Pool>;
+  mainnet_delegator?: Maybe<Delegator>;
+  mainnet_delegators: Array<Delegator>;
+  mainnet_delegatedStake?: Maybe<DelegatedStake>;
+  mainnet_delegatedStakes: Array<DelegatedStake>;
+  mainnet_curator?: Maybe<Curator>;
+  mainnet_curators: Array<Curator>;
+  mainnet_signal?: Maybe<Signal>;
+  mainnet_signals: Array<Signal>;
+  mainnet_nameSignal?: Maybe<NameSignal>;
+  mainnet_nameSignals: Array<NameSignal>;
+  mainnet_nameSignalSubgraphRelation?: Maybe<NameSignalSubgraphRelation>;
+  mainnet_nameSignalSubgraphRelations: Array<NameSignalSubgraphRelation>;
+  mainnet_signalSubgraphDeploymentRelation?: Maybe<SignalSubgraphDeploymentRelation>;
+  mainnet_signalSubgraphDeploymentRelations: Array<SignalSubgraphDeploymentRelation>;
+  mainnet_dispute?: Maybe<Dispute>;
+  mainnet_disputes: Array<Dispute>;
+  mainnet_attestation?: Maybe<Attestation>;
+  mainnet_attestations: Array<Attestation>;
+  mainnet_epoch?: Maybe<Epoch>;
+  mainnet_epoches: Array<Epoch>;
+  mainnet_nameSignalTransaction?: Maybe<NameSignalTransaction>;
+  mainnet_nameSignalTransactions: Array<NameSignalTransaction>;
+  mainnet_signalTransaction?: Maybe<SignalTransaction>;
+  mainnet_signalTransactions: Array<SignalTransaction>;
+  mainnet_bridgeWithdrawalTransaction?: Maybe<BridgeWithdrawalTransaction>;
+  mainnet_bridgeWithdrawalTransactions: Array<BridgeWithdrawalTransaction>;
+  mainnet_bridgeDepositTransaction?: Maybe<BridgeDepositTransaction>;
+  mainnet_bridgeDepositTransactions: Array<BridgeDepositTransaction>;
+  mainnet_retryableTicket?: Maybe<RetryableTicket>;
+  mainnet_retryableTickets: Array<RetryableTicket>;
+  mainnet_retryableTicketRedeemAttempt?: Maybe<RetryableTicketRedeemAttempt>;
+  mainnet_retryableTicketRedeemAttempts: Array<RetryableTicketRedeemAttempt>;
+  mainnet_tokenManager?: Maybe<TokenManager>;
+  mainnet_tokenManagers: Array<TokenManager>;
+  mainnet_authorizedFunction?: Maybe<AuthorizedFunction>;
+  mainnet_authorizedFunctions: Array<AuthorizedFunction>;
+  mainnet_tokenLockWallet?: Maybe<TokenLockWallet>;
+  mainnet_tokenLockWallets: Array<TokenLockWallet>;
+  mainnet_indexerDeployment?: Maybe<IndexerDeployment>;
+  mainnet_indexerDeployments: Array<IndexerDeployment>;
+  mainnet_rewardCutHistoryEntity?: Maybe<RewardCutHistoryEntity>;
+  mainnet_rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
+  mainnet_delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
+  mainnet_delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
+  mainnet_indexersRecalculateQueue?: Maybe<IndexersRecalculateQueue>;
+  mainnet_indexersRecalculateQueues: Array<IndexersRecalculateQueue>;
+  mainnet_transaction?: Maybe<Transaction>;
+  mainnet_transactions: Array<Transaction>;
   /** Access to subgraph metadata */
-  _meta?: Maybe<_Meta_>;
+  mainnet__meta?: Maybe<_Meta_>;
+  arbitrum_graphNetwork?: Maybe<GraphNetwork>;
+  arbitrum_graphNetworks: Array<GraphNetwork>;
+  arbitrum_graphAccount?: Maybe<GraphAccount>;
+  arbitrum_graphAccounts: Array<GraphAccount>;
+  arbitrum_accountMetadata: Array<AccountMetadata>;
+  arbitrum_graphAccountName?: Maybe<GraphAccountName>;
+  arbitrum_graphAccountNames: Array<GraphAccountName>;
+  arbitrum_subgraph?: Maybe<Subgraph>;
+  arbitrum_subgraphs: Array<Subgraph>;
+  arbitrum_subgraphMetadata: Array<SubgraphMetadata>;
+  arbitrum_currentSubgraphDeploymentRelation?: Maybe<CurrentSubgraphDeploymentRelation>;
+  arbitrum_currentSubgraphDeploymentRelations: Array<CurrentSubgraphDeploymentRelation>;
+  arbitrum_network?: Maybe<Network>;
+  arbitrum_networks: Array<Network>;
+  arbitrum_subgraphVersion?: Maybe<SubgraphVersion>;
+  arbitrum_subgraphVersions: Array<SubgraphVersion>;
+  arbitrum_subgraphVersionMetadata: Array<SubgraphVersionMetadata>;
+  arbitrum_subgraphDeployment?: Maybe<SubgraphDeployment>;
+  arbitrum_subgraphDeployments: Array<SubgraphDeployment>;
+  arbitrum_subgraphDeploymentMetadata: Array<SubgraphDeploymentMetadata>;
+  arbitrum_indexer?: Maybe<Indexer>;
+  arbitrum_indexers: Array<Indexer>;
+  arbitrum_allocation?: Maybe<Allocation>;
+  arbitrum_allocations: Array<Allocation>;
+  arbitrum_pool?: Maybe<Pool>;
+  arbitrum_pools: Array<Pool>;
+  arbitrum_delegator?: Maybe<Delegator>;
+  arbitrum_delegators: Array<Delegator>;
+  arbitrum_delegatedStake?: Maybe<DelegatedStake>;
+  arbitrum_delegatedStakes: Array<DelegatedStake>;
+  arbitrum_curator?: Maybe<Curator>;
+  arbitrum_curators: Array<Curator>;
+  arbitrum_signal?: Maybe<Signal>;
+  arbitrum_signals: Array<Signal>;
+  arbitrum_nameSignal?: Maybe<NameSignal>;
+  arbitrum_nameSignals: Array<NameSignal>;
+  arbitrum_nameSignalSubgraphRelation?: Maybe<NameSignalSubgraphRelation>;
+  arbitrum_nameSignalSubgraphRelations: Array<NameSignalSubgraphRelation>;
+  arbitrum_signalSubgraphDeploymentRelation?: Maybe<SignalSubgraphDeploymentRelation>;
+  arbitrum_signalSubgraphDeploymentRelations: Array<SignalSubgraphDeploymentRelation>;
+  arbitrum_dispute?: Maybe<Dispute>;
+  arbitrum_disputes: Array<Dispute>;
+  arbitrum_attestation?: Maybe<Attestation>;
+  arbitrum_attestations: Array<Attestation>;
+  arbitrum_epoch?: Maybe<Epoch>;
+  arbitrum_epoches: Array<Epoch>;
+  arbitrum_nameSignalTransaction?: Maybe<NameSignalTransaction>;
+  arbitrum_nameSignalTransactions: Array<NameSignalTransaction>;
+  arbitrum_signalTransaction?: Maybe<SignalTransaction>;
+  arbitrum_signalTransactions: Array<SignalTransaction>;
+  arbitrum_bridgeWithdrawalTransaction?: Maybe<BridgeWithdrawalTransaction>;
+  arbitrum_bridgeWithdrawalTransactions: Array<BridgeWithdrawalTransaction>;
+  arbitrum_bridgeDepositTransaction?: Maybe<BridgeDepositTransaction>;
+  arbitrum_bridgeDepositTransactions: Array<BridgeDepositTransaction>;
+  arbitrum_retryableTicket?: Maybe<RetryableTicket>;
+  arbitrum_retryableTickets: Array<RetryableTicket>;
+  arbitrum_retryableTicketRedeemAttempt?: Maybe<RetryableTicketRedeemAttempt>;
+  arbitrum_retryableTicketRedeemAttempts: Array<RetryableTicketRedeemAttempt>;
+  arbitrum_tokenManager?: Maybe<TokenManager>;
+  arbitrum_tokenManagers: Array<TokenManager>;
+  arbitrum_authorizedFunction?: Maybe<AuthorizedFunction>;
+  arbitrum_authorizedFunctions: Array<AuthorizedFunction>;
+  arbitrum_tokenLockWallet?: Maybe<TokenLockWallet>;
+  arbitrum_tokenLockWallets: Array<TokenLockWallet>;
+  arbitrum_indexerDeployment?: Maybe<IndexerDeployment>;
+  arbitrum_indexerDeployments: Array<IndexerDeployment>;
+  arbitrum_rewardCutHistoryEntity?: Maybe<RewardCutHistoryEntity>;
+  arbitrum_rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
+  arbitrum_delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
+  arbitrum_delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
+  arbitrum_indexersRecalculateQueue?: Maybe<IndexersRecalculateQueue>;
+  arbitrum_indexersRecalculateQueues: Array<IndexersRecalculateQueue>;
+  arbitrum_transaction?: Maybe<Transaction>;
+  arbitrum_transactions: Array<Transaction>;
+  /** Access to subgraph metadata */
+  arbitrum__meta?: Maybe<_Meta_>;
 };
 
 
-export type SubscriptiongraphNetworkArgs = {
+export type Subscriptionmainnet_graphNetworkArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiongraphNetworksArgs = {
+export type Subscriptionmainnet_graphNetworksArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GraphNetwork_orderBy>;
@@ -958,14 +1819,14 @@ export type SubscriptiongraphNetworksArgs = {
 };
 
 
-export type SubscriptiongraphAccountArgs = {
+export type Subscriptionmainnet_graphAccountArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiongraphAccountsArgs = {
+export type Subscriptionmainnet_graphAccountsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GraphAccount_orderBy>;
@@ -976,7 +1837,7 @@ export type SubscriptiongraphAccountsArgs = {
 };
 
 
-export type SubscriptionaccountMetadataArgs = {
+export type Subscriptionmainnet_accountMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<AccountMetadata_orderBy>;
@@ -987,14 +1848,14 @@ export type SubscriptionaccountMetadataArgs = {
 };
 
 
-export type SubscriptiongraphAccountNameArgs = {
+export type Subscriptionmainnet_graphAccountNameArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiongraphAccountNamesArgs = {
+export type Subscriptionmainnet_graphAccountNamesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GraphAccountName_orderBy>;
@@ -1005,14 +1866,14 @@ export type SubscriptiongraphAccountNamesArgs = {
 };
 
 
-export type SubscriptionsubgraphArgs = {
+export type Subscriptionmainnet_subgraphArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionsubgraphsArgs = {
+export type Subscriptionmainnet_subgraphsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Subgraph_orderBy>;
@@ -1023,7 +1884,7 @@ export type SubscriptionsubgraphsArgs = {
 };
 
 
-export type SubscriptionsubgraphMetadataArgs = {
+export type Subscriptionmainnet_subgraphMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphMetadata_orderBy>;
@@ -1034,14 +1895,14 @@ export type SubscriptionsubgraphMetadataArgs = {
 };
 
 
-export type SubscriptioncurrentSubgraphDeploymentRelationArgs = {
+export type Subscriptionmainnet_currentSubgraphDeploymentRelationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptioncurrentSubgraphDeploymentRelationsArgs = {
+export type Subscriptionmainnet_currentSubgraphDeploymentRelationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<CurrentSubgraphDeploymentRelation_orderBy>;
@@ -1052,14 +1913,14 @@ export type SubscriptioncurrentSubgraphDeploymentRelationsArgs = {
 };
 
 
-export type SubscriptionnetworkArgs = {
+export type Subscriptionmainnet_networkArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionnetworksArgs = {
+export type Subscriptionmainnet_networksArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Network_orderBy>;
@@ -1070,14 +1931,14 @@ export type SubscriptionnetworksArgs = {
 };
 
 
-export type SubscriptionsubgraphVersionArgs = {
+export type Subscriptionmainnet_subgraphVersionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionsubgraphVersionsArgs = {
+export type Subscriptionmainnet_subgraphVersionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphVersion_orderBy>;
@@ -1088,7 +1949,7 @@ export type SubscriptionsubgraphVersionsArgs = {
 };
 
 
-export type SubscriptionsubgraphVersionMetadataArgs = {
+export type Subscriptionmainnet_subgraphVersionMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphVersionMetadata_orderBy>;
@@ -1099,14 +1960,14 @@ export type SubscriptionsubgraphVersionMetadataArgs = {
 };
 
 
-export type SubscriptionsubgraphDeploymentArgs = {
+export type Subscriptionmainnet_subgraphDeploymentArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionsubgraphDeploymentsArgs = {
+export type Subscriptionmainnet_subgraphDeploymentsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphDeployment_orderBy>;
@@ -1117,7 +1978,7 @@ export type SubscriptionsubgraphDeploymentsArgs = {
 };
 
 
-export type SubscriptionsubgraphDeploymentMetadataArgs = {
+export type Subscriptionmainnet_subgraphDeploymentMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphDeploymentMetadata_orderBy>;
@@ -1128,14 +1989,14 @@ export type SubscriptionsubgraphDeploymentMetadataArgs = {
 };
 
 
-export type SubscriptionindexerArgs = {
+export type Subscriptionmainnet_indexerArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionindexersArgs = {
+export type Subscriptionmainnet_indexersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Indexer_orderBy>;
@@ -1146,14 +2007,14 @@ export type SubscriptionindexersArgs = {
 };
 
 
-export type SubscriptionallocationArgs = {
+export type Subscriptionmainnet_allocationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionallocationsArgs = {
+export type Subscriptionmainnet_allocationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Allocation_orderBy>;
@@ -1164,14 +2025,14 @@ export type SubscriptionallocationsArgs = {
 };
 
 
-export type SubscriptionpoolArgs = {
+export type Subscriptionmainnet_poolArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionpoolsArgs = {
+export type Subscriptionmainnet_poolsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Pool_orderBy>;
@@ -1182,14 +2043,14 @@ export type SubscriptionpoolsArgs = {
 };
 
 
-export type SubscriptiondelegatorArgs = {
+export type Subscriptionmainnet_delegatorArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiondelegatorsArgs = {
+export type Subscriptionmainnet_delegatorsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Delegator_orderBy>;
@@ -1200,14 +2061,14 @@ export type SubscriptiondelegatorsArgs = {
 };
 
 
-export type SubscriptiondelegatedStakeArgs = {
+export type Subscriptionmainnet_delegatedStakeArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiondelegatedStakesArgs = {
+export type Subscriptionmainnet_delegatedStakesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<DelegatedStake_orderBy>;
@@ -1218,14 +2079,14 @@ export type SubscriptiondelegatedStakesArgs = {
 };
 
 
-export type SubscriptioncuratorArgs = {
+export type Subscriptionmainnet_curatorArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptioncuratorsArgs = {
+export type Subscriptionmainnet_curatorsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Curator_orderBy>;
@@ -1236,14 +2097,14 @@ export type SubscriptioncuratorsArgs = {
 };
 
 
-export type SubscriptionsignalArgs = {
+export type Subscriptionmainnet_signalArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionsignalsArgs = {
+export type Subscriptionmainnet_signalsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Signal_orderBy>;
@@ -1254,14 +2115,14 @@ export type SubscriptionsignalsArgs = {
 };
 
 
-export type SubscriptionnameSignalArgs = {
+export type Subscriptionmainnet_nameSignalArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionnameSignalsArgs = {
+export type Subscriptionmainnet_nameSignalsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<NameSignal_orderBy>;
@@ -1272,14 +2133,14 @@ export type SubscriptionnameSignalsArgs = {
 };
 
 
-export type SubscriptionnameSignalSubgraphRelationArgs = {
+export type Subscriptionmainnet_nameSignalSubgraphRelationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionnameSignalSubgraphRelationsArgs = {
+export type Subscriptionmainnet_nameSignalSubgraphRelationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<NameSignalSubgraphRelation_orderBy>;
@@ -1290,14 +2151,14 @@ export type SubscriptionnameSignalSubgraphRelationsArgs = {
 };
 
 
-export type SubscriptionsignalSubgraphDeploymentRelationArgs = {
+export type Subscriptionmainnet_signalSubgraphDeploymentRelationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionsignalSubgraphDeploymentRelationsArgs = {
+export type Subscriptionmainnet_signalSubgraphDeploymentRelationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SignalSubgraphDeploymentRelation_orderBy>;
@@ -1308,14 +2169,14 @@ export type SubscriptionsignalSubgraphDeploymentRelationsArgs = {
 };
 
 
-export type SubscriptiondisputeArgs = {
+export type Subscriptionmainnet_disputeArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiondisputesArgs = {
+export type Subscriptionmainnet_disputesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Dispute_orderBy>;
@@ -1326,14 +2187,14 @@ export type SubscriptiondisputesArgs = {
 };
 
 
-export type SubscriptionattestationArgs = {
+export type Subscriptionmainnet_attestationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionattestationsArgs = {
+export type Subscriptionmainnet_attestationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Attestation_orderBy>;
@@ -1344,14 +2205,14 @@ export type SubscriptionattestationsArgs = {
 };
 
 
-export type SubscriptionepochArgs = {
+export type Subscriptionmainnet_epochArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionepochesArgs = {
+export type Subscriptionmainnet_epochesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Epoch_orderBy>;
@@ -1362,14 +2223,14 @@ export type SubscriptionepochesArgs = {
 };
 
 
-export type SubscriptionnameSignalTransactionArgs = {
+export type Subscriptionmainnet_nameSignalTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionnameSignalTransactionsArgs = {
+export type Subscriptionmainnet_nameSignalTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<NameSignalTransaction_orderBy>;
@@ -1380,14 +2241,14 @@ export type SubscriptionnameSignalTransactionsArgs = {
 };
 
 
-export type SubscriptionsignalTransactionArgs = {
+export type Subscriptionmainnet_signalTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionsignalTransactionsArgs = {
+export type Subscriptionmainnet_signalTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SignalTransaction_orderBy>;
@@ -1398,14 +2259,14 @@ export type SubscriptionsignalTransactionsArgs = {
 };
 
 
-export type SubscriptionbridgeWithdrawalTransactionArgs = {
+export type Subscriptionmainnet_bridgeWithdrawalTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionbridgeWithdrawalTransactionsArgs = {
+export type Subscriptionmainnet_bridgeWithdrawalTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<BridgeWithdrawalTransaction_orderBy>;
@@ -1416,14 +2277,14 @@ export type SubscriptionbridgeWithdrawalTransactionsArgs = {
 };
 
 
-export type SubscriptionbridgeDepositTransactionArgs = {
+export type Subscriptionmainnet_bridgeDepositTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionbridgeDepositTransactionsArgs = {
+export type Subscriptionmainnet_bridgeDepositTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<BridgeDepositTransaction_orderBy>;
@@ -1434,14 +2295,14 @@ export type SubscriptionbridgeDepositTransactionsArgs = {
 };
 
 
-export type SubscriptionretryableTicketArgs = {
+export type Subscriptionmainnet_retryableTicketArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionretryableTicketsArgs = {
+export type Subscriptionmainnet_retryableTicketsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<RetryableTicket_orderBy>;
@@ -1452,14 +2313,14 @@ export type SubscriptionretryableTicketsArgs = {
 };
 
 
-export type SubscriptionretryableTicketRedeemAttemptArgs = {
+export type Subscriptionmainnet_retryableTicketRedeemAttemptArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionretryableTicketRedeemAttemptsArgs = {
+export type Subscriptionmainnet_retryableTicketRedeemAttemptsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<RetryableTicketRedeemAttempt_orderBy>;
@@ -1470,14 +2331,14 @@ export type SubscriptionretryableTicketRedeemAttemptsArgs = {
 };
 
 
-export type SubscriptiontokenManagerArgs = {
+export type Subscriptionmainnet_tokenManagerArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiontokenManagersArgs = {
+export type Subscriptionmainnet_tokenManagersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<TokenManager_orderBy>;
@@ -1488,14 +2349,14 @@ export type SubscriptiontokenManagersArgs = {
 };
 
 
-export type SubscriptionauthorizedFunctionArgs = {
+export type Subscriptionmainnet_authorizedFunctionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionauthorizedFunctionsArgs = {
+export type Subscriptionmainnet_authorizedFunctionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<AuthorizedFunction_orderBy>;
@@ -1506,14 +2367,14 @@ export type SubscriptionauthorizedFunctionsArgs = {
 };
 
 
-export type SubscriptiontokenLockWalletArgs = {
+export type Subscriptionmainnet_tokenLockWalletArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiontokenLockWalletsArgs = {
+export type Subscriptionmainnet_tokenLockWalletsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<TokenLockWallet_orderBy>;
@@ -1524,14 +2385,14 @@ export type SubscriptiontokenLockWalletsArgs = {
 };
 
 
-export type SubscriptionindexerDeploymentArgs = {
+export type Subscriptionmainnet_indexerDeploymentArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionindexerDeploymentsArgs = {
+export type Subscriptionmainnet_indexerDeploymentsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<IndexerDeployment_orderBy>;
@@ -1542,14 +2403,14 @@ export type SubscriptionindexerDeploymentsArgs = {
 };
 
 
-export type SubscriptionrewardCutHistoryEntityArgs = {
+export type Subscriptionmainnet_rewardCutHistoryEntityArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionrewardCutHistoryEntitiesArgs = {
+export type Subscriptionmainnet_rewardCutHistoryEntitiesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<RewardCutHistoryEntity_orderBy>;
@@ -1560,14 +2421,14 @@ export type SubscriptionrewardCutHistoryEntitiesArgs = {
 };
 
 
-export type SubscriptiondelegationPoolHistoryEntityArgs = {
+export type Subscriptionmainnet_delegationPoolHistoryEntityArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiondelegationPoolHistoryEntitiesArgs = {
+export type Subscriptionmainnet_delegationPoolHistoryEntitiesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<DelegationPoolHistoryEntity_orderBy>;
@@ -1578,14 +2439,14 @@ export type SubscriptiondelegationPoolHistoryEntitiesArgs = {
 };
 
 
-export type SubscriptionindexersRecalculateQueueArgs = {
+export type Subscriptionmainnet_indexersRecalculateQueueArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionindexersRecalculateQueuesArgs = {
+export type Subscriptionmainnet_indexersRecalculateQueuesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<IndexersRecalculateQueue_orderBy>;
@@ -1596,14 +2457,14 @@ export type SubscriptionindexersRecalculateQueuesArgs = {
 };
 
 
-export type SubscriptiontransactionArgs = {
+export type Subscriptionmainnet_transactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiontransactionsArgs = {
+export type Subscriptionmainnet_transactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Transaction_orderBy>;
@@ -1614,7 +2475,686 @@ export type SubscriptiontransactionsArgs = {
 };
 
 
-export type Subscription_metaArgs = {
+export type Subscriptionmainnet__metaArgs = {
+  block?: InputMaybe<Block_height>;
+};
+
+
+export type Subscriptionarbitrum_graphNetworkArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_graphNetworksArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<GraphNetwork_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<GraphNetwork_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_graphAccountArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_graphAccountsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<GraphAccount_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<GraphAccount_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_accountMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<AccountMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<AccountMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_graphAccountNameArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_graphAccountNamesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<GraphAccountName_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<GraphAccountName_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_subgraphArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_subgraphsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Subgraph_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Subgraph_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_subgraphMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_currentSubgraphDeploymentRelationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_currentSubgraphDeploymentRelationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<CurrentSubgraphDeploymentRelation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<CurrentSubgraphDeploymentRelation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_networkArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_networksArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Network_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Network_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_subgraphVersionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_subgraphVersionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphVersion_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphVersion_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_subgraphVersionMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphVersionMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphVersionMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_subgraphDeploymentArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_subgraphDeploymentsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphDeployment_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphDeployment_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_subgraphDeploymentMetadataArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SubgraphDeploymentMetadata_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SubgraphDeploymentMetadata_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_indexerArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_indexersArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Indexer_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Indexer_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_allocationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_allocationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Allocation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Allocation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_poolArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_poolsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Pool_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Pool_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_delegatorArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_delegatorsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Delegator_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Delegator_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_delegatedStakeArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_delegatedStakesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<DelegatedStake_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<DelegatedStake_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_curatorArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_curatorsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Curator_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Curator_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_signalArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_signalsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Signal_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Signal_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_nameSignalArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_nameSignalsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameSignal_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<NameSignal_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_nameSignalSubgraphRelationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_nameSignalSubgraphRelationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameSignalSubgraphRelation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<NameSignalSubgraphRelation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_signalSubgraphDeploymentRelationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_signalSubgraphDeploymentRelationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SignalSubgraphDeploymentRelation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SignalSubgraphDeploymentRelation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_disputeArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_disputesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Dispute_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Dispute_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_attestationArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_attestationsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Attestation_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Attestation_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_epochArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_epochesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Epoch_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Epoch_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_nameSignalTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_nameSignalTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<NameSignalTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<NameSignalTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_signalTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_signalTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<SignalTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<SignalTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_bridgeWithdrawalTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_bridgeWithdrawalTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<BridgeWithdrawalTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<BridgeWithdrawalTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_bridgeDepositTransactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_bridgeDepositTransactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<BridgeDepositTransaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<BridgeDepositTransaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_retryableTicketArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_retryableTicketsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<RetryableTicket_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<RetryableTicket_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_retryableTicketRedeemAttemptArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_retryableTicketRedeemAttemptsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<RetryableTicketRedeemAttempt_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<RetryableTicketRedeemAttempt_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_tokenManagerArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_tokenManagersArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<TokenManager_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<TokenManager_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_authorizedFunctionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_authorizedFunctionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<AuthorizedFunction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<AuthorizedFunction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_tokenLockWalletArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_tokenLockWalletsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<TokenLockWallet_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<TokenLockWallet_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_indexerDeploymentArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_indexerDeploymentsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<IndexerDeployment_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<IndexerDeployment_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_rewardCutHistoryEntityArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_rewardCutHistoryEntitiesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<RewardCutHistoryEntity_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<RewardCutHistoryEntity_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_delegationPoolHistoryEntityArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_delegationPoolHistoryEntitiesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<DelegationPoolHistoryEntity_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<DelegationPoolHistoryEntity_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_indexersRecalculateQueueArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_indexersRecalculateQueuesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<IndexersRecalculateQueue_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<IndexersRecalculateQueue_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_transactionArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum_transactionsArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Transaction_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<Transaction_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Subscriptionarbitrum__metaArgs = {
   block?: InputMaybe<Block_height>;
 };
 
@@ -11836,164 +13376,318 @@ export type derivedFromDirectiveArgs = {
 export type derivedFromDirectiveResolver<Result, Parent, ContextType = MeshContext, Args = derivedFromDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type QueryResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  graphNetwork?: Resolver<Maybe<ResolversTypes['GraphNetwork']>, ParentType, ContextType, RequireFields<QuerygraphNetworkArgs, 'id' | 'subgraphError'>>;
-  graphNetworks?: Resolver<Array<ResolversTypes['GraphNetwork']>, ParentType, ContextType, RequireFields<QuerygraphNetworksArgs, 'skip' | 'first' | 'subgraphError'>>;
-  graphAccount?: Resolver<Maybe<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<QuerygraphAccountArgs, 'id' | 'subgraphError'>>;
-  graphAccounts?: Resolver<Array<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<QuerygraphAccountsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  accountMetadata?: Resolver<Array<ResolversTypes['AccountMetadata']>, ParentType, ContextType, RequireFields<QueryaccountMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  graphAccountName?: Resolver<Maybe<ResolversTypes['GraphAccountName']>, ParentType, ContextType, RequireFields<QuerygraphAccountNameArgs, 'id' | 'subgraphError'>>;
-  graphAccountNames?: Resolver<Array<ResolversTypes['GraphAccountName']>, ParentType, ContextType, RequireFields<QuerygraphAccountNamesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraph?: Resolver<Maybe<ResolversTypes['Subgraph']>, ParentType, ContextType, RequireFields<QuerysubgraphArgs, 'id' | 'subgraphError'>>;
-  subgraphs?: Resolver<Array<ResolversTypes['Subgraph']>, ParentType, ContextType, RequireFields<QuerysubgraphsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphMetadata?: Resolver<Array<ResolversTypes['SubgraphMetadata']>, ParentType, ContextType, RequireFields<QuerysubgraphMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  currentSubgraphDeploymentRelation?: Resolver<Maybe<ResolversTypes['CurrentSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<QuerycurrentSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
-  currentSubgraphDeploymentRelations?: Resolver<Array<ResolversTypes['CurrentSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<QuerycurrentSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  network?: Resolver<Maybe<ResolversTypes['Network']>, ParentType, ContextType, RequireFields<QuerynetworkArgs, 'id' | 'subgraphError'>>;
-  networks?: Resolver<Array<ResolversTypes['Network']>, ParentType, ContextType, RequireFields<QuerynetworksArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphVersion?: Resolver<Maybe<ResolversTypes['SubgraphVersion']>, ParentType, ContextType, RequireFields<QuerysubgraphVersionArgs, 'id' | 'subgraphError'>>;
-  subgraphVersions?: Resolver<Array<ResolversTypes['SubgraphVersion']>, ParentType, ContextType, RequireFields<QuerysubgraphVersionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphVersionMetadata?: Resolver<Array<ResolversTypes['SubgraphVersionMetadata']>, ParentType, ContextType, RequireFields<QuerysubgraphVersionMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphDeployment?: Resolver<Maybe<ResolversTypes['SubgraphDeployment']>, ParentType, ContextType, RequireFields<QuerysubgraphDeploymentArgs, 'id' | 'subgraphError'>>;
-  subgraphDeployments?: Resolver<Array<ResolversTypes['SubgraphDeployment']>, ParentType, ContextType, RequireFields<QuerysubgraphDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphDeploymentMetadata?: Resolver<Array<ResolversTypes['SubgraphDeploymentMetadata']>, ParentType, ContextType, RequireFields<QuerysubgraphDeploymentMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  indexer?: Resolver<Maybe<ResolversTypes['Indexer']>, ParentType, ContextType, RequireFields<QueryindexerArgs, 'id' | 'subgraphError'>>;
-  indexers?: Resolver<Array<ResolversTypes['Indexer']>, ParentType, ContextType, RequireFields<QueryindexersArgs, 'skip' | 'first' | 'subgraphError'>>;
-  allocation?: Resolver<Maybe<ResolversTypes['Allocation']>, ParentType, ContextType, RequireFields<QueryallocationArgs, 'id' | 'subgraphError'>>;
-  allocations?: Resolver<Array<ResolversTypes['Allocation']>, ParentType, ContextType, RequireFields<QueryallocationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  pool?: Resolver<Maybe<ResolversTypes['Pool']>, ParentType, ContextType, RequireFields<QuerypoolArgs, 'id' | 'subgraphError'>>;
-  pools?: Resolver<Array<ResolversTypes['Pool']>, ParentType, ContextType, RequireFields<QuerypoolsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  delegator?: Resolver<Maybe<ResolversTypes['Delegator']>, ParentType, ContextType, RequireFields<QuerydelegatorArgs, 'id' | 'subgraphError'>>;
-  delegators?: Resolver<Array<ResolversTypes['Delegator']>, ParentType, ContextType, RequireFields<QuerydelegatorsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  delegatedStake?: Resolver<Maybe<ResolversTypes['DelegatedStake']>, ParentType, ContextType, RequireFields<QuerydelegatedStakeArgs, 'id' | 'subgraphError'>>;
-  delegatedStakes?: Resolver<Array<ResolversTypes['DelegatedStake']>, ParentType, ContextType, RequireFields<QuerydelegatedStakesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  curator?: Resolver<Maybe<ResolversTypes['Curator']>, ParentType, ContextType, RequireFields<QuerycuratorArgs, 'id' | 'subgraphError'>>;
-  curators?: Resolver<Array<ResolversTypes['Curator']>, ParentType, ContextType, RequireFields<QuerycuratorsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  signal?: Resolver<Maybe<ResolversTypes['Signal']>, ParentType, ContextType, RequireFields<QuerysignalArgs, 'id' | 'subgraphError'>>;
-  signals?: Resolver<Array<ResolversTypes['Signal']>, ParentType, ContextType, RequireFields<QuerysignalsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  nameSignal?: Resolver<Maybe<ResolversTypes['NameSignal']>, ParentType, ContextType, RequireFields<QuerynameSignalArgs, 'id' | 'subgraphError'>>;
-  nameSignals?: Resolver<Array<ResolversTypes['NameSignal']>, ParentType, ContextType, RequireFields<QuerynameSignalsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  nameSignalSubgraphRelation?: Resolver<Maybe<ResolversTypes['NameSignalSubgraphRelation']>, ParentType, ContextType, RequireFields<QuerynameSignalSubgraphRelationArgs, 'id' | 'subgraphError'>>;
-  nameSignalSubgraphRelations?: Resolver<Array<ResolversTypes['NameSignalSubgraphRelation']>, ParentType, ContextType, RequireFields<QuerynameSignalSubgraphRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  signalSubgraphDeploymentRelation?: Resolver<Maybe<ResolversTypes['SignalSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<QuerysignalSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
-  signalSubgraphDeploymentRelations?: Resolver<Array<ResolversTypes['SignalSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<QuerysignalSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  dispute?: Resolver<Maybe<ResolversTypes['Dispute']>, ParentType, ContextType, RequireFields<QuerydisputeArgs, 'id' | 'subgraphError'>>;
-  disputes?: Resolver<Array<ResolversTypes['Dispute']>, ParentType, ContextType, RequireFields<QuerydisputesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  attestation?: Resolver<Maybe<ResolversTypes['Attestation']>, ParentType, ContextType, RequireFields<QueryattestationArgs, 'id' | 'subgraphError'>>;
-  attestations?: Resolver<Array<ResolversTypes['Attestation']>, ParentType, ContextType, RequireFields<QueryattestationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  epoch?: Resolver<Maybe<ResolversTypes['Epoch']>, ParentType, ContextType, RequireFields<QueryepochArgs, 'id' | 'subgraphError'>>;
-  epoches?: Resolver<Array<ResolversTypes['Epoch']>, ParentType, ContextType, RequireFields<QueryepochesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  nameSignalTransaction?: Resolver<Maybe<ResolversTypes['NameSignalTransaction']>, ParentType, ContextType, RequireFields<QuerynameSignalTransactionArgs, 'id' | 'subgraphError'>>;
-  nameSignalTransactions?: Resolver<Array<ResolversTypes['NameSignalTransaction']>, ParentType, ContextType, RequireFields<QuerynameSignalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  signalTransaction?: Resolver<Maybe<ResolversTypes['SignalTransaction']>, ParentType, ContextType, RequireFields<QuerysignalTransactionArgs, 'id' | 'subgraphError'>>;
-  signalTransactions?: Resolver<Array<ResolversTypes['SignalTransaction']>, ParentType, ContextType, RequireFields<QuerysignalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  bridgeWithdrawalTransaction?: Resolver<Maybe<ResolversTypes['BridgeWithdrawalTransaction']>, ParentType, ContextType, RequireFields<QuerybridgeWithdrawalTransactionArgs, 'id' | 'subgraphError'>>;
-  bridgeWithdrawalTransactions?: Resolver<Array<ResolversTypes['BridgeWithdrawalTransaction']>, ParentType, ContextType, RequireFields<QuerybridgeWithdrawalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  bridgeDepositTransaction?: Resolver<Maybe<ResolversTypes['BridgeDepositTransaction']>, ParentType, ContextType, RequireFields<QuerybridgeDepositTransactionArgs, 'id' | 'subgraphError'>>;
-  bridgeDepositTransactions?: Resolver<Array<ResolversTypes['BridgeDepositTransaction']>, ParentType, ContextType, RequireFields<QuerybridgeDepositTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  retryableTicket?: Resolver<Maybe<ResolversTypes['RetryableTicket']>, ParentType, ContextType, RequireFields<QueryretryableTicketArgs, 'id' | 'subgraphError'>>;
-  retryableTickets?: Resolver<Array<ResolversTypes['RetryableTicket']>, ParentType, ContextType, RequireFields<QueryretryableTicketsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  retryableTicketRedeemAttempt?: Resolver<Maybe<ResolversTypes['RetryableTicketRedeemAttempt']>, ParentType, ContextType, RequireFields<QueryretryableTicketRedeemAttemptArgs, 'id' | 'subgraphError'>>;
-  retryableTicketRedeemAttempts?: Resolver<Array<ResolversTypes['RetryableTicketRedeemAttempt']>, ParentType, ContextType, RequireFields<QueryretryableTicketRedeemAttemptsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  tokenManager?: Resolver<Maybe<ResolversTypes['TokenManager']>, ParentType, ContextType, RequireFields<QuerytokenManagerArgs, 'id' | 'subgraphError'>>;
-  tokenManagers?: Resolver<Array<ResolversTypes['TokenManager']>, ParentType, ContextType, RequireFields<QuerytokenManagersArgs, 'skip' | 'first' | 'subgraphError'>>;
-  authorizedFunction?: Resolver<Maybe<ResolversTypes['AuthorizedFunction']>, ParentType, ContextType, RequireFields<QueryauthorizedFunctionArgs, 'id' | 'subgraphError'>>;
-  authorizedFunctions?: Resolver<Array<ResolversTypes['AuthorizedFunction']>, ParentType, ContextType, RequireFields<QueryauthorizedFunctionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  tokenLockWallet?: Resolver<Maybe<ResolversTypes['TokenLockWallet']>, ParentType, ContextType, RequireFields<QuerytokenLockWalletArgs, 'id' | 'subgraphError'>>;
-  tokenLockWallets?: Resolver<Array<ResolversTypes['TokenLockWallet']>, ParentType, ContextType, RequireFields<QuerytokenLockWalletsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  indexerDeployment?: Resolver<Maybe<ResolversTypes['IndexerDeployment']>, ParentType, ContextType, RequireFields<QueryindexerDeploymentArgs, 'id' | 'subgraphError'>>;
-  indexerDeployments?: Resolver<Array<ResolversTypes['IndexerDeployment']>, ParentType, ContextType, RequireFields<QueryindexerDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  rewardCutHistoryEntity?: Resolver<Maybe<ResolversTypes['RewardCutHistoryEntity']>, ParentType, ContextType, RequireFields<QueryrewardCutHistoryEntityArgs, 'id' | 'subgraphError'>>;
-  rewardCutHistoryEntities?: Resolver<Array<ResolversTypes['RewardCutHistoryEntity']>, ParentType, ContextType, RequireFields<QueryrewardCutHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  delegationPoolHistoryEntity?: Resolver<Maybe<ResolversTypes['DelegationPoolHistoryEntity']>, ParentType, ContextType, RequireFields<QuerydelegationPoolHistoryEntityArgs, 'id' | 'subgraphError'>>;
-  delegationPoolHistoryEntities?: Resolver<Array<ResolversTypes['DelegationPoolHistoryEntity']>, ParentType, ContextType, RequireFields<QuerydelegationPoolHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  indexersRecalculateQueue?: Resolver<Maybe<ResolversTypes['IndexersRecalculateQueue']>, ParentType, ContextType, RequireFields<QueryindexersRecalculateQueueArgs, 'id' | 'subgraphError'>>;
-  indexersRecalculateQueues?: Resolver<Array<ResolversTypes['IndexersRecalculateQueue']>, ParentType, ContextType, RequireFields<QueryindexersRecalculateQueuesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  transaction?: Resolver<Maybe<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<QuerytransactionArgs, 'id' | 'subgraphError'>>;
-  transactions?: Resolver<Array<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<QuerytransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  curatorSearch?: Resolver<Array<ResolversTypes['Curator']>, ParentType, ContextType, RequireFields<QuerycuratorSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
-  delegatorSearch?: Resolver<Array<ResolversTypes['Delegator']>, ParentType, ContextType, RequireFields<QuerydelegatorSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
-  indexerSearch?: Resolver<Array<ResolversTypes['Indexer']>, ParentType, ContextType, RequireFields<QueryindexerSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
-  accountSearch?: Resolver<Array<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<QueryaccountSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
-  _meta?: Resolver<Maybe<ResolversTypes['_Meta_']>, ParentType, ContextType, Partial<Query_metaArgs>>;
+  mainnet_graphNetwork?: Resolver<Maybe<ResolversTypes['GraphNetwork']>, ParentType, ContextType, RequireFields<Querymainnet_graphNetworkArgs, 'id' | 'subgraphError'>>;
+  mainnet_graphNetworks?: Resolver<Array<ResolversTypes['GraphNetwork']>, ParentType, ContextType, RequireFields<Querymainnet_graphNetworksArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_graphAccount?: Resolver<Maybe<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<Querymainnet_graphAccountArgs, 'id' | 'subgraphError'>>;
+  mainnet_graphAccounts?: Resolver<Array<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<Querymainnet_graphAccountsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_accountMetadata?: Resolver<Array<ResolversTypes['AccountMetadata']>, ParentType, ContextType, RequireFields<Querymainnet_accountMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_graphAccountName?: Resolver<Maybe<ResolversTypes['GraphAccountName']>, ParentType, ContextType, RequireFields<Querymainnet_graphAccountNameArgs, 'id' | 'subgraphError'>>;
+  mainnet_graphAccountNames?: Resolver<Array<ResolversTypes['GraphAccountName']>, ParentType, ContextType, RequireFields<Querymainnet_graphAccountNamesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_subgraph?: Resolver<Maybe<ResolversTypes['Subgraph']>, ParentType, ContextType, RequireFields<Querymainnet_subgraphArgs, 'id' | 'subgraphError'>>;
+  mainnet_subgraphs?: Resolver<Array<ResolversTypes['Subgraph']>, ParentType, ContextType, RequireFields<Querymainnet_subgraphsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_subgraphMetadata?: Resolver<Array<ResolversTypes['SubgraphMetadata']>, ParentType, ContextType, RequireFields<Querymainnet_subgraphMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_currentSubgraphDeploymentRelation?: Resolver<Maybe<ResolversTypes['CurrentSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<Querymainnet_currentSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
+  mainnet_currentSubgraphDeploymentRelations?: Resolver<Array<ResolversTypes['CurrentSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<Querymainnet_currentSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_network?: Resolver<Maybe<ResolversTypes['Network']>, ParentType, ContextType, RequireFields<Querymainnet_networkArgs, 'id' | 'subgraphError'>>;
+  mainnet_networks?: Resolver<Array<ResolversTypes['Network']>, ParentType, ContextType, RequireFields<Querymainnet_networksArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_subgraphVersion?: Resolver<Maybe<ResolversTypes['SubgraphVersion']>, ParentType, ContextType, RequireFields<Querymainnet_subgraphVersionArgs, 'id' | 'subgraphError'>>;
+  mainnet_subgraphVersions?: Resolver<Array<ResolversTypes['SubgraphVersion']>, ParentType, ContextType, RequireFields<Querymainnet_subgraphVersionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_subgraphVersionMetadata?: Resolver<Array<ResolversTypes['SubgraphVersionMetadata']>, ParentType, ContextType, RequireFields<Querymainnet_subgraphVersionMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_subgraphDeployment?: Resolver<Maybe<ResolversTypes['SubgraphDeployment']>, ParentType, ContextType, RequireFields<Querymainnet_subgraphDeploymentArgs, 'id' | 'subgraphError'>>;
+  mainnet_subgraphDeployments?: Resolver<Array<ResolversTypes['SubgraphDeployment']>, ParentType, ContextType, RequireFields<Querymainnet_subgraphDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_subgraphDeploymentMetadata?: Resolver<Array<ResolversTypes['SubgraphDeploymentMetadata']>, ParentType, ContextType, RequireFields<Querymainnet_subgraphDeploymentMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_indexer?: Resolver<Maybe<ResolversTypes['Indexer']>, ParentType, ContextType, RequireFields<Querymainnet_indexerArgs, 'id' | 'subgraphError'>>;
+  mainnet_indexers?: Resolver<Array<ResolversTypes['Indexer']>, ParentType, ContextType, RequireFields<Querymainnet_indexersArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_allocation?: Resolver<Maybe<ResolversTypes['Allocation']>, ParentType, ContextType, RequireFields<Querymainnet_allocationArgs, 'id' | 'subgraphError'>>;
+  mainnet_allocations?: Resolver<Array<ResolversTypes['Allocation']>, ParentType, ContextType, RequireFields<Querymainnet_allocationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_pool?: Resolver<Maybe<ResolversTypes['Pool']>, ParentType, ContextType, RequireFields<Querymainnet_poolArgs, 'id' | 'subgraphError'>>;
+  mainnet_pools?: Resolver<Array<ResolversTypes['Pool']>, ParentType, ContextType, RequireFields<Querymainnet_poolsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_delegator?: Resolver<Maybe<ResolversTypes['Delegator']>, ParentType, ContextType, RequireFields<Querymainnet_delegatorArgs, 'id' | 'subgraphError'>>;
+  mainnet_delegators?: Resolver<Array<ResolversTypes['Delegator']>, ParentType, ContextType, RequireFields<Querymainnet_delegatorsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_delegatedStake?: Resolver<Maybe<ResolversTypes['DelegatedStake']>, ParentType, ContextType, RequireFields<Querymainnet_delegatedStakeArgs, 'id' | 'subgraphError'>>;
+  mainnet_delegatedStakes?: Resolver<Array<ResolversTypes['DelegatedStake']>, ParentType, ContextType, RequireFields<Querymainnet_delegatedStakesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_curator?: Resolver<Maybe<ResolversTypes['Curator']>, ParentType, ContextType, RequireFields<Querymainnet_curatorArgs, 'id' | 'subgraphError'>>;
+  mainnet_curators?: Resolver<Array<ResolversTypes['Curator']>, ParentType, ContextType, RequireFields<Querymainnet_curatorsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_signal?: Resolver<Maybe<ResolversTypes['Signal']>, ParentType, ContextType, RequireFields<Querymainnet_signalArgs, 'id' | 'subgraphError'>>;
+  mainnet_signals?: Resolver<Array<ResolversTypes['Signal']>, ParentType, ContextType, RequireFields<Querymainnet_signalsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_nameSignal?: Resolver<Maybe<ResolversTypes['NameSignal']>, ParentType, ContextType, RequireFields<Querymainnet_nameSignalArgs, 'id' | 'subgraphError'>>;
+  mainnet_nameSignals?: Resolver<Array<ResolversTypes['NameSignal']>, ParentType, ContextType, RequireFields<Querymainnet_nameSignalsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_nameSignalSubgraphRelation?: Resolver<Maybe<ResolversTypes['NameSignalSubgraphRelation']>, ParentType, ContextType, RequireFields<Querymainnet_nameSignalSubgraphRelationArgs, 'id' | 'subgraphError'>>;
+  mainnet_nameSignalSubgraphRelations?: Resolver<Array<ResolversTypes['NameSignalSubgraphRelation']>, ParentType, ContextType, RequireFields<Querymainnet_nameSignalSubgraphRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_signalSubgraphDeploymentRelation?: Resolver<Maybe<ResolversTypes['SignalSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<Querymainnet_signalSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
+  mainnet_signalSubgraphDeploymentRelations?: Resolver<Array<ResolversTypes['SignalSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<Querymainnet_signalSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_dispute?: Resolver<Maybe<ResolversTypes['Dispute']>, ParentType, ContextType, RequireFields<Querymainnet_disputeArgs, 'id' | 'subgraphError'>>;
+  mainnet_disputes?: Resolver<Array<ResolversTypes['Dispute']>, ParentType, ContextType, RequireFields<Querymainnet_disputesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_attestation?: Resolver<Maybe<ResolversTypes['Attestation']>, ParentType, ContextType, RequireFields<Querymainnet_attestationArgs, 'id' | 'subgraphError'>>;
+  mainnet_attestations?: Resolver<Array<ResolversTypes['Attestation']>, ParentType, ContextType, RequireFields<Querymainnet_attestationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_epoch?: Resolver<Maybe<ResolversTypes['Epoch']>, ParentType, ContextType, RequireFields<Querymainnet_epochArgs, 'id' | 'subgraphError'>>;
+  mainnet_epoches?: Resolver<Array<ResolversTypes['Epoch']>, ParentType, ContextType, RequireFields<Querymainnet_epochesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_nameSignalTransaction?: Resolver<Maybe<ResolversTypes['NameSignalTransaction']>, ParentType, ContextType, RequireFields<Querymainnet_nameSignalTransactionArgs, 'id' | 'subgraphError'>>;
+  mainnet_nameSignalTransactions?: Resolver<Array<ResolversTypes['NameSignalTransaction']>, ParentType, ContextType, RequireFields<Querymainnet_nameSignalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_signalTransaction?: Resolver<Maybe<ResolversTypes['SignalTransaction']>, ParentType, ContextType, RequireFields<Querymainnet_signalTransactionArgs, 'id' | 'subgraphError'>>;
+  mainnet_signalTransactions?: Resolver<Array<ResolversTypes['SignalTransaction']>, ParentType, ContextType, RequireFields<Querymainnet_signalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_bridgeWithdrawalTransaction?: Resolver<Maybe<ResolversTypes['BridgeWithdrawalTransaction']>, ParentType, ContextType, RequireFields<Querymainnet_bridgeWithdrawalTransactionArgs, 'id' | 'subgraphError'>>;
+  mainnet_bridgeWithdrawalTransactions?: Resolver<Array<ResolversTypes['BridgeWithdrawalTransaction']>, ParentType, ContextType, RequireFields<Querymainnet_bridgeWithdrawalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_bridgeDepositTransaction?: Resolver<Maybe<ResolversTypes['BridgeDepositTransaction']>, ParentType, ContextType, RequireFields<Querymainnet_bridgeDepositTransactionArgs, 'id' | 'subgraphError'>>;
+  mainnet_bridgeDepositTransactions?: Resolver<Array<ResolversTypes['BridgeDepositTransaction']>, ParentType, ContextType, RequireFields<Querymainnet_bridgeDepositTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_retryableTicket?: Resolver<Maybe<ResolversTypes['RetryableTicket']>, ParentType, ContextType, RequireFields<Querymainnet_retryableTicketArgs, 'id' | 'subgraphError'>>;
+  mainnet_retryableTickets?: Resolver<Array<ResolversTypes['RetryableTicket']>, ParentType, ContextType, RequireFields<Querymainnet_retryableTicketsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_retryableTicketRedeemAttempt?: Resolver<Maybe<ResolversTypes['RetryableTicketRedeemAttempt']>, ParentType, ContextType, RequireFields<Querymainnet_retryableTicketRedeemAttemptArgs, 'id' | 'subgraphError'>>;
+  mainnet_retryableTicketRedeemAttempts?: Resolver<Array<ResolversTypes['RetryableTicketRedeemAttempt']>, ParentType, ContextType, RequireFields<Querymainnet_retryableTicketRedeemAttemptsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_tokenManager?: Resolver<Maybe<ResolversTypes['TokenManager']>, ParentType, ContextType, RequireFields<Querymainnet_tokenManagerArgs, 'id' | 'subgraphError'>>;
+  mainnet_tokenManagers?: Resolver<Array<ResolversTypes['TokenManager']>, ParentType, ContextType, RequireFields<Querymainnet_tokenManagersArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_authorizedFunction?: Resolver<Maybe<ResolversTypes['AuthorizedFunction']>, ParentType, ContextType, RequireFields<Querymainnet_authorizedFunctionArgs, 'id' | 'subgraphError'>>;
+  mainnet_authorizedFunctions?: Resolver<Array<ResolversTypes['AuthorizedFunction']>, ParentType, ContextType, RequireFields<Querymainnet_authorizedFunctionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_tokenLockWallet?: Resolver<Maybe<ResolversTypes['TokenLockWallet']>, ParentType, ContextType, RequireFields<Querymainnet_tokenLockWalletArgs, 'id' | 'subgraphError'>>;
+  mainnet_tokenLockWallets?: Resolver<Array<ResolversTypes['TokenLockWallet']>, ParentType, ContextType, RequireFields<Querymainnet_tokenLockWalletsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_indexerDeployment?: Resolver<Maybe<ResolversTypes['IndexerDeployment']>, ParentType, ContextType, RequireFields<Querymainnet_indexerDeploymentArgs, 'id' | 'subgraphError'>>;
+  mainnet_indexerDeployments?: Resolver<Array<ResolversTypes['IndexerDeployment']>, ParentType, ContextType, RequireFields<Querymainnet_indexerDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_rewardCutHistoryEntity?: Resolver<Maybe<ResolversTypes['RewardCutHistoryEntity']>, ParentType, ContextType, RequireFields<Querymainnet_rewardCutHistoryEntityArgs, 'id' | 'subgraphError'>>;
+  mainnet_rewardCutHistoryEntities?: Resolver<Array<ResolversTypes['RewardCutHistoryEntity']>, ParentType, ContextType, RequireFields<Querymainnet_rewardCutHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_delegationPoolHistoryEntity?: Resolver<Maybe<ResolversTypes['DelegationPoolHistoryEntity']>, ParentType, ContextType, RequireFields<Querymainnet_delegationPoolHistoryEntityArgs, 'id' | 'subgraphError'>>;
+  mainnet_delegationPoolHistoryEntities?: Resolver<Array<ResolversTypes['DelegationPoolHistoryEntity']>, ParentType, ContextType, RequireFields<Querymainnet_delegationPoolHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_indexersRecalculateQueue?: Resolver<Maybe<ResolversTypes['IndexersRecalculateQueue']>, ParentType, ContextType, RequireFields<Querymainnet_indexersRecalculateQueueArgs, 'id' | 'subgraphError'>>;
+  mainnet_indexersRecalculateQueues?: Resolver<Array<ResolversTypes['IndexersRecalculateQueue']>, ParentType, ContextType, RequireFields<Querymainnet_indexersRecalculateQueuesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_transaction?: Resolver<Maybe<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<Querymainnet_transactionArgs, 'id' | 'subgraphError'>>;
+  mainnet_transactions?: Resolver<Array<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<Querymainnet_transactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_curatorSearch?: Resolver<Array<ResolversTypes['Curator']>, ParentType, ContextType, RequireFields<Querymainnet_curatorSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
+  mainnet_delegatorSearch?: Resolver<Array<ResolversTypes['Delegator']>, ParentType, ContextType, RequireFields<Querymainnet_delegatorSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
+  mainnet_indexerSearch?: Resolver<Array<ResolversTypes['Indexer']>, ParentType, ContextType, RequireFields<Querymainnet_indexerSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
+  mainnet_accountSearch?: Resolver<Array<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<Querymainnet_accountSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
+  mainnet__meta?: Resolver<Maybe<ResolversTypes['_Meta_']>, ParentType, ContextType, Partial<Querymainnet__metaArgs>>;
+  arbitrum_graphNetwork?: Resolver<Maybe<ResolversTypes['GraphNetwork']>, ParentType, ContextType, RequireFields<Queryarbitrum_graphNetworkArgs, 'id' | 'subgraphError'>>;
+  arbitrum_graphNetworks?: Resolver<Array<ResolversTypes['GraphNetwork']>, ParentType, ContextType, RequireFields<Queryarbitrum_graphNetworksArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_graphAccount?: Resolver<Maybe<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<Queryarbitrum_graphAccountArgs, 'id' | 'subgraphError'>>;
+  arbitrum_graphAccounts?: Resolver<Array<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<Queryarbitrum_graphAccountsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_accountMetadata?: Resolver<Array<ResolversTypes['AccountMetadata']>, ParentType, ContextType, RequireFields<Queryarbitrum_accountMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_graphAccountName?: Resolver<Maybe<ResolversTypes['GraphAccountName']>, ParentType, ContextType, RequireFields<Queryarbitrum_graphAccountNameArgs, 'id' | 'subgraphError'>>;
+  arbitrum_graphAccountNames?: Resolver<Array<ResolversTypes['GraphAccountName']>, ParentType, ContextType, RequireFields<Queryarbitrum_graphAccountNamesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_subgraph?: Resolver<Maybe<ResolversTypes['Subgraph']>, ParentType, ContextType, RequireFields<Queryarbitrum_subgraphArgs, 'id' | 'subgraphError'>>;
+  arbitrum_subgraphs?: Resolver<Array<ResolversTypes['Subgraph']>, ParentType, ContextType, RequireFields<Queryarbitrum_subgraphsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_subgraphMetadata?: Resolver<Array<ResolversTypes['SubgraphMetadata']>, ParentType, ContextType, RequireFields<Queryarbitrum_subgraphMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_currentSubgraphDeploymentRelation?: Resolver<Maybe<ResolversTypes['CurrentSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<Queryarbitrum_currentSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
+  arbitrum_currentSubgraphDeploymentRelations?: Resolver<Array<ResolversTypes['CurrentSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<Queryarbitrum_currentSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_network?: Resolver<Maybe<ResolversTypes['Network']>, ParentType, ContextType, RequireFields<Queryarbitrum_networkArgs, 'id' | 'subgraphError'>>;
+  arbitrum_networks?: Resolver<Array<ResolversTypes['Network']>, ParentType, ContextType, RequireFields<Queryarbitrum_networksArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_subgraphVersion?: Resolver<Maybe<ResolversTypes['SubgraphVersion']>, ParentType, ContextType, RequireFields<Queryarbitrum_subgraphVersionArgs, 'id' | 'subgraphError'>>;
+  arbitrum_subgraphVersions?: Resolver<Array<ResolversTypes['SubgraphVersion']>, ParentType, ContextType, RequireFields<Queryarbitrum_subgraphVersionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_subgraphVersionMetadata?: Resolver<Array<ResolversTypes['SubgraphVersionMetadata']>, ParentType, ContextType, RequireFields<Queryarbitrum_subgraphVersionMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_subgraphDeployment?: Resolver<Maybe<ResolversTypes['SubgraphDeployment']>, ParentType, ContextType, RequireFields<Queryarbitrum_subgraphDeploymentArgs, 'id' | 'subgraphError'>>;
+  arbitrum_subgraphDeployments?: Resolver<Array<ResolversTypes['SubgraphDeployment']>, ParentType, ContextType, RequireFields<Queryarbitrum_subgraphDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_subgraphDeploymentMetadata?: Resolver<Array<ResolversTypes['SubgraphDeploymentMetadata']>, ParentType, ContextType, RequireFields<Queryarbitrum_subgraphDeploymentMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_indexer?: Resolver<Maybe<ResolversTypes['Indexer']>, ParentType, ContextType, RequireFields<Queryarbitrum_indexerArgs, 'id' | 'subgraphError'>>;
+  arbitrum_indexers?: Resolver<Array<ResolversTypes['Indexer']>, ParentType, ContextType, RequireFields<Queryarbitrum_indexersArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_allocation?: Resolver<Maybe<ResolversTypes['Allocation']>, ParentType, ContextType, RequireFields<Queryarbitrum_allocationArgs, 'id' | 'subgraphError'>>;
+  arbitrum_allocations?: Resolver<Array<ResolversTypes['Allocation']>, ParentType, ContextType, RequireFields<Queryarbitrum_allocationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_pool?: Resolver<Maybe<ResolversTypes['Pool']>, ParentType, ContextType, RequireFields<Queryarbitrum_poolArgs, 'id' | 'subgraphError'>>;
+  arbitrum_pools?: Resolver<Array<ResolversTypes['Pool']>, ParentType, ContextType, RequireFields<Queryarbitrum_poolsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_delegator?: Resolver<Maybe<ResolversTypes['Delegator']>, ParentType, ContextType, RequireFields<Queryarbitrum_delegatorArgs, 'id' | 'subgraphError'>>;
+  arbitrum_delegators?: Resolver<Array<ResolversTypes['Delegator']>, ParentType, ContextType, RequireFields<Queryarbitrum_delegatorsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_delegatedStake?: Resolver<Maybe<ResolversTypes['DelegatedStake']>, ParentType, ContextType, RequireFields<Queryarbitrum_delegatedStakeArgs, 'id' | 'subgraphError'>>;
+  arbitrum_delegatedStakes?: Resolver<Array<ResolversTypes['DelegatedStake']>, ParentType, ContextType, RequireFields<Queryarbitrum_delegatedStakesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_curator?: Resolver<Maybe<ResolversTypes['Curator']>, ParentType, ContextType, RequireFields<Queryarbitrum_curatorArgs, 'id' | 'subgraphError'>>;
+  arbitrum_curators?: Resolver<Array<ResolversTypes['Curator']>, ParentType, ContextType, RequireFields<Queryarbitrum_curatorsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_signal?: Resolver<Maybe<ResolversTypes['Signal']>, ParentType, ContextType, RequireFields<Queryarbitrum_signalArgs, 'id' | 'subgraphError'>>;
+  arbitrum_signals?: Resolver<Array<ResolversTypes['Signal']>, ParentType, ContextType, RequireFields<Queryarbitrum_signalsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_nameSignal?: Resolver<Maybe<ResolversTypes['NameSignal']>, ParentType, ContextType, RequireFields<Queryarbitrum_nameSignalArgs, 'id' | 'subgraphError'>>;
+  arbitrum_nameSignals?: Resolver<Array<ResolversTypes['NameSignal']>, ParentType, ContextType, RequireFields<Queryarbitrum_nameSignalsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_nameSignalSubgraphRelation?: Resolver<Maybe<ResolversTypes['NameSignalSubgraphRelation']>, ParentType, ContextType, RequireFields<Queryarbitrum_nameSignalSubgraphRelationArgs, 'id' | 'subgraphError'>>;
+  arbitrum_nameSignalSubgraphRelations?: Resolver<Array<ResolversTypes['NameSignalSubgraphRelation']>, ParentType, ContextType, RequireFields<Queryarbitrum_nameSignalSubgraphRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_signalSubgraphDeploymentRelation?: Resolver<Maybe<ResolversTypes['SignalSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<Queryarbitrum_signalSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
+  arbitrum_signalSubgraphDeploymentRelations?: Resolver<Array<ResolversTypes['SignalSubgraphDeploymentRelation']>, ParentType, ContextType, RequireFields<Queryarbitrum_signalSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_dispute?: Resolver<Maybe<ResolversTypes['Dispute']>, ParentType, ContextType, RequireFields<Queryarbitrum_disputeArgs, 'id' | 'subgraphError'>>;
+  arbitrum_disputes?: Resolver<Array<ResolversTypes['Dispute']>, ParentType, ContextType, RequireFields<Queryarbitrum_disputesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_attestation?: Resolver<Maybe<ResolversTypes['Attestation']>, ParentType, ContextType, RequireFields<Queryarbitrum_attestationArgs, 'id' | 'subgraphError'>>;
+  arbitrum_attestations?: Resolver<Array<ResolversTypes['Attestation']>, ParentType, ContextType, RequireFields<Queryarbitrum_attestationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_epoch?: Resolver<Maybe<ResolversTypes['Epoch']>, ParentType, ContextType, RequireFields<Queryarbitrum_epochArgs, 'id' | 'subgraphError'>>;
+  arbitrum_epoches?: Resolver<Array<ResolversTypes['Epoch']>, ParentType, ContextType, RequireFields<Queryarbitrum_epochesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_nameSignalTransaction?: Resolver<Maybe<ResolversTypes['NameSignalTransaction']>, ParentType, ContextType, RequireFields<Queryarbitrum_nameSignalTransactionArgs, 'id' | 'subgraphError'>>;
+  arbitrum_nameSignalTransactions?: Resolver<Array<ResolversTypes['NameSignalTransaction']>, ParentType, ContextType, RequireFields<Queryarbitrum_nameSignalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_signalTransaction?: Resolver<Maybe<ResolversTypes['SignalTransaction']>, ParentType, ContextType, RequireFields<Queryarbitrum_signalTransactionArgs, 'id' | 'subgraphError'>>;
+  arbitrum_signalTransactions?: Resolver<Array<ResolversTypes['SignalTransaction']>, ParentType, ContextType, RequireFields<Queryarbitrum_signalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_bridgeWithdrawalTransaction?: Resolver<Maybe<ResolversTypes['BridgeWithdrawalTransaction']>, ParentType, ContextType, RequireFields<Queryarbitrum_bridgeWithdrawalTransactionArgs, 'id' | 'subgraphError'>>;
+  arbitrum_bridgeWithdrawalTransactions?: Resolver<Array<ResolversTypes['BridgeWithdrawalTransaction']>, ParentType, ContextType, RequireFields<Queryarbitrum_bridgeWithdrawalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_bridgeDepositTransaction?: Resolver<Maybe<ResolversTypes['BridgeDepositTransaction']>, ParentType, ContextType, RequireFields<Queryarbitrum_bridgeDepositTransactionArgs, 'id' | 'subgraphError'>>;
+  arbitrum_bridgeDepositTransactions?: Resolver<Array<ResolversTypes['BridgeDepositTransaction']>, ParentType, ContextType, RequireFields<Queryarbitrum_bridgeDepositTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_retryableTicket?: Resolver<Maybe<ResolversTypes['RetryableTicket']>, ParentType, ContextType, RequireFields<Queryarbitrum_retryableTicketArgs, 'id' | 'subgraphError'>>;
+  arbitrum_retryableTickets?: Resolver<Array<ResolversTypes['RetryableTicket']>, ParentType, ContextType, RequireFields<Queryarbitrum_retryableTicketsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_retryableTicketRedeemAttempt?: Resolver<Maybe<ResolversTypes['RetryableTicketRedeemAttempt']>, ParentType, ContextType, RequireFields<Queryarbitrum_retryableTicketRedeemAttemptArgs, 'id' | 'subgraphError'>>;
+  arbitrum_retryableTicketRedeemAttempts?: Resolver<Array<ResolversTypes['RetryableTicketRedeemAttempt']>, ParentType, ContextType, RequireFields<Queryarbitrum_retryableTicketRedeemAttemptsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_tokenManager?: Resolver<Maybe<ResolversTypes['TokenManager']>, ParentType, ContextType, RequireFields<Queryarbitrum_tokenManagerArgs, 'id' | 'subgraphError'>>;
+  arbitrum_tokenManagers?: Resolver<Array<ResolversTypes['TokenManager']>, ParentType, ContextType, RequireFields<Queryarbitrum_tokenManagersArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_authorizedFunction?: Resolver<Maybe<ResolversTypes['AuthorizedFunction']>, ParentType, ContextType, RequireFields<Queryarbitrum_authorizedFunctionArgs, 'id' | 'subgraphError'>>;
+  arbitrum_authorizedFunctions?: Resolver<Array<ResolversTypes['AuthorizedFunction']>, ParentType, ContextType, RequireFields<Queryarbitrum_authorizedFunctionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_tokenLockWallet?: Resolver<Maybe<ResolversTypes['TokenLockWallet']>, ParentType, ContextType, RequireFields<Queryarbitrum_tokenLockWalletArgs, 'id' | 'subgraphError'>>;
+  arbitrum_tokenLockWallets?: Resolver<Array<ResolversTypes['TokenLockWallet']>, ParentType, ContextType, RequireFields<Queryarbitrum_tokenLockWalletsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_indexerDeployment?: Resolver<Maybe<ResolversTypes['IndexerDeployment']>, ParentType, ContextType, RequireFields<Queryarbitrum_indexerDeploymentArgs, 'id' | 'subgraphError'>>;
+  arbitrum_indexerDeployments?: Resolver<Array<ResolversTypes['IndexerDeployment']>, ParentType, ContextType, RequireFields<Queryarbitrum_indexerDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_rewardCutHistoryEntity?: Resolver<Maybe<ResolversTypes['RewardCutHistoryEntity']>, ParentType, ContextType, RequireFields<Queryarbitrum_rewardCutHistoryEntityArgs, 'id' | 'subgraphError'>>;
+  arbitrum_rewardCutHistoryEntities?: Resolver<Array<ResolversTypes['RewardCutHistoryEntity']>, ParentType, ContextType, RequireFields<Queryarbitrum_rewardCutHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_delegationPoolHistoryEntity?: Resolver<Maybe<ResolversTypes['DelegationPoolHistoryEntity']>, ParentType, ContextType, RequireFields<Queryarbitrum_delegationPoolHistoryEntityArgs, 'id' | 'subgraphError'>>;
+  arbitrum_delegationPoolHistoryEntities?: Resolver<Array<ResolversTypes['DelegationPoolHistoryEntity']>, ParentType, ContextType, RequireFields<Queryarbitrum_delegationPoolHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_indexersRecalculateQueue?: Resolver<Maybe<ResolversTypes['IndexersRecalculateQueue']>, ParentType, ContextType, RequireFields<Queryarbitrum_indexersRecalculateQueueArgs, 'id' | 'subgraphError'>>;
+  arbitrum_indexersRecalculateQueues?: Resolver<Array<ResolversTypes['IndexersRecalculateQueue']>, ParentType, ContextType, RequireFields<Queryarbitrum_indexersRecalculateQueuesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_transaction?: Resolver<Maybe<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<Queryarbitrum_transactionArgs, 'id' | 'subgraphError'>>;
+  arbitrum_transactions?: Resolver<Array<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<Queryarbitrum_transactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_curatorSearch?: Resolver<Array<ResolversTypes['Curator']>, ParentType, ContextType, RequireFields<Queryarbitrum_curatorSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
+  arbitrum_delegatorSearch?: Resolver<Array<ResolversTypes['Delegator']>, ParentType, ContextType, RequireFields<Queryarbitrum_delegatorSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
+  arbitrum_indexerSearch?: Resolver<Array<ResolversTypes['Indexer']>, ParentType, ContextType, RequireFields<Queryarbitrum_indexerSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
+  arbitrum_accountSearch?: Resolver<Array<ResolversTypes['GraphAccount']>, ParentType, ContextType, RequireFields<Queryarbitrum_accountSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
+  arbitrum__meta?: Resolver<Maybe<ResolversTypes['_Meta_']>, ParentType, ContextType, Partial<Queryarbitrum__metaArgs>>;
   crossSubgraphs?: Resolver<Array<ResolversTypes['Subgraph']>, ParentType, ContextType, RequireFields<QuerycrossSubgraphsArgs, 'skip'>>;
 }>;
 
 export type SubscriptionResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = ResolversObject<{
-  graphNetwork?: SubscriptionResolver<Maybe<ResolversTypes['GraphNetwork']>, "graphNetwork", ParentType, ContextType, RequireFields<SubscriptiongraphNetworkArgs, 'id' | 'subgraphError'>>;
-  graphNetworks?: SubscriptionResolver<Array<ResolversTypes['GraphNetwork']>, "graphNetworks", ParentType, ContextType, RequireFields<SubscriptiongraphNetworksArgs, 'skip' | 'first' | 'subgraphError'>>;
-  graphAccount?: SubscriptionResolver<Maybe<ResolversTypes['GraphAccount']>, "graphAccount", ParentType, ContextType, RequireFields<SubscriptiongraphAccountArgs, 'id' | 'subgraphError'>>;
-  graphAccounts?: SubscriptionResolver<Array<ResolversTypes['GraphAccount']>, "graphAccounts", ParentType, ContextType, RequireFields<SubscriptiongraphAccountsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  accountMetadata?: SubscriptionResolver<Array<ResolversTypes['AccountMetadata']>, "accountMetadata", ParentType, ContextType, RequireFields<SubscriptionaccountMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  graphAccountName?: SubscriptionResolver<Maybe<ResolversTypes['GraphAccountName']>, "graphAccountName", ParentType, ContextType, RequireFields<SubscriptiongraphAccountNameArgs, 'id' | 'subgraphError'>>;
-  graphAccountNames?: SubscriptionResolver<Array<ResolversTypes['GraphAccountName']>, "graphAccountNames", ParentType, ContextType, RequireFields<SubscriptiongraphAccountNamesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraph?: SubscriptionResolver<Maybe<ResolversTypes['Subgraph']>, "subgraph", ParentType, ContextType, RequireFields<SubscriptionsubgraphArgs, 'id' | 'subgraphError'>>;
-  subgraphs?: SubscriptionResolver<Array<ResolversTypes['Subgraph']>, "subgraphs", ParentType, ContextType, RequireFields<SubscriptionsubgraphsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphMetadata?: SubscriptionResolver<Array<ResolversTypes['SubgraphMetadata']>, "subgraphMetadata", ParentType, ContextType, RequireFields<SubscriptionsubgraphMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  currentSubgraphDeploymentRelation?: SubscriptionResolver<Maybe<ResolversTypes['CurrentSubgraphDeploymentRelation']>, "currentSubgraphDeploymentRelation", ParentType, ContextType, RequireFields<SubscriptioncurrentSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
-  currentSubgraphDeploymentRelations?: SubscriptionResolver<Array<ResolversTypes['CurrentSubgraphDeploymentRelation']>, "currentSubgraphDeploymentRelations", ParentType, ContextType, RequireFields<SubscriptioncurrentSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  network?: SubscriptionResolver<Maybe<ResolversTypes['Network']>, "network", ParentType, ContextType, RequireFields<SubscriptionnetworkArgs, 'id' | 'subgraphError'>>;
-  networks?: SubscriptionResolver<Array<ResolversTypes['Network']>, "networks", ParentType, ContextType, RequireFields<SubscriptionnetworksArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphVersion?: SubscriptionResolver<Maybe<ResolversTypes['SubgraphVersion']>, "subgraphVersion", ParentType, ContextType, RequireFields<SubscriptionsubgraphVersionArgs, 'id' | 'subgraphError'>>;
-  subgraphVersions?: SubscriptionResolver<Array<ResolversTypes['SubgraphVersion']>, "subgraphVersions", ParentType, ContextType, RequireFields<SubscriptionsubgraphVersionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphVersionMetadata?: SubscriptionResolver<Array<ResolversTypes['SubgraphVersionMetadata']>, "subgraphVersionMetadata", ParentType, ContextType, RequireFields<SubscriptionsubgraphVersionMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphDeployment?: SubscriptionResolver<Maybe<ResolversTypes['SubgraphDeployment']>, "subgraphDeployment", ParentType, ContextType, RequireFields<SubscriptionsubgraphDeploymentArgs, 'id' | 'subgraphError'>>;
-  subgraphDeployments?: SubscriptionResolver<Array<ResolversTypes['SubgraphDeployment']>, "subgraphDeployments", ParentType, ContextType, RequireFields<SubscriptionsubgraphDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  subgraphDeploymentMetadata?: SubscriptionResolver<Array<ResolversTypes['SubgraphDeploymentMetadata']>, "subgraphDeploymentMetadata", ParentType, ContextType, RequireFields<SubscriptionsubgraphDeploymentMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
-  indexer?: SubscriptionResolver<Maybe<ResolversTypes['Indexer']>, "indexer", ParentType, ContextType, RequireFields<SubscriptionindexerArgs, 'id' | 'subgraphError'>>;
-  indexers?: SubscriptionResolver<Array<ResolversTypes['Indexer']>, "indexers", ParentType, ContextType, RequireFields<SubscriptionindexersArgs, 'skip' | 'first' | 'subgraphError'>>;
-  allocation?: SubscriptionResolver<Maybe<ResolversTypes['Allocation']>, "allocation", ParentType, ContextType, RequireFields<SubscriptionallocationArgs, 'id' | 'subgraphError'>>;
-  allocations?: SubscriptionResolver<Array<ResolversTypes['Allocation']>, "allocations", ParentType, ContextType, RequireFields<SubscriptionallocationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  pool?: SubscriptionResolver<Maybe<ResolversTypes['Pool']>, "pool", ParentType, ContextType, RequireFields<SubscriptionpoolArgs, 'id' | 'subgraphError'>>;
-  pools?: SubscriptionResolver<Array<ResolversTypes['Pool']>, "pools", ParentType, ContextType, RequireFields<SubscriptionpoolsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  delegator?: SubscriptionResolver<Maybe<ResolversTypes['Delegator']>, "delegator", ParentType, ContextType, RequireFields<SubscriptiondelegatorArgs, 'id' | 'subgraphError'>>;
-  delegators?: SubscriptionResolver<Array<ResolversTypes['Delegator']>, "delegators", ParentType, ContextType, RequireFields<SubscriptiondelegatorsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  delegatedStake?: SubscriptionResolver<Maybe<ResolversTypes['DelegatedStake']>, "delegatedStake", ParentType, ContextType, RequireFields<SubscriptiondelegatedStakeArgs, 'id' | 'subgraphError'>>;
-  delegatedStakes?: SubscriptionResolver<Array<ResolversTypes['DelegatedStake']>, "delegatedStakes", ParentType, ContextType, RequireFields<SubscriptiondelegatedStakesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  curator?: SubscriptionResolver<Maybe<ResolversTypes['Curator']>, "curator", ParentType, ContextType, RequireFields<SubscriptioncuratorArgs, 'id' | 'subgraphError'>>;
-  curators?: SubscriptionResolver<Array<ResolversTypes['Curator']>, "curators", ParentType, ContextType, RequireFields<SubscriptioncuratorsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  signal?: SubscriptionResolver<Maybe<ResolversTypes['Signal']>, "signal", ParentType, ContextType, RequireFields<SubscriptionsignalArgs, 'id' | 'subgraphError'>>;
-  signals?: SubscriptionResolver<Array<ResolversTypes['Signal']>, "signals", ParentType, ContextType, RequireFields<SubscriptionsignalsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  nameSignal?: SubscriptionResolver<Maybe<ResolversTypes['NameSignal']>, "nameSignal", ParentType, ContextType, RequireFields<SubscriptionnameSignalArgs, 'id' | 'subgraphError'>>;
-  nameSignals?: SubscriptionResolver<Array<ResolversTypes['NameSignal']>, "nameSignals", ParentType, ContextType, RequireFields<SubscriptionnameSignalsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  nameSignalSubgraphRelation?: SubscriptionResolver<Maybe<ResolversTypes['NameSignalSubgraphRelation']>, "nameSignalSubgraphRelation", ParentType, ContextType, RequireFields<SubscriptionnameSignalSubgraphRelationArgs, 'id' | 'subgraphError'>>;
-  nameSignalSubgraphRelations?: SubscriptionResolver<Array<ResolversTypes['NameSignalSubgraphRelation']>, "nameSignalSubgraphRelations", ParentType, ContextType, RequireFields<SubscriptionnameSignalSubgraphRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  signalSubgraphDeploymentRelation?: SubscriptionResolver<Maybe<ResolversTypes['SignalSubgraphDeploymentRelation']>, "signalSubgraphDeploymentRelation", ParentType, ContextType, RequireFields<SubscriptionsignalSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
-  signalSubgraphDeploymentRelations?: SubscriptionResolver<Array<ResolversTypes['SignalSubgraphDeploymentRelation']>, "signalSubgraphDeploymentRelations", ParentType, ContextType, RequireFields<SubscriptionsignalSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  dispute?: SubscriptionResolver<Maybe<ResolversTypes['Dispute']>, "dispute", ParentType, ContextType, RequireFields<SubscriptiondisputeArgs, 'id' | 'subgraphError'>>;
-  disputes?: SubscriptionResolver<Array<ResolversTypes['Dispute']>, "disputes", ParentType, ContextType, RequireFields<SubscriptiondisputesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  attestation?: SubscriptionResolver<Maybe<ResolversTypes['Attestation']>, "attestation", ParentType, ContextType, RequireFields<SubscriptionattestationArgs, 'id' | 'subgraphError'>>;
-  attestations?: SubscriptionResolver<Array<ResolversTypes['Attestation']>, "attestations", ParentType, ContextType, RequireFields<SubscriptionattestationsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  epoch?: SubscriptionResolver<Maybe<ResolversTypes['Epoch']>, "epoch", ParentType, ContextType, RequireFields<SubscriptionepochArgs, 'id' | 'subgraphError'>>;
-  epoches?: SubscriptionResolver<Array<ResolversTypes['Epoch']>, "epoches", ParentType, ContextType, RequireFields<SubscriptionepochesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  nameSignalTransaction?: SubscriptionResolver<Maybe<ResolversTypes['NameSignalTransaction']>, "nameSignalTransaction", ParentType, ContextType, RequireFields<SubscriptionnameSignalTransactionArgs, 'id' | 'subgraphError'>>;
-  nameSignalTransactions?: SubscriptionResolver<Array<ResolversTypes['NameSignalTransaction']>, "nameSignalTransactions", ParentType, ContextType, RequireFields<SubscriptionnameSignalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  signalTransaction?: SubscriptionResolver<Maybe<ResolversTypes['SignalTransaction']>, "signalTransaction", ParentType, ContextType, RequireFields<SubscriptionsignalTransactionArgs, 'id' | 'subgraphError'>>;
-  signalTransactions?: SubscriptionResolver<Array<ResolversTypes['SignalTransaction']>, "signalTransactions", ParentType, ContextType, RequireFields<SubscriptionsignalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  bridgeWithdrawalTransaction?: SubscriptionResolver<Maybe<ResolversTypes['BridgeWithdrawalTransaction']>, "bridgeWithdrawalTransaction", ParentType, ContextType, RequireFields<SubscriptionbridgeWithdrawalTransactionArgs, 'id' | 'subgraphError'>>;
-  bridgeWithdrawalTransactions?: SubscriptionResolver<Array<ResolversTypes['BridgeWithdrawalTransaction']>, "bridgeWithdrawalTransactions", ParentType, ContextType, RequireFields<SubscriptionbridgeWithdrawalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  bridgeDepositTransaction?: SubscriptionResolver<Maybe<ResolversTypes['BridgeDepositTransaction']>, "bridgeDepositTransaction", ParentType, ContextType, RequireFields<SubscriptionbridgeDepositTransactionArgs, 'id' | 'subgraphError'>>;
-  bridgeDepositTransactions?: SubscriptionResolver<Array<ResolversTypes['BridgeDepositTransaction']>, "bridgeDepositTransactions", ParentType, ContextType, RequireFields<SubscriptionbridgeDepositTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  retryableTicket?: SubscriptionResolver<Maybe<ResolversTypes['RetryableTicket']>, "retryableTicket", ParentType, ContextType, RequireFields<SubscriptionretryableTicketArgs, 'id' | 'subgraphError'>>;
-  retryableTickets?: SubscriptionResolver<Array<ResolversTypes['RetryableTicket']>, "retryableTickets", ParentType, ContextType, RequireFields<SubscriptionretryableTicketsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  retryableTicketRedeemAttempt?: SubscriptionResolver<Maybe<ResolversTypes['RetryableTicketRedeemAttempt']>, "retryableTicketRedeemAttempt", ParentType, ContextType, RequireFields<SubscriptionretryableTicketRedeemAttemptArgs, 'id' | 'subgraphError'>>;
-  retryableTicketRedeemAttempts?: SubscriptionResolver<Array<ResolversTypes['RetryableTicketRedeemAttempt']>, "retryableTicketRedeemAttempts", ParentType, ContextType, RequireFields<SubscriptionretryableTicketRedeemAttemptsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  tokenManager?: SubscriptionResolver<Maybe<ResolversTypes['TokenManager']>, "tokenManager", ParentType, ContextType, RequireFields<SubscriptiontokenManagerArgs, 'id' | 'subgraphError'>>;
-  tokenManagers?: SubscriptionResolver<Array<ResolversTypes['TokenManager']>, "tokenManagers", ParentType, ContextType, RequireFields<SubscriptiontokenManagersArgs, 'skip' | 'first' | 'subgraphError'>>;
-  authorizedFunction?: SubscriptionResolver<Maybe<ResolversTypes['AuthorizedFunction']>, "authorizedFunction", ParentType, ContextType, RequireFields<SubscriptionauthorizedFunctionArgs, 'id' | 'subgraphError'>>;
-  authorizedFunctions?: SubscriptionResolver<Array<ResolversTypes['AuthorizedFunction']>, "authorizedFunctions", ParentType, ContextType, RequireFields<SubscriptionauthorizedFunctionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  tokenLockWallet?: SubscriptionResolver<Maybe<ResolversTypes['TokenLockWallet']>, "tokenLockWallet", ParentType, ContextType, RequireFields<SubscriptiontokenLockWalletArgs, 'id' | 'subgraphError'>>;
-  tokenLockWallets?: SubscriptionResolver<Array<ResolversTypes['TokenLockWallet']>, "tokenLockWallets", ParentType, ContextType, RequireFields<SubscriptiontokenLockWalletsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  indexerDeployment?: SubscriptionResolver<Maybe<ResolversTypes['IndexerDeployment']>, "indexerDeployment", ParentType, ContextType, RequireFields<SubscriptionindexerDeploymentArgs, 'id' | 'subgraphError'>>;
-  indexerDeployments?: SubscriptionResolver<Array<ResolversTypes['IndexerDeployment']>, "indexerDeployments", ParentType, ContextType, RequireFields<SubscriptionindexerDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  rewardCutHistoryEntity?: SubscriptionResolver<Maybe<ResolversTypes['RewardCutHistoryEntity']>, "rewardCutHistoryEntity", ParentType, ContextType, RequireFields<SubscriptionrewardCutHistoryEntityArgs, 'id' | 'subgraphError'>>;
-  rewardCutHistoryEntities?: SubscriptionResolver<Array<ResolversTypes['RewardCutHistoryEntity']>, "rewardCutHistoryEntities", ParentType, ContextType, RequireFields<SubscriptionrewardCutHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  delegationPoolHistoryEntity?: SubscriptionResolver<Maybe<ResolversTypes['DelegationPoolHistoryEntity']>, "delegationPoolHistoryEntity", ParentType, ContextType, RequireFields<SubscriptiondelegationPoolHistoryEntityArgs, 'id' | 'subgraphError'>>;
-  delegationPoolHistoryEntities?: SubscriptionResolver<Array<ResolversTypes['DelegationPoolHistoryEntity']>, "delegationPoolHistoryEntities", ParentType, ContextType, RequireFields<SubscriptiondelegationPoolHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  indexersRecalculateQueue?: SubscriptionResolver<Maybe<ResolversTypes['IndexersRecalculateQueue']>, "indexersRecalculateQueue", ParentType, ContextType, RequireFields<SubscriptionindexersRecalculateQueueArgs, 'id' | 'subgraphError'>>;
-  indexersRecalculateQueues?: SubscriptionResolver<Array<ResolversTypes['IndexersRecalculateQueue']>, "indexersRecalculateQueues", ParentType, ContextType, RequireFields<SubscriptionindexersRecalculateQueuesArgs, 'skip' | 'first' | 'subgraphError'>>;
-  transaction?: SubscriptionResolver<Maybe<ResolversTypes['Transaction']>, "transaction", ParentType, ContextType, RequireFields<SubscriptiontransactionArgs, 'id' | 'subgraphError'>>;
-  transactions?: SubscriptionResolver<Array<ResolversTypes['Transaction']>, "transactions", ParentType, ContextType, RequireFields<SubscriptiontransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  _meta?: SubscriptionResolver<Maybe<ResolversTypes['_Meta_']>, "_meta", ParentType, ContextType, Partial<Subscription_metaArgs>>;
+  mainnet_graphNetwork?: SubscriptionResolver<Maybe<ResolversTypes['GraphNetwork']>, "mainnet_graphNetwork", ParentType, ContextType, RequireFields<Subscriptionmainnet_graphNetworkArgs, 'id' | 'subgraphError'>>;
+  mainnet_graphNetworks?: SubscriptionResolver<Array<ResolversTypes['GraphNetwork']>, "mainnet_graphNetworks", ParentType, ContextType, RequireFields<Subscriptionmainnet_graphNetworksArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_graphAccount?: SubscriptionResolver<Maybe<ResolversTypes['GraphAccount']>, "mainnet_graphAccount", ParentType, ContextType, RequireFields<Subscriptionmainnet_graphAccountArgs, 'id' | 'subgraphError'>>;
+  mainnet_graphAccounts?: SubscriptionResolver<Array<ResolversTypes['GraphAccount']>, "mainnet_graphAccounts", ParentType, ContextType, RequireFields<Subscriptionmainnet_graphAccountsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_accountMetadata?: SubscriptionResolver<Array<ResolversTypes['AccountMetadata']>, "mainnet_accountMetadata", ParentType, ContextType, RequireFields<Subscriptionmainnet_accountMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_graphAccountName?: SubscriptionResolver<Maybe<ResolversTypes['GraphAccountName']>, "mainnet_graphAccountName", ParentType, ContextType, RequireFields<Subscriptionmainnet_graphAccountNameArgs, 'id' | 'subgraphError'>>;
+  mainnet_graphAccountNames?: SubscriptionResolver<Array<ResolversTypes['GraphAccountName']>, "mainnet_graphAccountNames", ParentType, ContextType, RequireFields<Subscriptionmainnet_graphAccountNamesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_subgraph?: SubscriptionResolver<Maybe<ResolversTypes['Subgraph']>, "mainnet_subgraph", ParentType, ContextType, RequireFields<Subscriptionmainnet_subgraphArgs, 'id' | 'subgraphError'>>;
+  mainnet_subgraphs?: SubscriptionResolver<Array<ResolversTypes['Subgraph']>, "mainnet_subgraphs", ParentType, ContextType, RequireFields<Subscriptionmainnet_subgraphsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_subgraphMetadata?: SubscriptionResolver<Array<ResolversTypes['SubgraphMetadata']>, "mainnet_subgraphMetadata", ParentType, ContextType, RequireFields<Subscriptionmainnet_subgraphMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_currentSubgraphDeploymentRelation?: SubscriptionResolver<Maybe<ResolversTypes['CurrentSubgraphDeploymentRelation']>, "mainnet_currentSubgraphDeploymentRelation", ParentType, ContextType, RequireFields<Subscriptionmainnet_currentSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
+  mainnet_currentSubgraphDeploymentRelations?: SubscriptionResolver<Array<ResolversTypes['CurrentSubgraphDeploymentRelation']>, "mainnet_currentSubgraphDeploymentRelations", ParentType, ContextType, RequireFields<Subscriptionmainnet_currentSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_network?: SubscriptionResolver<Maybe<ResolversTypes['Network']>, "mainnet_network", ParentType, ContextType, RequireFields<Subscriptionmainnet_networkArgs, 'id' | 'subgraphError'>>;
+  mainnet_networks?: SubscriptionResolver<Array<ResolversTypes['Network']>, "mainnet_networks", ParentType, ContextType, RequireFields<Subscriptionmainnet_networksArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_subgraphVersion?: SubscriptionResolver<Maybe<ResolversTypes['SubgraphVersion']>, "mainnet_subgraphVersion", ParentType, ContextType, RequireFields<Subscriptionmainnet_subgraphVersionArgs, 'id' | 'subgraphError'>>;
+  mainnet_subgraphVersions?: SubscriptionResolver<Array<ResolversTypes['SubgraphVersion']>, "mainnet_subgraphVersions", ParentType, ContextType, RequireFields<Subscriptionmainnet_subgraphVersionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_subgraphVersionMetadata?: SubscriptionResolver<Array<ResolversTypes['SubgraphVersionMetadata']>, "mainnet_subgraphVersionMetadata", ParentType, ContextType, RequireFields<Subscriptionmainnet_subgraphVersionMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_subgraphDeployment?: SubscriptionResolver<Maybe<ResolversTypes['SubgraphDeployment']>, "mainnet_subgraphDeployment", ParentType, ContextType, RequireFields<Subscriptionmainnet_subgraphDeploymentArgs, 'id' | 'subgraphError'>>;
+  mainnet_subgraphDeployments?: SubscriptionResolver<Array<ResolversTypes['SubgraphDeployment']>, "mainnet_subgraphDeployments", ParentType, ContextType, RequireFields<Subscriptionmainnet_subgraphDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_subgraphDeploymentMetadata?: SubscriptionResolver<Array<ResolversTypes['SubgraphDeploymentMetadata']>, "mainnet_subgraphDeploymentMetadata", ParentType, ContextType, RequireFields<Subscriptionmainnet_subgraphDeploymentMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_indexer?: SubscriptionResolver<Maybe<ResolversTypes['Indexer']>, "mainnet_indexer", ParentType, ContextType, RequireFields<Subscriptionmainnet_indexerArgs, 'id' | 'subgraphError'>>;
+  mainnet_indexers?: SubscriptionResolver<Array<ResolversTypes['Indexer']>, "mainnet_indexers", ParentType, ContextType, RequireFields<Subscriptionmainnet_indexersArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_allocation?: SubscriptionResolver<Maybe<ResolversTypes['Allocation']>, "mainnet_allocation", ParentType, ContextType, RequireFields<Subscriptionmainnet_allocationArgs, 'id' | 'subgraphError'>>;
+  mainnet_allocations?: SubscriptionResolver<Array<ResolversTypes['Allocation']>, "mainnet_allocations", ParentType, ContextType, RequireFields<Subscriptionmainnet_allocationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_pool?: SubscriptionResolver<Maybe<ResolversTypes['Pool']>, "mainnet_pool", ParentType, ContextType, RequireFields<Subscriptionmainnet_poolArgs, 'id' | 'subgraphError'>>;
+  mainnet_pools?: SubscriptionResolver<Array<ResolversTypes['Pool']>, "mainnet_pools", ParentType, ContextType, RequireFields<Subscriptionmainnet_poolsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_delegator?: SubscriptionResolver<Maybe<ResolversTypes['Delegator']>, "mainnet_delegator", ParentType, ContextType, RequireFields<Subscriptionmainnet_delegatorArgs, 'id' | 'subgraphError'>>;
+  mainnet_delegators?: SubscriptionResolver<Array<ResolversTypes['Delegator']>, "mainnet_delegators", ParentType, ContextType, RequireFields<Subscriptionmainnet_delegatorsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_delegatedStake?: SubscriptionResolver<Maybe<ResolversTypes['DelegatedStake']>, "mainnet_delegatedStake", ParentType, ContextType, RequireFields<Subscriptionmainnet_delegatedStakeArgs, 'id' | 'subgraphError'>>;
+  mainnet_delegatedStakes?: SubscriptionResolver<Array<ResolversTypes['DelegatedStake']>, "mainnet_delegatedStakes", ParentType, ContextType, RequireFields<Subscriptionmainnet_delegatedStakesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_curator?: SubscriptionResolver<Maybe<ResolversTypes['Curator']>, "mainnet_curator", ParentType, ContextType, RequireFields<Subscriptionmainnet_curatorArgs, 'id' | 'subgraphError'>>;
+  mainnet_curators?: SubscriptionResolver<Array<ResolversTypes['Curator']>, "mainnet_curators", ParentType, ContextType, RequireFields<Subscriptionmainnet_curatorsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_signal?: SubscriptionResolver<Maybe<ResolversTypes['Signal']>, "mainnet_signal", ParentType, ContextType, RequireFields<Subscriptionmainnet_signalArgs, 'id' | 'subgraphError'>>;
+  mainnet_signals?: SubscriptionResolver<Array<ResolversTypes['Signal']>, "mainnet_signals", ParentType, ContextType, RequireFields<Subscriptionmainnet_signalsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_nameSignal?: SubscriptionResolver<Maybe<ResolversTypes['NameSignal']>, "mainnet_nameSignal", ParentType, ContextType, RequireFields<Subscriptionmainnet_nameSignalArgs, 'id' | 'subgraphError'>>;
+  mainnet_nameSignals?: SubscriptionResolver<Array<ResolversTypes['NameSignal']>, "mainnet_nameSignals", ParentType, ContextType, RequireFields<Subscriptionmainnet_nameSignalsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_nameSignalSubgraphRelation?: SubscriptionResolver<Maybe<ResolversTypes['NameSignalSubgraphRelation']>, "mainnet_nameSignalSubgraphRelation", ParentType, ContextType, RequireFields<Subscriptionmainnet_nameSignalSubgraphRelationArgs, 'id' | 'subgraphError'>>;
+  mainnet_nameSignalSubgraphRelations?: SubscriptionResolver<Array<ResolversTypes['NameSignalSubgraphRelation']>, "mainnet_nameSignalSubgraphRelations", ParentType, ContextType, RequireFields<Subscriptionmainnet_nameSignalSubgraphRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_signalSubgraphDeploymentRelation?: SubscriptionResolver<Maybe<ResolversTypes['SignalSubgraphDeploymentRelation']>, "mainnet_signalSubgraphDeploymentRelation", ParentType, ContextType, RequireFields<Subscriptionmainnet_signalSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
+  mainnet_signalSubgraphDeploymentRelations?: SubscriptionResolver<Array<ResolversTypes['SignalSubgraphDeploymentRelation']>, "mainnet_signalSubgraphDeploymentRelations", ParentType, ContextType, RequireFields<Subscriptionmainnet_signalSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_dispute?: SubscriptionResolver<Maybe<ResolversTypes['Dispute']>, "mainnet_dispute", ParentType, ContextType, RequireFields<Subscriptionmainnet_disputeArgs, 'id' | 'subgraphError'>>;
+  mainnet_disputes?: SubscriptionResolver<Array<ResolversTypes['Dispute']>, "mainnet_disputes", ParentType, ContextType, RequireFields<Subscriptionmainnet_disputesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_attestation?: SubscriptionResolver<Maybe<ResolversTypes['Attestation']>, "mainnet_attestation", ParentType, ContextType, RequireFields<Subscriptionmainnet_attestationArgs, 'id' | 'subgraphError'>>;
+  mainnet_attestations?: SubscriptionResolver<Array<ResolversTypes['Attestation']>, "mainnet_attestations", ParentType, ContextType, RequireFields<Subscriptionmainnet_attestationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_epoch?: SubscriptionResolver<Maybe<ResolversTypes['Epoch']>, "mainnet_epoch", ParentType, ContextType, RequireFields<Subscriptionmainnet_epochArgs, 'id' | 'subgraphError'>>;
+  mainnet_epoches?: SubscriptionResolver<Array<ResolversTypes['Epoch']>, "mainnet_epoches", ParentType, ContextType, RequireFields<Subscriptionmainnet_epochesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_nameSignalTransaction?: SubscriptionResolver<Maybe<ResolversTypes['NameSignalTransaction']>, "mainnet_nameSignalTransaction", ParentType, ContextType, RequireFields<Subscriptionmainnet_nameSignalTransactionArgs, 'id' | 'subgraphError'>>;
+  mainnet_nameSignalTransactions?: SubscriptionResolver<Array<ResolversTypes['NameSignalTransaction']>, "mainnet_nameSignalTransactions", ParentType, ContextType, RequireFields<Subscriptionmainnet_nameSignalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_signalTransaction?: SubscriptionResolver<Maybe<ResolversTypes['SignalTransaction']>, "mainnet_signalTransaction", ParentType, ContextType, RequireFields<Subscriptionmainnet_signalTransactionArgs, 'id' | 'subgraphError'>>;
+  mainnet_signalTransactions?: SubscriptionResolver<Array<ResolversTypes['SignalTransaction']>, "mainnet_signalTransactions", ParentType, ContextType, RequireFields<Subscriptionmainnet_signalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_bridgeWithdrawalTransaction?: SubscriptionResolver<Maybe<ResolversTypes['BridgeWithdrawalTransaction']>, "mainnet_bridgeWithdrawalTransaction", ParentType, ContextType, RequireFields<Subscriptionmainnet_bridgeWithdrawalTransactionArgs, 'id' | 'subgraphError'>>;
+  mainnet_bridgeWithdrawalTransactions?: SubscriptionResolver<Array<ResolversTypes['BridgeWithdrawalTransaction']>, "mainnet_bridgeWithdrawalTransactions", ParentType, ContextType, RequireFields<Subscriptionmainnet_bridgeWithdrawalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_bridgeDepositTransaction?: SubscriptionResolver<Maybe<ResolversTypes['BridgeDepositTransaction']>, "mainnet_bridgeDepositTransaction", ParentType, ContextType, RequireFields<Subscriptionmainnet_bridgeDepositTransactionArgs, 'id' | 'subgraphError'>>;
+  mainnet_bridgeDepositTransactions?: SubscriptionResolver<Array<ResolversTypes['BridgeDepositTransaction']>, "mainnet_bridgeDepositTransactions", ParentType, ContextType, RequireFields<Subscriptionmainnet_bridgeDepositTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_retryableTicket?: SubscriptionResolver<Maybe<ResolversTypes['RetryableTicket']>, "mainnet_retryableTicket", ParentType, ContextType, RequireFields<Subscriptionmainnet_retryableTicketArgs, 'id' | 'subgraphError'>>;
+  mainnet_retryableTickets?: SubscriptionResolver<Array<ResolversTypes['RetryableTicket']>, "mainnet_retryableTickets", ParentType, ContextType, RequireFields<Subscriptionmainnet_retryableTicketsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_retryableTicketRedeemAttempt?: SubscriptionResolver<Maybe<ResolversTypes['RetryableTicketRedeemAttempt']>, "mainnet_retryableTicketRedeemAttempt", ParentType, ContextType, RequireFields<Subscriptionmainnet_retryableTicketRedeemAttemptArgs, 'id' | 'subgraphError'>>;
+  mainnet_retryableTicketRedeemAttempts?: SubscriptionResolver<Array<ResolversTypes['RetryableTicketRedeemAttempt']>, "mainnet_retryableTicketRedeemAttempts", ParentType, ContextType, RequireFields<Subscriptionmainnet_retryableTicketRedeemAttemptsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_tokenManager?: SubscriptionResolver<Maybe<ResolversTypes['TokenManager']>, "mainnet_tokenManager", ParentType, ContextType, RequireFields<Subscriptionmainnet_tokenManagerArgs, 'id' | 'subgraphError'>>;
+  mainnet_tokenManagers?: SubscriptionResolver<Array<ResolversTypes['TokenManager']>, "mainnet_tokenManagers", ParentType, ContextType, RequireFields<Subscriptionmainnet_tokenManagersArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_authorizedFunction?: SubscriptionResolver<Maybe<ResolversTypes['AuthorizedFunction']>, "mainnet_authorizedFunction", ParentType, ContextType, RequireFields<Subscriptionmainnet_authorizedFunctionArgs, 'id' | 'subgraphError'>>;
+  mainnet_authorizedFunctions?: SubscriptionResolver<Array<ResolversTypes['AuthorizedFunction']>, "mainnet_authorizedFunctions", ParentType, ContextType, RequireFields<Subscriptionmainnet_authorizedFunctionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_tokenLockWallet?: SubscriptionResolver<Maybe<ResolversTypes['TokenLockWallet']>, "mainnet_tokenLockWallet", ParentType, ContextType, RequireFields<Subscriptionmainnet_tokenLockWalletArgs, 'id' | 'subgraphError'>>;
+  mainnet_tokenLockWallets?: SubscriptionResolver<Array<ResolversTypes['TokenLockWallet']>, "mainnet_tokenLockWallets", ParentType, ContextType, RequireFields<Subscriptionmainnet_tokenLockWalletsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_indexerDeployment?: SubscriptionResolver<Maybe<ResolversTypes['IndexerDeployment']>, "mainnet_indexerDeployment", ParentType, ContextType, RequireFields<Subscriptionmainnet_indexerDeploymentArgs, 'id' | 'subgraphError'>>;
+  mainnet_indexerDeployments?: SubscriptionResolver<Array<ResolversTypes['IndexerDeployment']>, "mainnet_indexerDeployments", ParentType, ContextType, RequireFields<Subscriptionmainnet_indexerDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_rewardCutHistoryEntity?: SubscriptionResolver<Maybe<ResolversTypes['RewardCutHistoryEntity']>, "mainnet_rewardCutHistoryEntity", ParentType, ContextType, RequireFields<Subscriptionmainnet_rewardCutHistoryEntityArgs, 'id' | 'subgraphError'>>;
+  mainnet_rewardCutHistoryEntities?: SubscriptionResolver<Array<ResolversTypes['RewardCutHistoryEntity']>, "mainnet_rewardCutHistoryEntities", ParentType, ContextType, RequireFields<Subscriptionmainnet_rewardCutHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_delegationPoolHistoryEntity?: SubscriptionResolver<Maybe<ResolversTypes['DelegationPoolHistoryEntity']>, "mainnet_delegationPoolHistoryEntity", ParentType, ContextType, RequireFields<Subscriptionmainnet_delegationPoolHistoryEntityArgs, 'id' | 'subgraphError'>>;
+  mainnet_delegationPoolHistoryEntities?: SubscriptionResolver<Array<ResolversTypes['DelegationPoolHistoryEntity']>, "mainnet_delegationPoolHistoryEntities", ParentType, ContextType, RequireFields<Subscriptionmainnet_delegationPoolHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_indexersRecalculateQueue?: SubscriptionResolver<Maybe<ResolversTypes['IndexersRecalculateQueue']>, "mainnet_indexersRecalculateQueue", ParentType, ContextType, RequireFields<Subscriptionmainnet_indexersRecalculateQueueArgs, 'id' | 'subgraphError'>>;
+  mainnet_indexersRecalculateQueues?: SubscriptionResolver<Array<ResolversTypes['IndexersRecalculateQueue']>, "mainnet_indexersRecalculateQueues", ParentType, ContextType, RequireFields<Subscriptionmainnet_indexersRecalculateQueuesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet_transaction?: SubscriptionResolver<Maybe<ResolversTypes['Transaction']>, "mainnet_transaction", ParentType, ContextType, RequireFields<Subscriptionmainnet_transactionArgs, 'id' | 'subgraphError'>>;
+  mainnet_transactions?: SubscriptionResolver<Array<ResolversTypes['Transaction']>, "mainnet_transactions", ParentType, ContextType, RequireFields<Subscriptionmainnet_transactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  mainnet__meta?: SubscriptionResolver<Maybe<ResolversTypes['_Meta_']>, "mainnet__meta", ParentType, ContextType, Partial<Subscriptionmainnet__metaArgs>>;
+  arbitrum_graphNetwork?: SubscriptionResolver<Maybe<ResolversTypes['GraphNetwork']>, "arbitrum_graphNetwork", ParentType, ContextType, RequireFields<Subscriptionarbitrum_graphNetworkArgs, 'id' | 'subgraphError'>>;
+  arbitrum_graphNetworks?: SubscriptionResolver<Array<ResolversTypes['GraphNetwork']>, "arbitrum_graphNetworks", ParentType, ContextType, RequireFields<Subscriptionarbitrum_graphNetworksArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_graphAccount?: SubscriptionResolver<Maybe<ResolversTypes['GraphAccount']>, "arbitrum_graphAccount", ParentType, ContextType, RequireFields<Subscriptionarbitrum_graphAccountArgs, 'id' | 'subgraphError'>>;
+  arbitrum_graphAccounts?: SubscriptionResolver<Array<ResolversTypes['GraphAccount']>, "arbitrum_graphAccounts", ParentType, ContextType, RequireFields<Subscriptionarbitrum_graphAccountsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_accountMetadata?: SubscriptionResolver<Array<ResolversTypes['AccountMetadata']>, "arbitrum_accountMetadata", ParentType, ContextType, RequireFields<Subscriptionarbitrum_accountMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_graphAccountName?: SubscriptionResolver<Maybe<ResolversTypes['GraphAccountName']>, "arbitrum_graphAccountName", ParentType, ContextType, RequireFields<Subscriptionarbitrum_graphAccountNameArgs, 'id' | 'subgraphError'>>;
+  arbitrum_graphAccountNames?: SubscriptionResolver<Array<ResolversTypes['GraphAccountName']>, "arbitrum_graphAccountNames", ParentType, ContextType, RequireFields<Subscriptionarbitrum_graphAccountNamesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_subgraph?: SubscriptionResolver<Maybe<ResolversTypes['Subgraph']>, "arbitrum_subgraph", ParentType, ContextType, RequireFields<Subscriptionarbitrum_subgraphArgs, 'id' | 'subgraphError'>>;
+  arbitrum_subgraphs?: SubscriptionResolver<Array<ResolversTypes['Subgraph']>, "arbitrum_subgraphs", ParentType, ContextType, RequireFields<Subscriptionarbitrum_subgraphsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_subgraphMetadata?: SubscriptionResolver<Array<ResolversTypes['SubgraphMetadata']>, "arbitrum_subgraphMetadata", ParentType, ContextType, RequireFields<Subscriptionarbitrum_subgraphMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_currentSubgraphDeploymentRelation?: SubscriptionResolver<Maybe<ResolversTypes['CurrentSubgraphDeploymentRelation']>, "arbitrum_currentSubgraphDeploymentRelation", ParentType, ContextType, RequireFields<Subscriptionarbitrum_currentSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
+  arbitrum_currentSubgraphDeploymentRelations?: SubscriptionResolver<Array<ResolversTypes['CurrentSubgraphDeploymentRelation']>, "arbitrum_currentSubgraphDeploymentRelations", ParentType, ContextType, RequireFields<Subscriptionarbitrum_currentSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_network?: SubscriptionResolver<Maybe<ResolversTypes['Network']>, "arbitrum_network", ParentType, ContextType, RequireFields<Subscriptionarbitrum_networkArgs, 'id' | 'subgraphError'>>;
+  arbitrum_networks?: SubscriptionResolver<Array<ResolversTypes['Network']>, "arbitrum_networks", ParentType, ContextType, RequireFields<Subscriptionarbitrum_networksArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_subgraphVersion?: SubscriptionResolver<Maybe<ResolversTypes['SubgraphVersion']>, "arbitrum_subgraphVersion", ParentType, ContextType, RequireFields<Subscriptionarbitrum_subgraphVersionArgs, 'id' | 'subgraphError'>>;
+  arbitrum_subgraphVersions?: SubscriptionResolver<Array<ResolversTypes['SubgraphVersion']>, "arbitrum_subgraphVersions", ParentType, ContextType, RequireFields<Subscriptionarbitrum_subgraphVersionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_subgraphVersionMetadata?: SubscriptionResolver<Array<ResolversTypes['SubgraphVersionMetadata']>, "arbitrum_subgraphVersionMetadata", ParentType, ContextType, RequireFields<Subscriptionarbitrum_subgraphVersionMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_subgraphDeployment?: SubscriptionResolver<Maybe<ResolversTypes['SubgraphDeployment']>, "arbitrum_subgraphDeployment", ParentType, ContextType, RequireFields<Subscriptionarbitrum_subgraphDeploymentArgs, 'id' | 'subgraphError'>>;
+  arbitrum_subgraphDeployments?: SubscriptionResolver<Array<ResolversTypes['SubgraphDeployment']>, "arbitrum_subgraphDeployments", ParentType, ContextType, RequireFields<Subscriptionarbitrum_subgraphDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_subgraphDeploymentMetadata?: SubscriptionResolver<Array<ResolversTypes['SubgraphDeploymentMetadata']>, "arbitrum_subgraphDeploymentMetadata", ParentType, ContextType, RequireFields<Subscriptionarbitrum_subgraphDeploymentMetadataArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_indexer?: SubscriptionResolver<Maybe<ResolversTypes['Indexer']>, "arbitrum_indexer", ParentType, ContextType, RequireFields<Subscriptionarbitrum_indexerArgs, 'id' | 'subgraphError'>>;
+  arbitrum_indexers?: SubscriptionResolver<Array<ResolversTypes['Indexer']>, "arbitrum_indexers", ParentType, ContextType, RequireFields<Subscriptionarbitrum_indexersArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_allocation?: SubscriptionResolver<Maybe<ResolversTypes['Allocation']>, "arbitrum_allocation", ParentType, ContextType, RequireFields<Subscriptionarbitrum_allocationArgs, 'id' | 'subgraphError'>>;
+  arbitrum_allocations?: SubscriptionResolver<Array<ResolversTypes['Allocation']>, "arbitrum_allocations", ParentType, ContextType, RequireFields<Subscriptionarbitrum_allocationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_pool?: SubscriptionResolver<Maybe<ResolversTypes['Pool']>, "arbitrum_pool", ParentType, ContextType, RequireFields<Subscriptionarbitrum_poolArgs, 'id' | 'subgraphError'>>;
+  arbitrum_pools?: SubscriptionResolver<Array<ResolversTypes['Pool']>, "arbitrum_pools", ParentType, ContextType, RequireFields<Subscriptionarbitrum_poolsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_delegator?: SubscriptionResolver<Maybe<ResolversTypes['Delegator']>, "arbitrum_delegator", ParentType, ContextType, RequireFields<Subscriptionarbitrum_delegatorArgs, 'id' | 'subgraphError'>>;
+  arbitrum_delegators?: SubscriptionResolver<Array<ResolversTypes['Delegator']>, "arbitrum_delegators", ParentType, ContextType, RequireFields<Subscriptionarbitrum_delegatorsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_delegatedStake?: SubscriptionResolver<Maybe<ResolversTypes['DelegatedStake']>, "arbitrum_delegatedStake", ParentType, ContextType, RequireFields<Subscriptionarbitrum_delegatedStakeArgs, 'id' | 'subgraphError'>>;
+  arbitrum_delegatedStakes?: SubscriptionResolver<Array<ResolversTypes['DelegatedStake']>, "arbitrum_delegatedStakes", ParentType, ContextType, RequireFields<Subscriptionarbitrum_delegatedStakesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_curator?: SubscriptionResolver<Maybe<ResolversTypes['Curator']>, "arbitrum_curator", ParentType, ContextType, RequireFields<Subscriptionarbitrum_curatorArgs, 'id' | 'subgraphError'>>;
+  arbitrum_curators?: SubscriptionResolver<Array<ResolversTypes['Curator']>, "arbitrum_curators", ParentType, ContextType, RequireFields<Subscriptionarbitrum_curatorsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_signal?: SubscriptionResolver<Maybe<ResolversTypes['Signal']>, "arbitrum_signal", ParentType, ContextType, RequireFields<Subscriptionarbitrum_signalArgs, 'id' | 'subgraphError'>>;
+  arbitrum_signals?: SubscriptionResolver<Array<ResolversTypes['Signal']>, "arbitrum_signals", ParentType, ContextType, RequireFields<Subscriptionarbitrum_signalsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_nameSignal?: SubscriptionResolver<Maybe<ResolversTypes['NameSignal']>, "arbitrum_nameSignal", ParentType, ContextType, RequireFields<Subscriptionarbitrum_nameSignalArgs, 'id' | 'subgraphError'>>;
+  arbitrum_nameSignals?: SubscriptionResolver<Array<ResolversTypes['NameSignal']>, "arbitrum_nameSignals", ParentType, ContextType, RequireFields<Subscriptionarbitrum_nameSignalsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_nameSignalSubgraphRelation?: SubscriptionResolver<Maybe<ResolversTypes['NameSignalSubgraphRelation']>, "arbitrum_nameSignalSubgraphRelation", ParentType, ContextType, RequireFields<Subscriptionarbitrum_nameSignalSubgraphRelationArgs, 'id' | 'subgraphError'>>;
+  arbitrum_nameSignalSubgraphRelations?: SubscriptionResolver<Array<ResolversTypes['NameSignalSubgraphRelation']>, "arbitrum_nameSignalSubgraphRelations", ParentType, ContextType, RequireFields<Subscriptionarbitrum_nameSignalSubgraphRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_signalSubgraphDeploymentRelation?: SubscriptionResolver<Maybe<ResolversTypes['SignalSubgraphDeploymentRelation']>, "arbitrum_signalSubgraphDeploymentRelation", ParentType, ContextType, RequireFields<Subscriptionarbitrum_signalSubgraphDeploymentRelationArgs, 'id' | 'subgraphError'>>;
+  arbitrum_signalSubgraphDeploymentRelations?: SubscriptionResolver<Array<ResolversTypes['SignalSubgraphDeploymentRelation']>, "arbitrum_signalSubgraphDeploymentRelations", ParentType, ContextType, RequireFields<Subscriptionarbitrum_signalSubgraphDeploymentRelationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_dispute?: SubscriptionResolver<Maybe<ResolversTypes['Dispute']>, "arbitrum_dispute", ParentType, ContextType, RequireFields<Subscriptionarbitrum_disputeArgs, 'id' | 'subgraphError'>>;
+  arbitrum_disputes?: SubscriptionResolver<Array<ResolversTypes['Dispute']>, "arbitrum_disputes", ParentType, ContextType, RequireFields<Subscriptionarbitrum_disputesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_attestation?: SubscriptionResolver<Maybe<ResolversTypes['Attestation']>, "arbitrum_attestation", ParentType, ContextType, RequireFields<Subscriptionarbitrum_attestationArgs, 'id' | 'subgraphError'>>;
+  arbitrum_attestations?: SubscriptionResolver<Array<ResolversTypes['Attestation']>, "arbitrum_attestations", ParentType, ContextType, RequireFields<Subscriptionarbitrum_attestationsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_epoch?: SubscriptionResolver<Maybe<ResolversTypes['Epoch']>, "arbitrum_epoch", ParentType, ContextType, RequireFields<Subscriptionarbitrum_epochArgs, 'id' | 'subgraphError'>>;
+  arbitrum_epoches?: SubscriptionResolver<Array<ResolversTypes['Epoch']>, "arbitrum_epoches", ParentType, ContextType, RequireFields<Subscriptionarbitrum_epochesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_nameSignalTransaction?: SubscriptionResolver<Maybe<ResolversTypes['NameSignalTransaction']>, "arbitrum_nameSignalTransaction", ParentType, ContextType, RequireFields<Subscriptionarbitrum_nameSignalTransactionArgs, 'id' | 'subgraphError'>>;
+  arbitrum_nameSignalTransactions?: SubscriptionResolver<Array<ResolversTypes['NameSignalTransaction']>, "arbitrum_nameSignalTransactions", ParentType, ContextType, RequireFields<Subscriptionarbitrum_nameSignalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_signalTransaction?: SubscriptionResolver<Maybe<ResolversTypes['SignalTransaction']>, "arbitrum_signalTransaction", ParentType, ContextType, RequireFields<Subscriptionarbitrum_signalTransactionArgs, 'id' | 'subgraphError'>>;
+  arbitrum_signalTransactions?: SubscriptionResolver<Array<ResolversTypes['SignalTransaction']>, "arbitrum_signalTransactions", ParentType, ContextType, RequireFields<Subscriptionarbitrum_signalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_bridgeWithdrawalTransaction?: SubscriptionResolver<Maybe<ResolversTypes['BridgeWithdrawalTransaction']>, "arbitrum_bridgeWithdrawalTransaction", ParentType, ContextType, RequireFields<Subscriptionarbitrum_bridgeWithdrawalTransactionArgs, 'id' | 'subgraphError'>>;
+  arbitrum_bridgeWithdrawalTransactions?: SubscriptionResolver<Array<ResolversTypes['BridgeWithdrawalTransaction']>, "arbitrum_bridgeWithdrawalTransactions", ParentType, ContextType, RequireFields<Subscriptionarbitrum_bridgeWithdrawalTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_bridgeDepositTransaction?: SubscriptionResolver<Maybe<ResolversTypes['BridgeDepositTransaction']>, "arbitrum_bridgeDepositTransaction", ParentType, ContextType, RequireFields<Subscriptionarbitrum_bridgeDepositTransactionArgs, 'id' | 'subgraphError'>>;
+  arbitrum_bridgeDepositTransactions?: SubscriptionResolver<Array<ResolversTypes['BridgeDepositTransaction']>, "arbitrum_bridgeDepositTransactions", ParentType, ContextType, RequireFields<Subscriptionarbitrum_bridgeDepositTransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_retryableTicket?: SubscriptionResolver<Maybe<ResolversTypes['RetryableTicket']>, "arbitrum_retryableTicket", ParentType, ContextType, RequireFields<Subscriptionarbitrum_retryableTicketArgs, 'id' | 'subgraphError'>>;
+  arbitrum_retryableTickets?: SubscriptionResolver<Array<ResolversTypes['RetryableTicket']>, "arbitrum_retryableTickets", ParentType, ContextType, RequireFields<Subscriptionarbitrum_retryableTicketsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_retryableTicketRedeemAttempt?: SubscriptionResolver<Maybe<ResolversTypes['RetryableTicketRedeemAttempt']>, "arbitrum_retryableTicketRedeemAttempt", ParentType, ContextType, RequireFields<Subscriptionarbitrum_retryableTicketRedeemAttemptArgs, 'id' | 'subgraphError'>>;
+  arbitrum_retryableTicketRedeemAttempts?: SubscriptionResolver<Array<ResolversTypes['RetryableTicketRedeemAttempt']>, "arbitrum_retryableTicketRedeemAttempts", ParentType, ContextType, RequireFields<Subscriptionarbitrum_retryableTicketRedeemAttemptsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_tokenManager?: SubscriptionResolver<Maybe<ResolversTypes['TokenManager']>, "arbitrum_tokenManager", ParentType, ContextType, RequireFields<Subscriptionarbitrum_tokenManagerArgs, 'id' | 'subgraphError'>>;
+  arbitrum_tokenManagers?: SubscriptionResolver<Array<ResolversTypes['TokenManager']>, "arbitrum_tokenManagers", ParentType, ContextType, RequireFields<Subscriptionarbitrum_tokenManagersArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_authorizedFunction?: SubscriptionResolver<Maybe<ResolversTypes['AuthorizedFunction']>, "arbitrum_authorizedFunction", ParentType, ContextType, RequireFields<Subscriptionarbitrum_authorizedFunctionArgs, 'id' | 'subgraphError'>>;
+  arbitrum_authorizedFunctions?: SubscriptionResolver<Array<ResolversTypes['AuthorizedFunction']>, "arbitrum_authorizedFunctions", ParentType, ContextType, RequireFields<Subscriptionarbitrum_authorizedFunctionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_tokenLockWallet?: SubscriptionResolver<Maybe<ResolversTypes['TokenLockWallet']>, "arbitrum_tokenLockWallet", ParentType, ContextType, RequireFields<Subscriptionarbitrum_tokenLockWalletArgs, 'id' | 'subgraphError'>>;
+  arbitrum_tokenLockWallets?: SubscriptionResolver<Array<ResolversTypes['TokenLockWallet']>, "arbitrum_tokenLockWallets", ParentType, ContextType, RequireFields<Subscriptionarbitrum_tokenLockWalletsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_indexerDeployment?: SubscriptionResolver<Maybe<ResolversTypes['IndexerDeployment']>, "arbitrum_indexerDeployment", ParentType, ContextType, RequireFields<Subscriptionarbitrum_indexerDeploymentArgs, 'id' | 'subgraphError'>>;
+  arbitrum_indexerDeployments?: SubscriptionResolver<Array<ResolversTypes['IndexerDeployment']>, "arbitrum_indexerDeployments", ParentType, ContextType, RequireFields<Subscriptionarbitrum_indexerDeploymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_rewardCutHistoryEntity?: SubscriptionResolver<Maybe<ResolversTypes['RewardCutHistoryEntity']>, "arbitrum_rewardCutHistoryEntity", ParentType, ContextType, RequireFields<Subscriptionarbitrum_rewardCutHistoryEntityArgs, 'id' | 'subgraphError'>>;
+  arbitrum_rewardCutHistoryEntities?: SubscriptionResolver<Array<ResolversTypes['RewardCutHistoryEntity']>, "arbitrum_rewardCutHistoryEntities", ParentType, ContextType, RequireFields<Subscriptionarbitrum_rewardCutHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_delegationPoolHistoryEntity?: SubscriptionResolver<Maybe<ResolversTypes['DelegationPoolHistoryEntity']>, "arbitrum_delegationPoolHistoryEntity", ParentType, ContextType, RequireFields<Subscriptionarbitrum_delegationPoolHistoryEntityArgs, 'id' | 'subgraphError'>>;
+  arbitrum_delegationPoolHistoryEntities?: SubscriptionResolver<Array<ResolversTypes['DelegationPoolHistoryEntity']>, "arbitrum_delegationPoolHistoryEntities", ParentType, ContextType, RequireFields<Subscriptionarbitrum_delegationPoolHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_indexersRecalculateQueue?: SubscriptionResolver<Maybe<ResolversTypes['IndexersRecalculateQueue']>, "arbitrum_indexersRecalculateQueue", ParentType, ContextType, RequireFields<Subscriptionarbitrum_indexersRecalculateQueueArgs, 'id' | 'subgraphError'>>;
+  arbitrum_indexersRecalculateQueues?: SubscriptionResolver<Array<ResolversTypes['IndexersRecalculateQueue']>, "arbitrum_indexersRecalculateQueues", ParentType, ContextType, RequireFields<Subscriptionarbitrum_indexersRecalculateQueuesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum_transaction?: SubscriptionResolver<Maybe<ResolversTypes['Transaction']>, "arbitrum_transaction", ParentType, ContextType, RequireFields<Subscriptionarbitrum_transactionArgs, 'id' | 'subgraphError'>>;
+  arbitrum_transactions?: SubscriptionResolver<Array<ResolversTypes['Transaction']>, "arbitrum_transactions", ParentType, ContextType, RequireFields<Subscriptionarbitrum_transactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  arbitrum__meta?: SubscriptionResolver<Maybe<ResolversTypes['_Meta_']>, "arbitrum__meta", ParentType, ContextType, Partial<Subscriptionarbitrum__metaArgs>>;
 }>;
 
 export type AccountMetadataResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['AccountMetadata'] = ResolversParentTypes['AccountMetadata']> = ResolversObject<{
@@ -12858,12 +14552,6 @@ const baseDir = pathModule.join(pathModule.dirname(fileURLToPath(import.meta.url
 const importFn: ImportFn = <T>(moduleId: string) => {
   const relativeModuleId = (pathModule.isAbsolute(moduleId) ? pathModule.relative(baseDir, moduleId) : moduleId).split('\\').join('/').replace(baseDir + '/', '');
   switch(relativeModuleId) {
-    case ".graphclient/sources/mainnet/introspectionSchema":
-      return Promise.resolve(importedModule$0) as T;
-    
-    case ".graphclient/sources/arbitrum/introspectionSchema":
-      return Promise.resolve(importedModule$1) as T;
-    
     default:
       return Promise.reject(new Error(`Cannot find module '${relativeModuleId}'.`));
   }
@@ -12878,89 +14566,15 @@ const rootStore = new MeshStore('.graphclient', new FsStoreStorageAdapter({
   validate: false
 });
 
-export const rawServeConfig: YamlConfig.Config['serve'] = undefined as any
-export async function getMeshOptions(): Promise<GetMeshOptions> {
-const pubsub = new PubSub();
-const sourcesStore = rootStore.child('sources');
-const logger = new DefaultLogger("GraphClient");
-const cache = new (MeshCache as any)({
-      ...({} as any),
-      importFn,
-      store: rootStore.child('cache'),
-      pubsub,
-      logger,
-    } as any)
-
-const sources: MeshResolvedSource[] = [];
-const transforms: MeshTransform[] = [];
-const additionalEnvelopPlugins: MeshPlugin<any>[] = [];
-const mainnetTransforms = [];
-const arbitrumTransforms = [];
-const mainnetHandler = new GraphqlHandler({
-              name: "mainnet",
-              config: {"endpoint":"https://gateway-arbitrum.network.thegraph.com/api/dc9b1200d80a1c064c90462b9c04f264/subgraphs/id/AwyZBdna4vTAHiqBWsrQ5ErFRMi6HCgGEkQMgNBseWTL"},
-              baseDir,
-              cache,
-              pubsub,
-              store: sourcesStore.child("mainnet"),
-              logger: logger.child("mainnet"),
-              importFn,
-            });
-const arbitrumHandler = new GraphqlHandler({
-              name: "arbitrum",
-              config: {"endpoint":"https://gateway-arbitrum.network.thegraph.com/api/dc9b1200d80a1c064c90462b9c04f264/subgraphs/id/DjUVVVSuKcCCTZSVzVXLioSd7AdqwGEyBrY4Ru5tuqzX"},
-              baseDir,
-              cache,
-              pubsub,
-              store: sourcesStore.child("arbitrum"),
-              logger: logger.child("arbitrum"),
-              importFn,
-            });
-sources[0] = {
-          name: 'mainnet',
-          handler: mainnetHandler,
-          transforms: mainnetTransforms
-        }
-sources[1] = {
-          name: 'arbitrum',
-          handler: arbitrumHandler,
-          transforms: arbitrumTransforms
-        }
-const additionalTypeDefs = [parse("enum CHAIN {\n  ARBITRUM\n  MAINNET\n}\n\nextend type Subgraph {\n  deployedChain: CHAIN\n}\n\nextend type Query {\n  crossSubgraphs(skip: Int = 0, first: Int, orderBy: Subgraph_orderBy, orderDirection: OrderDirection, where: Subgraph_filter, block: Block_height): [Subgraph!]!\n}"),] as any[];
-const additionalResolvers = await Promise.all([
-        import("../utils/graphclient/resolvers.ts")
-            .then(m => m.resolvers || m.default || m)
-      ]);
-const merger = new(StitchingMerger as any)({
-        cache,
-        pubsub,
-        logger: logger.child('stitchingMerger'),
-        store: rootStore.child('stitchingMerger')
-      })
-
-  return {
-    sources,
-    transforms,
-    additionalTypeDefs,
-    additionalResolvers,
-    cache,
-    pubsub,
-    merger,
-    logger,
-    additionalEnvelopPlugins,
-    get documents() {
-      return [
-      {
-        document: SubgraphsDocument,
-        get rawSDL() {
-          return printWithCache(SubgraphsDocument);
-        },
-        location: 'SubgraphsDocument.graphql'
-      }
-    ];
-    },
-    fetchFn,
-  };
+export function getMeshOptions() {
+  console.warn('WARNING: These artifacts are built for development mode. Please run "graphclient build" to build production artifacts');
+  return findAndParseConfig({
+    dir: baseDir,
+    artifactsDir: ".graphclient",
+    configName: "graphclient",
+    additionalPackagePrefixes: ["@graphprotocol/client-"],
+    initialLoggerPrefix: "GraphClient",
+  });
 }
 
 export function createBuiltMeshHTTPHandler<TServerContext = {}>(): MeshHTTPHandler<TServerContext> {
@@ -12970,7 +14584,6 @@ export function createBuiltMeshHTTPHandler<TServerContext = {}>(): MeshHTTPHandl
     rawServeConfig: undefined,
   })
 }
-
 
 let meshInstance$: Promise<MeshInstance> | undefined;
 

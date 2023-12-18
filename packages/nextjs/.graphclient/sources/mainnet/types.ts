@@ -6807,97 +6807,97 @@ export type Pool_orderBy =
   | 'closedAllocations';
 
 export type Query = {
-  graphNetwork?: Maybe<GraphNetwork>;
-  graphNetworks: Array<GraphNetwork>;
-  graphAccount?: Maybe<GraphAccount>;
-  graphAccounts: Array<GraphAccount>;
-  accountMetadata: Array<AccountMetadata>;
-  graphAccountName?: Maybe<GraphAccountName>;
-  graphAccountNames: Array<GraphAccountName>;
-  subgraph?: Maybe<Subgraph>;
-  subgraphs: Array<Subgraph>;
-  subgraphMetadata: Array<SubgraphMetadata>;
-  currentSubgraphDeploymentRelation?: Maybe<CurrentSubgraphDeploymentRelation>;
-  currentSubgraphDeploymentRelations: Array<CurrentSubgraphDeploymentRelation>;
-  network?: Maybe<Network>;
-  networks: Array<Network>;
-  subgraphVersion?: Maybe<SubgraphVersion>;
-  subgraphVersions: Array<SubgraphVersion>;
-  subgraphVersionMetadata: Array<SubgraphVersionMetadata>;
-  subgraphDeployment?: Maybe<SubgraphDeployment>;
-  subgraphDeployments: Array<SubgraphDeployment>;
-  subgraphDeploymentMetadata: Array<SubgraphDeploymentMetadata>;
-  indexer?: Maybe<Indexer>;
-  indexers: Array<Indexer>;
-  allocation?: Maybe<Allocation>;
-  allocations: Array<Allocation>;
-  pool?: Maybe<Pool>;
-  pools: Array<Pool>;
-  delegator?: Maybe<Delegator>;
-  delegators: Array<Delegator>;
-  delegatedStake?: Maybe<DelegatedStake>;
-  delegatedStakes: Array<DelegatedStake>;
-  curator?: Maybe<Curator>;
-  curators: Array<Curator>;
-  signal?: Maybe<Signal>;
-  signals: Array<Signal>;
-  nameSignal?: Maybe<NameSignal>;
-  nameSignals: Array<NameSignal>;
-  nameSignalSubgraphRelation?: Maybe<NameSignalSubgraphRelation>;
-  nameSignalSubgraphRelations: Array<NameSignalSubgraphRelation>;
-  signalSubgraphDeploymentRelation?: Maybe<SignalSubgraphDeploymentRelation>;
-  signalSubgraphDeploymentRelations: Array<SignalSubgraphDeploymentRelation>;
-  dispute?: Maybe<Dispute>;
-  disputes: Array<Dispute>;
-  attestation?: Maybe<Attestation>;
-  attestations: Array<Attestation>;
-  epoch?: Maybe<Epoch>;
-  epoches: Array<Epoch>;
-  nameSignalTransaction?: Maybe<NameSignalTransaction>;
-  nameSignalTransactions: Array<NameSignalTransaction>;
-  signalTransaction?: Maybe<SignalTransaction>;
-  signalTransactions: Array<SignalTransaction>;
-  bridgeWithdrawalTransaction?: Maybe<BridgeWithdrawalTransaction>;
-  bridgeWithdrawalTransactions: Array<BridgeWithdrawalTransaction>;
-  bridgeDepositTransaction?: Maybe<BridgeDepositTransaction>;
-  bridgeDepositTransactions: Array<BridgeDepositTransaction>;
-  retryableTicket?: Maybe<RetryableTicket>;
-  retryableTickets: Array<RetryableTicket>;
-  retryableTicketRedeemAttempt?: Maybe<RetryableTicketRedeemAttempt>;
-  retryableTicketRedeemAttempts: Array<RetryableTicketRedeemAttempt>;
-  tokenManager?: Maybe<TokenManager>;
-  tokenManagers: Array<TokenManager>;
-  authorizedFunction?: Maybe<AuthorizedFunction>;
-  authorizedFunctions: Array<AuthorizedFunction>;
-  tokenLockWallet?: Maybe<TokenLockWallet>;
-  tokenLockWallets: Array<TokenLockWallet>;
-  indexerDeployment?: Maybe<IndexerDeployment>;
-  indexerDeployments: Array<IndexerDeployment>;
-  rewardCutHistoryEntity?: Maybe<RewardCutHistoryEntity>;
-  rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
-  delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
-  delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
-  indexersRecalculateQueue?: Maybe<IndexersRecalculateQueue>;
-  indexersRecalculateQueues: Array<IndexersRecalculateQueue>;
-  transaction?: Maybe<Transaction>;
-  transactions: Array<Transaction>;
-  curatorSearch: Array<Curator>;
-  delegatorSearch: Array<Delegator>;
-  indexerSearch: Array<Indexer>;
-  accountSearch: Array<GraphAccount>;
+  mainnet_graphNetwork?: Maybe<GraphNetwork>;
+  mainnet_graphNetworks: Array<GraphNetwork>;
+  mainnet_graphAccount?: Maybe<GraphAccount>;
+  mainnet_graphAccounts: Array<GraphAccount>;
+  mainnet_accountMetadata: Array<AccountMetadata>;
+  mainnet_graphAccountName?: Maybe<GraphAccountName>;
+  mainnet_graphAccountNames: Array<GraphAccountName>;
+  mainnet_subgraph?: Maybe<Subgraph>;
+  mainnet_subgraphs: Array<Subgraph>;
+  mainnet_subgraphMetadata: Array<SubgraphMetadata>;
+  mainnet_currentSubgraphDeploymentRelation?: Maybe<CurrentSubgraphDeploymentRelation>;
+  mainnet_currentSubgraphDeploymentRelations: Array<CurrentSubgraphDeploymentRelation>;
+  mainnet_network?: Maybe<Network>;
+  mainnet_networks: Array<Network>;
+  mainnet_subgraphVersion?: Maybe<SubgraphVersion>;
+  mainnet_subgraphVersions: Array<SubgraphVersion>;
+  mainnet_subgraphVersionMetadata: Array<SubgraphVersionMetadata>;
+  mainnet_subgraphDeployment?: Maybe<SubgraphDeployment>;
+  mainnet_subgraphDeployments: Array<SubgraphDeployment>;
+  mainnet_subgraphDeploymentMetadata: Array<SubgraphDeploymentMetadata>;
+  mainnet_indexer?: Maybe<Indexer>;
+  mainnet_indexers: Array<Indexer>;
+  mainnet_allocation?: Maybe<Allocation>;
+  mainnet_allocations: Array<Allocation>;
+  mainnet_pool?: Maybe<Pool>;
+  mainnet_pools: Array<Pool>;
+  mainnet_delegator?: Maybe<Delegator>;
+  mainnet_delegators: Array<Delegator>;
+  mainnet_delegatedStake?: Maybe<DelegatedStake>;
+  mainnet_delegatedStakes: Array<DelegatedStake>;
+  mainnet_curator?: Maybe<Curator>;
+  mainnet_curators: Array<Curator>;
+  mainnet_signal?: Maybe<Signal>;
+  mainnet_signals: Array<Signal>;
+  mainnet_nameSignal?: Maybe<NameSignal>;
+  mainnet_nameSignals: Array<NameSignal>;
+  mainnet_nameSignalSubgraphRelation?: Maybe<NameSignalSubgraphRelation>;
+  mainnet_nameSignalSubgraphRelations: Array<NameSignalSubgraphRelation>;
+  mainnet_signalSubgraphDeploymentRelation?: Maybe<SignalSubgraphDeploymentRelation>;
+  mainnet_signalSubgraphDeploymentRelations: Array<SignalSubgraphDeploymentRelation>;
+  mainnet_dispute?: Maybe<Dispute>;
+  mainnet_disputes: Array<Dispute>;
+  mainnet_attestation?: Maybe<Attestation>;
+  mainnet_attestations: Array<Attestation>;
+  mainnet_epoch?: Maybe<Epoch>;
+  mainnet_epoches: Array<Epoch>;
+  mainnet_nameSignalTransaction?: Maybe<NameSignalTransaction>;
+  mainnet_nameSignalTransactions: Array<NameSignalTransaction>;
+  mainnet_signalTransaction?: Maybe<SignalTransaction>;
+  mainnet_signalTransactions: Array<SignalTransaction>;
+  mainnet_bridgeWithdrawalTransaction?: Maybe<BridgeWithdrawalTransaction>;
+  mainnet_bridgeWithdrawalTransactions: Array<BridgeWithdrawalTransaction>;
+  mainnet_bridgeDepositTransaction?: Maybe<BridgeDepositTransaction>;
+  mainnet_bridgeDepositTransactions: Array<BridgeDepositTransaction>;
+  mainnet_retryableTicket?: Maybe<RetryableTicket>;
+  mainnet_retryableTickets: Array<RetryableTicket>;
+  mainnet_retryableTicketRedeemAttempt?: Maybe<RetryableTicketRedeemAttempt>;
+  mainnet_retryableTicketRedeemAttempts: Array<RetryableTicketRedeemAttempt>;
+  mainnet_tokenManager?: Maybe<TokenManager>;
+  mainnet_tokenManagers: Array<TokenManager>;
+  mainnet_authorizedFunction?: Maybe<AuthorizedFunction>;
+  mainnet_authorizedFunctions: Array<AuthorizedFunction>;
+  mainnet_tokenLockWallet?: Maybe<TokenLockWallet>;
+  mainnet_tokenLockWallets: Array<TokenLockWallet>;
+  mainnet_indexerDeployment?: Maybe<IndexerDeployment>;
+  mainnet_indexerDeployments: Array<IndexerDeployment>;
+  mainnet_rewardCutHistoryEntity?: Maybe<RewardCutHistoryEntity>;
+  mainnet_rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
+  mainnet_delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
+  mainnet_delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
+  mainnet_indexersRecalculateQueue?: Maybe<IndexersRecalculateQueue>;
+  mainnet_indexersRecalculateQueues: Array<IndexersRecalculateQueue>;
+  mainnet_transaction?: Maybe<Transaction>;
+  mainnet_transactions: Array<Transaction>;
+  mainnet_curatorSearch: Array<Curator>;
+  mainnet_delegatorSearch: Array<Delegator>;
+  mainnet_indexerSearch: Array<Indexer>;
+  mainnet_accountSearch: Array<GraphAccount>;
   /** Access to subgraph metadata */
-  _meta?: Maybe<_Meta_>;
+  mainnet__meta?: Maybe<_Meta_>;
 };
 
 
-export type QuerygraphNetworkArgs = {
+export type Querymainnet_graphNetworkArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerygraphNetworksArgs = {
+export type Querymainnet_graphNetworksArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GraphNetwork_orderBy>;
@@ -6908,14 +6908,14 @@ export type QuerygraphNetworksArgs = {
 };
 
 
-export type QuerygraphAccountArgs = {
+export type Querymainnet_graphAccountArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerygraphAccountsArgs = {
+export type Querymainnet_graphAccountsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GraphAccount_orderBy>;
@@ -6926,7 +6926,7 @@ export type QuerygraphAccountsArgs = {
 };
 
 
-export type QueryaccountMetadataArgs = {
+export type Querymainnet_accountMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<AccountMetadata_orderBy>;
@@ -6937,14 +6937,14 @@ export type QueryaccountMetadataArgs = {
 };
 
 
-export type QuerygraphAccountNameArgs = {
+export type Querymainnet_graphAccountNameArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerygraphAccountNamesArgs = {
+export type Querymainnet_graphAccountNamesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GraphAccountName_orderBy>;
@@ -6955,14 +6955,14 @@ export type QuerygraphAccountNamesArgs = {
 };
 
 
-export type QuerysubgraphArgs = {
+export type Querymainnet_subgraphArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerysubgraphsArgs = {
+export type Querymainnet_subgraphsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Subgraph_orderBy>;
@@ -6973,7 +6973,7 @@ export type QuerysubgraphsArgs = {
 };
 
 
-export type QuerysubgraphMetadataArgs = {
+export type Querymainnet_subgraphMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphMetadata_orderBy>;
@@ -6984,14 +6984,14 @@ export type QuerysubgraphMetadataArgs = {
 };
 
 
-export type QuerycurrentSubgraphDeploymentRelationArgs = {
+export type Querymainnet_currentSubgraphDeploymentRelationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerycurrentSubgraphDeploymentRelationsArgs = {
+export type Querymainnet_currentSubgraphDeploymentRelationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<CurrentSubgraphDeploymentRelation_orderBy>;
@@ -7002,14 +7002,14 @@ export type QuerycurrentSubgraphDeploymentRelationsArgs = {
 };
 
 
-export type QuerynetworkArgs = {
+export type Querymainnet_networkArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerynetworksArgs = {
+export type Querymainnet_networksArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Network_orderBy>;
@@ -7020,14 +7020,14 @@ export type QuerynetworksArgs = {
 };
 
 
-export type QuerysubgraphVersionArgs = {
+export type Querymainnet_subgraphVersionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerysubgraphVersionsArgs = {
+export type Querymainnet_subgraphVersionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphVersion_orderBy>;
@@ -7038,7 +7038,7 @@ export type QuerysubgraphVersionsArgs = {
 };
 
 
-export type QuerysubgraphVersionMetadataArgs = {
+export type Querymainnet_subgraphVersionMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphVersionMetadata_orderBy>;
@@ -7049,14 +7049,14 @@ export type QuerysubgraphVersionMetadataArgs = {
 };
 
 
-export type QuerysubgraphDeploymentArgs = {
+export type Querymainnet_subgraphDeploymentArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerysubgraphDeploymentsArgs = {
+export type Querymainnet_subgraphDeploymentsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphDeployment_orderBy>;
@@ -7067,7 +7067,7 @@ export type QuerysubgraphDeploymentsArgs = {
 };
 
 
-export type QuerysubgraphDeploymentMetadataArgs = {
+export type Querymainnet_subgraphDeploymentMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphDeploymentMetadata_orderBy>;
@@ -7078,14 +7078,14 @@ export type QuerysubgraphDeploymentMetadataArgs = {
 };
 
 
-export type QueryindexerArgs = {
+export type Querymainnet_indexerArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryindexersArgs = {
+export type Querymainnet_indexersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Indexer_orderBy>;
@@ -7096,14 +7096,14 @@ export type QueryindexersArgs = {
 };
 
 
-export type QueryallocationArgs = {
+export type Querymainnet_allocationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryallocationsArgs = {
+export type Querymainnet_allocationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Allocation_orderBy>;
@@ -7114,14 +7114,14 @@ export type QueryallocationsArgs = {
 };
 
 
-export type QuerypoolArgs = {
+export type Querymainnet_poolArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerypoolsArgs = {
+export type Querymainnet_poolsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Pool_orderBy>;
@@ -7132,14 +7132,14 @@ export type QuerypoolsArgs = {
 };
 
 
-export type QuerydelegatorArgs = {
+export type Querymainnet_delegatorArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerydelegatorsArgs = {
+export type Querymainnet_delegatorsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Delegator_orderBy>;
@@ -7150,14 +7150,14 @@ export type QuerydelegatorsArgs = {
 };
 
 
-export type QuerydelegatedStakeArgs = {
+export type Querymainnet_delegatedStakeArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerydelegatedStakesArgs = {
+export type Querymainnet_delegatedStakesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<DelegatedStake_orderBy>;
@@ -7168,14 +7168,14 @@ export type QuerydelegatedStakesArgs = {
 };
 
 
-export type QuerycuratorArgs = {
+export type Querymainnet_curatorArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerycuratorsArgs = {
+export type Querymainnet_curatorsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Curator_orderBy>;
@@ -7186,14 +7186,14 @@ export type QuerycuratorsArgs = {
 };
 
 
-export type QuerysignalArgs = {
+export type Querymainnet_signalArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerysignalsArgs = {
+export type Querymainnet_signalsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Signal_orderBy>;
@@ -7204,14 +7204,14 @@ export type QuerysignalsArgs = {
 };
 
 
-export type QuerynameSignalArgs = {
+export type Querymainnet_nameSignalArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerynameSignalsArgs = {
+export type Querymainnet_nameSignalsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<NameSignal_orderBy>;
@@ -7222,14 +7222,14 @@ export type QuerynameSignalsArgs = {
 };
 
 
-export type QuerynameSignalSubgraphRelationArgs = {
+export type Querymainnet_nameSignalSubgraphRelationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerynameSignalSubgraphRelationsArgs = {
+export type Querymainnet_nameSignalSubgraphRelationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<NameSignalSubgraphRelation_orderBy>;
@@ -7240,14 +7240,14 @@ export type QuerynameSignalSubgraphRelationsArgs = {
 };
 
 
-export type QuerysignalSubgraphDeploymentRelationArgs = {
+export type Querymainnet_signalSubgraphDeploymentRelationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerysignalSubgraphDeploymentRelationsArgs = {
+export type Querymainnet_signalSubgraphDeploymentRelationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SignalSubgraphDeploymentRelation_orderBy>;
@@ -7258,14 +7258,14 @@ export type QuerysignalSubgraphDeploymentRelationsArgs = {
 };
 
 
-export type QuerydisputeArgs = {
+export type Querymainnet_disputeArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerydisputesArgs = {
+export type Querymainnet_disputesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Dispute_orderBy>;
@@ -7276,14 +7276,14 @@ export type QuerydisputesArgs = {
 };
 
 
-export type QueryattestationArgs = {
+export type Querymainnet_attestationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryattestationsArgs = {
+export type Querymainnet_attestationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Attestation_orderBy>;
@@ -7294,14 +7294,14 @@ export type QueryattestationsArgs = {
 };
 
 
-export type QueryepochArgs = {
+export type Querymainnet_epochArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryepochesArgs = {
+export type Querymainnet_epochesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Epoch_orderBy>;
@@ -7312,14 +7312,14 @@ export type QueryepochesArgs = {
 };
 
 
-export type QuerynameSignalTransactionArgs = {
+export type Querymainnet_nameSignalTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerynameSignalTransactionsArgs = {
+export type Querymainnet_nameSignalTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<NameSignalTransaction_orderBy>;
@@ -7330,14 +7330,14 @@ export type QuerynameSignalTransactionsArgs = {
 };
 
 
-export type QuerysignalTransactionArgs = {
+export type Querymainnet_signalTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerysignalTransactionsArgs = {
+export type Querymainnet_signalTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SignalTransaction_orderBy>;
@@ -7348,14 +7348,14 @@ export type QuerysignalTransactionsArgs = {
 };
 
 
-export type QuerybridgeWithdrawalTransactionArgs = {
+export type Querymainnet_bridgeWithdrawalTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerybridgeWithdrawalTransactionsArgs = {
+export type Querymainnet_bridgeWithdrawalTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<BridgeWithdrawalTransaction_orderBy>;
@@ -7366,14 +7366,14 @@ export type QuerybridgeWithdrawalTransactionsArgs = {
 };
 
 
-export type QuerybridgeDepositTransactionArgs = {
+export type Querymainnet_bridgeDepositTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerybridgeDepositTransactionsArgs = {
+export type Querymainnet_bridgeDepositTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<BridgeDepositTransaction_orderBy>;
@@ -7384,14 +7384,14 @@ export type QuerybridgeDepositTransactionsArgs = {
 };
 
 
-export type QueryretryableTicketArgs = {
+export type Querymainnet_retryableTicketArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryretryableTicketsArgs = {
+export type Querymainnet_retryableTicketsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<RetryableTicket_orderBy>;
@@ -7402,14 +7402,14 @@ export type QueryretryableTicketsArgs = {
 };
 
 
-export type QueryretryableTicketRedeemAttemptArgs = {
+export type Querymainnet_retryableTicketRedeemAttemptArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryretryableTicketRedeemAttemptsArgs = {
+export type Querymainnet_retryableTicketRedeemAttemptsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<RetryableTicketRedeemAttempt_orderBy>;
@@ -7420,14 +7420,14 @@ export type QueryretryableTicketRedeemAttemptsArgs = {
 };
 
 
-export type QuerytokenManagerArgs = {
+export type Querymainnet_tokenManagerArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerytokenManagersArgs = {
+export type Querymainnet_tokenManagersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<TokenManager_orderBy>;
@@ -7438,14 +7438,14 @@ export type QuerytokenManagersArgs = {
 };
 
 
-export type QueryauthorizedFunctionArgs = {
+export type Querymainnet_authorizedFunctionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryauthorizedFunctionsArgs = {
+export type Querymainnet_authorizedFunctionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<AuthorizedFunction_orderBy>;
@@ -7456,14 +7456,14 @@ export type QueryauthorizedFunctionsArgs = {
 };
 
 
-export type QuerytokenLockWalletArgs = {
+export type Querymainnet_tokenLockWalletArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerytokenLockWalletsArgs = {
+export type Querymainnet_tokenLockWalletsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<TokenLockWallet_orderBy>;
@@ -7474,14 +7474,14 @@ export type QuerytokenLockWalletsArgs = {
 };
 
 
-export type QueryindexerDeploymentArgs = {
+export type Querymainnet_indexerDeploymentArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryindexerDeploymentsArgs = {
+export type Querymainnet_indexerDeploymentsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<IndexerDeployment_orderBy>;
@@ -7492,14 +7492,14 @@ export type QueryindexerDeploymentsArgs = {
 };
 
 
-export type QueryrewardCutHistoryEntityArgs = {
+export type Querymainnet_rewardCutHistoryEntityArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryrewardCutHistoryEntitiesArgs = {
+export type Querymainnet_rewardCutHistoryEntitiesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<RewardCutHistoryEntity_orderBy>;
@@ -7510,14 +7510,14 @@ export type QueryrewardCutHistoryEntitiesArgs = {
 };
 
 
-export type QuerydelegationPoolHistoryEntityArgs = {
+export type Querymainnet_delegationPoolHistoryEntityArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerydelegationPoolHistoryEntitiesArgs = {
+export type Querymainnet_delegationPoolHistoryEntitiesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<DelegationPoolHistoryEntity_orderBy>;
@@ -7528,14 +7528,14 @@ export type QuerydelegationPoolHistoryEntitiesArgs = {
 };
 
 
-export type QueryindexersRecalculateQueueArgs = {
+export type Querymainnet_indexersRecalculateQueueArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QueryindexersRecalculateQueuesArgs = {
+export type Querymainnet_indexersRecalculateQueuesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<IndexersRecalculateQueue_orderBy>;
@@ -7546,14 +7546,14 @@ export type QueryindexersRecalculateQueuesArgs = {
 };
 
 
-export type QuerytransactionArgs = {
+export type Querymainnet_transactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type QuerytransactionsArgs = {
+export type Querymainnet_transactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Transaction_orderBy>;
@@ -7564,7 +7564,7 @@ export type QuerytransactionsArgs = {
 };
 
 
-export type QuerycuratorSearchArgs = {
+export type Querymainnet_curatorSearchArgs = {
   text: Scalars['String'];
   first?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -7574,7 +7574,7 @@ export type QuerycuratorSearchArgs = {
 };
 
 
-export type QuerydelegatorSearchArgs = {
+export type Querymainnet_delegatorSearchArgs = {
   text: Scalars['String'];
   first?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -7584,7 +7584,7 @@ export type QuerydelegatorSearchArgs = {
 };
 
 
-export type QueryindexerSearchArgs = {
+export type Querymainnet_indexerSearchArgs = {
   text: Scalars['String'];
   first?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -7594,7 +7594,7 @@ export type QueryindexerSearchArgs = {
 };
 
 
-export type QueryaccountSearchArgs = {
+export type Querymainnet_accountSearchArgs = {
   text: Scalars['String'];
   first?: InputMaybe<Scalars['Int']>;
   skip?: InputMaybe<Scalars['Int']>;
@@ -7604,7 +7604,7 @@ export type QueryaccountSearchArgs = {
 };
 
 
-export type Query_metaArgs = {
+export type Querymainnet__metaArgs = {
   block?: InputMaybe<Block_height>;
 };
 
@@ -10258,93 +10258,93 @@ export type Subgraph_orderBy =
   | 'currentVersionRelationEntity__active';
 
 export type Subscription = {
-  graphNetwork?: Maybe<GraphNetwork>;
-  graphNetworks: Array<GraphNetwork>;
-  graphAccount?: Maybe<GraphAccount>;
-  graphAccounts: Array<GraphAccount>;
-  accountMetadata: Array<AccountMetadata>;
-  graphAccountName?: Maybe<GraphAccountName>;
-  graphAccountNames: Array<GraphAccountName>;
-  subgraph?: Maybe<Subgraph>;
-  subgraphs: Array<Subgraph>;
-  subgraphMetadata: Array<SubgraphMetadata>;
-  currentSubgraphDeploymentRelation?: Maybe<CurrentSubgraphDeploymentRelation>;
-  currentSubgraphDeploymentRelations: Array<CurrentSubgraphDeploymentRelation>;
-  network?: Maybe<Network>;
-  networks: Array<Network>;
-  subgraphVersion?: Maybe<SubgraphVersion>;
-  subgraphVersions: Array<SubgraphVersion>;
-  subgraphVersionMetadata: Array<SubgraphVersionMetadata>;
-  subgraphDeployment?: Maybe<SubgraphDeployment>;
-  subgraphDeployments: Array<SubgraphDeployment>;
-  subgraphDeploymentMetadata: Array<SubgraphDeploymentMetadata>;
-  indexer?: Maybe<Indexer>;
-  indexers: Array<Indexer>;
-  allocation?: Maybe<Allocation>;
-  allocations: Array<Allocation>;
-  pool?: Maybe<Pool>;
-  pools: Array<Pool>;
-  delegator?: Maybe<Delegator>;
-  delegators: Array<Delegator>;
-  delegatedStake?: Maybe<DelegatedStake>;
-  delegatedStakes: Array<DelegatedStake>;
-  curator?: Maybe<Curator>;
-  curators: Array<Curator>;
-  signal?: Maybe<Signal>;
-  signals: Array<Signal>;
-  nameSignal?: Maybe<NameSignal>;
-  nameSignals: Array<NameSignal>;
-  nameSignalSubgraphRelation?: Maybe<NameSignalSubgraphRelation>;
-  nameSignalSubgraphRelations: Array<NameSignalSubgraphRelation>;
-  signalSubgraphDeploymentRelation?: Maybe<SignalSubgraphDeploymentRelation>;
-  signalSubgraphDeploymentRelations: Array<SignalSubgraphDeploymentRelation>;
-  dispute?: Maybe<Dispute>;
-  disputes: Array<Dispute>;
-  attestation?: Maybe<Attestation>;
-  attestations: Array<Attestation>;
-  epoch?: Maybe<Epoch>;
-  epoches: Array<Epoch>;
-  nameSignalTransaction?: Maybe<NameSignalTransaction>;
-  nameSignalTransactions: Array<NameSignalTransaction>;
-  signalTransaction?: Maybe<SignalTransaction>;
-  signalTransactions: Array<SignalTransaction>;
-  bridgeWithdrawalTransaction?: Maybe<BridgeWithdrawalTransaction>;
-  bridgeWithdrawalTransactions: Array<BridgeWithdrawalTransaction>;
-  bridgeDepositTransaction?: Maybe<BridgeDepositTransaction>;
-  bridgeDepositTransactions: Array<BridgeDepositTransaction>;
-  retryableTicket?: Maybe<RetryableTicket>;
-  retryableTickets: Array<RetryableTicket>;
-  retryableTicketRedeemAttempt?: Maybe<RetryableTicketRedeemAttempt>;
-  retryableTicketRedeemAttempts: Array<RetryableTicketRedeemAttempt>;
-  tokenManager?: Maybe<TokenManager>;
-  tokenManagers: Array<TokenManager>;
-  authorizedFunction?: Maybe<AuthorizedFunction>;
-  authorizedFunctions: Array<AuthorizedFunction>;
-  tokenLockWallet?: Maybe<TokenLockWallet>;
-  tokenLockWallets: Array<TokenLockWallet>;
-  indexerDeployment?: Maybe<IndexerDeployment>;
-  indexerDeployments: Array<IndexerDeployment>;
-  rewardCutHistoryEntity?: Maybe<RewardCutHistoryEntity>;
-  rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
-  delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
-  delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
-  indexersRecalculateQueue?: Maybe<IndexersRecalculateQueue>;
-  indexersRecalculateQueues: Array<IndexersRecalculateQueue>;
-  transaction?: Maybe<Transaction>;
-  transactions: Array<Transaction>;
+  mainnet_graphNetwork?: Maybe<GraphNetwork>;
+  mainnet_graphNetworks: Array<GraphNetwork>;
+  mainnet_graphAccount?: Maybe<GraphAccount>;
+  mainnet_graphAccounts: Array<GraphAccount>;
+  mainnet_accountMetadata: Array<AccountMetadata>;
+  mainnet_graphAccountName?: Maybe<GraphAccountName>;
+  mainnet_graphAccountNames: Array<GraphAccountName>;
+  mainnet_subgraph?: Maybe<Subgraph>;
+  mainnet_subgraphs: Array<Subgraph>;
+  mainnet_subgraphMetadata: Array<SubgraphMetadata>;
+  mainnet_currentSubgraphDeploymentRelation?: Maybe<CurrentSubgraphDeploymentRelation>;
+  mainnet_currentSubgraphDeploymentRelations: Array<CurrentSubgraphDeploymentRelation>;
+  mainnet_network?: Maybe<Network>;
+  mainnet_networks: Array<Network>;
+  mainnet_subgraphVersion?: Maybe<SubgraphVersion>;
+  mainnet_subgraphVersions: Array<SubgraphVersion>;
+  mainnet_subgraphVersionMetadata: Array<SubgraphVersionMetadata>;
+  mainnet_subgraphDeployment?: Maybe<SubgraphDeployment>;
+  mainnet_subgraphDeployments: Array<SubgraphDeployment>;
+  mainnet_subgraphDeploymentMetadata: Array<SubgraphDeploymentMetadata>;
+  mainnet_indexer?: Maybe<Indexer>;
+  mainnet_indexers: Array<Indexer>;
+  mainnet_allocation?: Maybe<Allocation>;
+  mainnet_allocations: Array<Allocation>;
+  mainnet_pool?: Maybe<Pool>;
+  mainnet_pools: Array<Pool>;
+  mainnet_delegator?: Maybe<Delegator>;
+  mainnet_delegators: Array<Delegator>;
+  mainnet_delegatedStake?: Maybe<DelegatedStake>;
+  mainnet_delegatedStakes: Array<DelegatedStake>;
+  mainnet_curator?: Maybe<Curator>;
+  mainnet_curators: Array<Curator>;
+  mainnet_signal?: Maybe<Signal>;
+  mainnet_signals: Array<Signal>;
+  mainnet_nameSignal?: Maybe<NameSignal>;
+  mainnet_nameSignals: Array<NameSignal>;
+  mainnet_nameSignalSubgraphRelation?: Maybe<NameSignalSubgraphRelation>;
+  mainnet_nameSignalSubgraphRelations: Array<NameSignalSubgraphRelation>;
+  mainnet_signalSubgraphDeploymentRelation?: Maybe<SignalSubgraphDeploymentRelation>;
+  mainnet_signalSubgraphDeploymentRelations: Array<SignalSubgraphDeploymentRelation>;
+  mainnet_dispute?: Maybe<Dispute>;
+  mainnet_disputes: Array<Dispute>;
+  mainnet_attestation?: Maybe<Attestation>;
+  mainnet_attestations: Array<Attestation>;
+  mainnet_epoch?: Maybe<Epoch>;
+  mainnet_epoches: Array<Epoch>;
+  mainnet_nameSignalTransaction?: Maybe<NameSignalTransaction>;
+  mainnet_nameSignalTransactions: Array<NameSignalTransaction>;
+  mainnet_signalTransaction?: Maybe<SignalTransaction>;
+  mainnet_signalTransactions: Array<SignalTransaction>;
+  mainnet_bridgeWithdrawalTransaction?: Maybe<BridgeWithdrawalTransaction>;
+  mainnet_bridgeWithdrawalTransactions: Array<BridgeWithdrawalTransaction>;
+  mainnet_bridgeDepositTransaction?: Maybe<BridgeDepositTransaction>;
+  mainnet_bridgeDepositTransactions: Array<BridgeDepositTransaction>;
+  mainnet_retryableTicket?: Maybe<RetryableTicket>;
+  mainnet_retryableTickets: Array<RetryableTicket>;
+  mainnet_retryableTicketRedeemAttempt?: Maybe<RetryableTicketRedeemAttempt>;
+  mainnet_retryableTicketRedeemAttempts: Array<RetryableTicketRedeemAttempt>;
+  mainnet_tokenManager?: Maybe<TokenManager>;
+  mainnet_tokenManagers: Array<TokenManager>;
+  mainnet_authorizedFunction?: Maybe<AuthorizedFunction>;
+  mainnet_authorizedFunctions: Array<AuthorizedFunction>;
+  mainnet_tokenLockWallet?: Maybe<TokenLockWallet>;
+  mainnet_tokenLockWallets: Array<TokenLockWallet>;
+  mainnet_indexerDeployment?: Maybe<IndexerDeployment>;
+  mainnet_indexerDeployments: Array<IndexerDeployment>;
+  mainnet_rewardCutHistoryEntity?: Maybe<RewardCutHistoryEntity>;
+  mainnet_rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
+  mainnet_delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
+  mainnet_delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
+  mainnet_indexersRecalculateQueue?: Maybe<IndexersRecalculateQueue>;
+  mainnet_indexersRecalculateQueues: Array<IndexersRecalculateQueue>;
+  mainnet_transaction?: Maybe<Transaction>;
+  mainnet_transactions: Array<Transaction>;
   /** Access to subgraph metadata */
-  _meta?: Maybe<_Meta_>;
+  mainnet__meta?: Maybe<_Meta_>;
 };
 
 
-export type SubscriptiongraphNetworkArgs = {
+export type Subscriptionmainnet_graphNetworkArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiongraphNetworksArgs = {
+export type Subscriptionmainnet_graphNetworksArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GraphNetwork_orderBy>;
@@ -10355,14 +10355,14 @@ export type SubscriptiongraphNetworksArgs = {
 };
 
 
-export type SubscriptiongraphAccountArgs = {
+export type Subscriptionmainnet_graphAccountArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiongraphAccountsArgs = {
+export type Subscriptionmainnet_graphAccountsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GraphAccount_orderBy>;
@@ -10373,7 +10373,7 @@ export type SubscriptiongraphAccountsArgs = {
 };
 
 
-export type SubscriptionaccountMetadataArgs = {
+export type Subscriptionmainnet_accountMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<AccountMetadata_orderBy>;
@@ -10384,14 +10384,14 @@ export type SubscriptionaccountMetadataArgs = {
 };
 
 
-export type SubscriptiongraphAccountNameArgs = {
+export type Subscriptionmainnet_graphAccountNameArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiongraphAccountNamesArgs = {
+export type Subscriptionmainnet_graphAccountNamesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<GraphAccountName_orderBy>;
@@ -10402,14 +10402,14 @@ export type SubscriptiongraphAccountNamesArgs = {
 };
 
 
-export type SubscriptionsubgraphArgs = {
+export type Subscriptionmainnet_subgraphArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionsubgraphsArgs = {
+export type Subscriptionmainnet_subgraphsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Subgraph_orderBy>;
@@ -10420,7 +10420,7 @@ export type SubscriptionsubgraphsArgs = {
 };
 
 
-export type SubscriptionsubgraphMetadataArgs = {
+export type Subscriptionmainnet_subgraphMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphMetadata_orderBy>;
@@ -10431,14 +10431,14 @@ export type SubscriptionsubgraphMetadataArgs = {
 };
 
 
-export type SubscriptioncurrentSubgraphDeploymentRelationArgs = {
+export type Subscriptionmainnet_currentSubgraphDeploymentRelationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptioncurrentSubgraphDeploymentRelationsArgs = {
+export type Subscriptionmainnet_currentSubgraphDeploymentRelationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<CurrentSubgraphDeploymentRelation_orderBy>;
@@ -10449,14 +10449,14 @@ export type SubscriptioncurrentSubgraphDeploymentRelationsArgs = {
 };
 
 
-export type SubscriptionnetworkArgs = {
+export type Subscriptionmainnet_networkArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionnetworksArgs = {
+export type Subscriptionmainnet_networksArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Network_orderBy>;
@@ -10467,14 +10467,14 @@ export type SubscriptionnetworksArgs = {
 };
 
 
-export type SubscriptionsubgraphVersionArgs = {
+export type Subscriptionmainnet_subgraphVersionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionsubgraphVersionsArgs = {
+export type Subscriptionmainnet_subgraphVersionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphVersion_orderBy>;
@@ -10485,7 +10485,7 @@ export type SubscriptionsubgraphVersionsArgs = {
 };
 
 
-export type SubscriptionsubgraphVersionMetadataArgs = {
+export type Subscriptionmainnet_subgraphVersionMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphVersionMetadata_orderBy>;
@@ -10496,14 +10496,14 @@ export type SubscriptionsubgraphVersionMetadataArgs = {
 };
 
 
-export type SubscriptionsubgraphDeploymentArgs = {
+export type Subscriptionmainnet_subgraphDeploymentArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionsubgraphDeploymentsArgs = {
+export type Subscriptionmainnet_subgraphDeploymentsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphDeployment_orderBy>;
@@ -10514,7 +10514,7 @@ export type SubscriptionsubgraphDeploymentsArgs = {
 };
 
 
-export type SubscriptionsubgraphDeploymentMetadataArgs = {
+export type Subscriptionmainnet_subgraphDeploymentMetadataArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SubgraphDeploymentMetadata_orderBy>;
@@ -10525,14 +10525,14 @@ export type SubscriptionsubgraphDeploymentMetadataArgs = {
 };
 
 
-export type SubscriptionindexerArgs = {
+export type Subscriptionmainnet_indexerArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionindexersArgs = {
+export type Subscriptionmainnet_indexersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Indexer_orderBy>;
@@ -10543,14 +10543,14 @@ export type SubscriptionindexersArgs = {
 };
 
 
-export type SubscriptionallocationArgs = {
+export type Subscriptionmainnet_allocationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionallocationsArgs = {
+export type Subscriptionmainnet_allocationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Allocation_orderBy>;
@@ -10561,14 +10561,14 @@ export type SubscriptionallocationsArgs = {
 };
 
 
-export type SubscriptionpoolArgs = {
+export type Subscriptionmainnet_poolArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionpoolsArgs = {
+export type Subscriptionmainnet_poolsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Pool_orderBy>;
@@ -10579,14 +10579,14 @@ export type SubscriptionpoolsArgs = {
 };
 
 
-export type SubscriptiondelegatorArgs = {
+export type Subscriptionmainnet_delegatorArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiondelegatorsArgs = {
+export type Subscriptionmainnet_delegatorsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Delegator_orderBy>;
@@ -10597,14 +10597,14 @@ export type SubscriptiondelegatorsArgs = {
 };
 
 
-export type SubscriptiondelegatedStakeArgs = {
+export type Subscriptionmainnet_delegatedStakeArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiondelegatedStakesArgs = {
+export type Subscriptionmainnet_delegatedStakesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<DelegatedStake_orderBy>;
@@ -10615,14 +10615,14 @@ export type SubscriptiondelegatedStakesArgs = {
 };
 
 
-export type SubscriptioncuratorArgs = {
+export type Subscriptionmainnet_curatorArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptioncuratorsArgs = {
+export type Subscriptionmainnet_curatorsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Curator_orderBy>;
@@ -10633,14 +10633,14 @@ export type SubscriptioncuratorsArgs = {
 };
 
 
-export type SubscriptionsignalArgs = {
+export type Subscriptionmainnet_signalArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionsignalsArgs = {
+export type Subscriptionmainnet_signalsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Signal_orderBy>;
@@ -10651,14 +10651,14 @@ export type SubscriptionsignalsArgs = {
 };
 
 
-export type SubscriptionnameSignalArgs = {
+export type Subscriptionmainnet_nameSignalArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionnameSignalsArgs = {
+export type Subscriptionmainnet_nameSignalsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<NameSignal_orderBy>;
@@ -10669,14 +10669,14 @@ export type SubscriptionnameSignalsArgs = {
 };
 
 
-export type SubscriptionnameSignalSubgraphRelationArgs = {
+export type Subscriptionmainnet_nameSignalSubgraphRelationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionnameSignalSubgraphRelationsArgs = {
+export type Subscriptionmainnet_nameSignalSubgraphRelationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<NameSignalSubgraphRelation_orderBy>;
@@ -10687,14 +10687,14 @@ export type SubscriptionnameSignalSubgraphRelationsArgs = {
 };
 
 
-export type SubscriptionsignalSubgraphDeploymentRelationArgs = {
+export type Subscriptionmainnet_signalSubgraphDeploymentRelationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionsignalSubgraphDeploymentRelationsArgs = {
+export type Subscriptionmainnet_signalSubgraphDeploymentRelationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SignalSubgraphDeploymentRelation_orderBy>;
@@ -10705,14 +10705,14 @@ export type SubscriptionsignalSubgraphDeploymentRelationsArgs = {
 };
 
 
-export type SubscriptiondisputeArgs = {
+export type Subscriptionmainnet_disputeArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiondisputesArgs = {
+export type Subscriptionmainnet_disputesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Dispute_orderBy>;
@@ -10723,14 +10723,14 @@ export type SubscriptiondisputesArgs = {
 };
 
 
-export type SubscriptionattestationArgs = {
+export type Subscriptionmainnet_attestationArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionattestationsArgs = {
+export type Subscriptionmainnet_attestationsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Attestation_orderBy>;
@@ -10741,14 +10741,14 @@ export type SubscriptionattestationsArgs = {
 };
 
 
-export type SubscriptionepochArgs = {
+export type Subscriptionmainnet_epochArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionepochesArgs = {
+export type Subscriptionmainnet_epochesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Epoch_orderBy>;
@@ -10759,14 +10759,14 @@ export type SubscriptionepochesArgs = {
 };
 
 
-export type SubscriptionnameSignalTransactionArgs = {
+export type Subscriptionmainnet_nameSignalTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionnameSignalTransactionsArgs = {
+export type Subscriptionmainnet_nameSignalTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<NameSignalTransaction_orderBy>;
@@ -10777,14 +10777,14 @@ export type SubscriptionnameSignalTransactionsArgs = {
 };
 
 
-export type SubscriptionsignalTransactionArgs = {
+export type Subscriptionmainnet_signalTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionsignalTransactionsArgs = {
+export type Subscriptionmainnet_signalTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<SignalTransaction_orderBy>;
@@ -10795,14 +10795,14 @@ export type SubscriptionsignalTransactionsArgs = {
 };
 
 
-export type SubscriptionbridgeWithdrawalTransactionArgs = {
+export type Subscriptionmainnet_bridgeWithdrawalTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionbridgeWithdrawalTransactionsArgs = {
+export type Subscriptionmainnet_bridgeWithdrawalTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<BridgeWithdrawalTransaction_orderBy>;
@@ -10813,14 +10813,14 @@ export type SubscriptionbridgeWithdrawalTransactionsArgs = {
 };
 
 
-export type SubscriptionbridgeDepositTransactionArgs = {
+export type Subscriptionmainnet_bridgeDepositTransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionbridgeDepositTransactionsArgs = {
+export type Subscriptionmainnet_bridgeDepositTransactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<BridgeDepositTransaction_orderBy>;
@@ -10831,14 +10831,14 @@ export type SubscriptionbridgeDepositTransactionsArgs = {
 };
 
 
-export type SubscriptionretryableTicketArgs = {
+export type Subscriptionmainnet_retryableTicketArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionretryableTicketsArgs = {
+export type Subscriptionmainnet_retryableTicketsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<RetryableTicket_orderBy>;
@@ -10849,14 +10849,14 @@ export type SubscriptionretryableTicketsArgs = {
 };
 
 
-export type SubscriptionretryableTicketRedeemAttemptArgs = {
+export type Subscriptionmainnet_retryableTicketRedeemAttemptArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionretryableTicketRedeemAttemptsArgs = {
+export type Subscriptionmainnet_retryableTicketRedeemAttemptsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<RetryableTicketRedeemAttempt_orderBy>;
@@ -10867,14 +10867,14 @@ export type SubscriptionretryableTicketRedeemAttemptsArgs = {
 };
 
 
-export type SubscriptiontokenManagerArgs = {
+export type Subscriptionmainnet_tokenManagerArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiontokenManagersArgs = {
+export type Subscriptionmainnet_tokenManagersArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<TokenManager_orderBy>;
@@ -10885,14 +10885,14 @@ export type SubscriptiontokenManagersArgs = {
 };
 
 
-export type SubscriptionauthorizedFunctionArgs = {
+export type Subscriptionmainnet_authorizedFunctionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionauthorizedFunctionsArgs = {
+export type Subscriptionmainnet_authorizedFunctionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<AuthorizedFunction_orderBy>;
@@ -10903,14 +10903,14 @@ export type SubscriptionauthorizedFunctionsArgs = {
 };
 
 
-export type SubscriptiontokenLockWalletArgs = {
+export type Subscriptionmainnet_tokenLockWalletArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiontokenLockWalletsArgs = {
+export type Subscriptionmainnet_tokenLockWalletsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<TokenLockWallet_orderBy>;
@@ -10921,14 +10921,14 @@ export type SubscriptiontokenLockWalletsArgs = {
 };
 
 
-export type SubscriptionindexerDeploymentArgs = {
+export type Subscriptionmainnet_indexerDeploymentArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionindexerDeploymentsArgs = {
+export type Subscriptionmainnet_indexerDeploymentsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<IndexerDeployment_orderBy>;
@@ -10939,14 +10939,14 @@ export type SubscriptionindexerDeploymentsArgs = {
 };
 
 
-export type SubscriptionrewardCutHistoryEntityArgs = {
+export type Subscriptionmainnet_rewardCutHistoryEntityArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionrewardCutHistoryEntitiesArgs = {
+export type Subscriptionmainnet_rewardCutHistoryEntitiesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<RewardCutHistoryEntity_orderBy>;
@@ -10957,14 +10957,14 @@ export type SubscriptionrewardCutHistoryEntitiesArgs = {
 };
 
 
-export type SubscriptiondelegationPoolHistoryEntityArgs = {
+export type Subscriptionmainnet_delegationPoolHistoryEntityArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiondelegationPoolHistoryEntitiesArgs = {
+export type Subscriptionmainnet_delegationPoolHistoryEntitiesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<DelegationPoolHistoryEntity_orderBy>;
@@ -10975,14 +10975,14 @@ export type SubscriptiondelegationPoolHistoryEntitiesArgs = {
 };
 
 
-export type SubscriptionindexersRecalculateQueueArgs = {
+export type Subscriptionmainnet_indexersRecalculateQueueArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptionindexersRecalculateQueuesArgs = {
+export type Subscriptionmainnet_indexersRecalculateQueuesArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<IndexersRecalculateQueue_orderBy>;
@@ -10993,14 +10993,14 @@ export type SubscriptionindexersRecalculateQueuesArgs = {
 };
 
 
-export type SubscriptiontransactionArgs = {
+export type Subscriptionmainnet_transactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
 
 
-export type SubscriptiontransactionsArgs = {
+export type Subscriptionmainnet_transactionsArgs = {
   skip?: InputMaybe<Scalars['Int']>;
   first?: InputMaybe<Scalars['Int']>;
   orderBy?: InputMaybe<Transaction_orderBy>;
@@ -11011,7 +11011,7 @@ export type SubscriptiontransactionsArgs = {
 };
 
 
-export type Subscription_metaArgs = {
+export type Subscriptionmainnet__metaArgs = {
   block?: InputMaybe<Block_height>;
 };
 
@@ -11454,163 +11454,163 @@ export type _SubgraphErrorPolicy_ =
 
   export type QuerySdk = {
       /** null **/
-  graphNetwork: InContextSdkMethod<Query['graphNetwork'], QuerygraphNetworkArgs, MeshContext>,
+  mainnet_graphNetwork: InContextSdkMethod<Query['mainnet_graphNetwork'], Querymainnet_graphNetworkArgs, MeshContext>,
   /** null **/
-  graphNetworks: InContextSdkMethod<Query['graphNetworks'], QuerygraphNetworksArgs, MeshContext>,
+  mainnet_graphNetworks: InContextSdkMethod<Query['mainnet_graphNetworks'], Querymainnet_graphNetworksArgs, MeshContext>,
   /** null **/
-  graphAccount: InContextSdkMethod<Query['graphAccount'], QuerygraphAccountArgs, MeshContext>,
+  mainnet_graphAccount: InContextSdkMethod<Query['mainnet_graphAccount'], Querymainnet_graphAccountArgs, MeshContext>,
   /** null **/
-  graphAccounts: InContextSdkMethod<Query['graphAccounts'], QuerygraphAccountsArgs, MeshContext>,
+  mainnet_graphAccounts: InContextSdkMethod<Query['mainnet_graphAccounts'], Querymainnet_graphAccountsArgs, MeshContext>,
   /** null **/
-  accountMetadata: InContextSdkMethod<Query['accountMetadata'], QueryaccountMetadataArgs, MeshContext>,
+  mainnet_accountMetadata: InContextSdkMethod<Query['mainnet_accountMetadata'], Querymainnet_accountMetadataArgs, MeshContext>,
   /** null **/
-  graphAccountName: InContextSdkMethod<Query['graphAccountName'], QuerygraphAccountNameArgs, MeshContext>,
+  mainnet_graphAccountName: InContextSdkMethod<Query['mainnet_graphAccountName'], Querymainnet_graphAccountNameArgs, MeshContext>,
   /** null **/
-  graphAccountNames: InContextSdkMethod<Query['graphAccountNames'], QuerygraphAccountNamesArgs, MeshContext>,
+  mainnet_graphAccountNames: InContextSdkMethod<Query['mainnet_graphAccountNames'], Querymainnet_graphAccountNamesArgs, MeshContext>,
   /** null **/
-  subgraph: InContextSdkMethod<Query['subgraph'], QuerysubgraphArgs, MeshContext>,
+  mainnet_subgraph: InContextSdkMethod<Query['mainnet_subgraph'], Querymainnet_subgraphArgs, MeshContext>,
   /** null **/
-  subgraphs: InContextSdkMethod<Query['subgraphs'], QuerysubgraphsArgs, MeshContext>,
+  mainnet_subgraphs: InContextSdkMethod<Query['mainnet_subgraphs'], Querymainnet_subgraphsArgs, MeshContext>,
   /** null **/
-  subgraphMetadata: InContextSdkMethod<Query['subgraphMetadata'], QuerysubgraphMetadataArgs, MeshContext>,
+  mainnet_subgraphMetadata: InContextSdkMethod<Query['mainnet_subgraphMetadata'], Querymainnet_subgraphMetadataArgs, MeshContext>,
   /** null **/
-  currentSubgraphDeploymentRelation: InContextSdkMethod<Query['currentSubgraphDeploymentRelation'], QuerycurrentSubgraphDeploymentRelationArgs, MeshContext>,
+  mainnet_currentSubgraphDeploymentRelation: InContextSdkMethod<Query['mainnet_currentSubgraphDeploymentRelation'], Querymainnet_currentSubgraphDeploymentRelationArgs, MeshContext>,
   /** null **/
-  currentSubgraphDeploymentRelations: InContextSdkMethod<Query['currentSubgraphDeploymentRelations'], QuerycurrentSubgraphDeploymentRelationsArgs, MeshContext>,
+  mainnet_currentSubgraphDeploymentRelations: InContextSdkMethod<Query['mainnet_currentSubgraphDeploymentRelations'], Querymainnet_currentSubgraphDeploymentRelationsArgs, MeshContext>,
   /** null **/
-  network: InContextSdkMethod<Query['network'], QuerynetworkArgs, MeshContext>,
+  mainnet_network: InContextSdkMethod<Query['mainnet_network'], Querymainnet_networkArgs, MeshContext>,
   /** null **/
-  networks: InContextSdkMethod<Query['networks'], QuerynetworksArgs, MeshContext>,
+  mainnet_networks: InContextSdkMethod<Query['mainnet_networks'], Querymainnet_networksArgs, MeshContext>,
   /** null **/
-  subgraphVersion: InContextSdkMethod<Query['subgraphVersion'], QuerysubgraphVersionArgs, MeshContext>,
+  mainnet_subgraphVersion: InContextSdkMethod<Query['mainnet_subgraphVersion'], Querymainnet_subgraphVersionArgs, MeshContext>,
   /** null **/
-  subgraphVersions: InContextSdkMethod<Query['subgraphVersions'], QuerysubgraphVersionsArgs, MeshContext>,
+  mainnet_subgraphVersions: InContextSdkMethod<Query['mainnet_subgraphVersions'], Querymainnet_subgraphVersionsArgs, MeshContext>,
   /** null **/
-  subgraphVersionMetadata: InContextSdkMethod<Query['subgraphVersionMetadata'], QuerysubgraphVersionMetadataArgs, MeshContext>,
+  mainnet_subgraphVersionMetadata: InContextSdkMethod<Query['mainnet_subgraphVersionMetadata'], Querymainnet_subgraphVersionMetadataArgs, MeshContext>,
   /** null **/
-  subgraphDeployment: InContextSdkMethod<Query['subgraphDeployment'], QuerysubgraphDeploymentArgs, MeshContext>,
+  mainnet_subgraphDeployment: InContextSdkMethod<Query['mainnet_subgraphDeployment'], Querymainnet_subgraphDeploymentArgs, MeshContext>,
   /** null **/
-  subgraphDeployments: InContextSdkMethod<Query['subgraphDeployments'], QuerysubgraphDeploymentsArgs, MeshContext>,
+  mainnet_subgraphDeployments: InContextSdkMethod<Query['mainnet_subgraphDeployments'], Querymainnet_subgraphDeploymentsArgs, MeshContext>,
   /** null **/
-  subgraphDeploymentMetadata: InContextSdkMethod<Query['subgraphDeploymentMetadata'], QuerysubgraphDeploymentMetadataArgs, MeshContext>,
+  mainnet_subgraphDeploymentMetadata: InContextSdkMethod<Query['mainnet_subgraphDeploymentMetadata'], Querymainnet_subgraphDeploymentMetadataArgs, MeshContext>,
   /** null **/
-  indexer: InContextSdkMethod<Query['indexer'], QueryindexerArgs, MeshContext>,
+  mainnet_indexer: InContextSdkMethod<Query['mainnet_indexer'], Querymainnet_indexerArgs, MeshContext>,
   /** null **/
-  indexers: InContextSdkMethod<Query['indexers'], QueryindexersArgs, MeshContext>,
+  mainnet_indexers: InContextSdkMethod<Query['mainnet_indexers'], Querymainnet_indexersArgs, MeshContext>,
   /** null **/
-  allocation: InContextSdkMethod<Query['allocation'], QueryallocationArgs, MeshContext>,
+  mainnet_allocation: InContextSdkMethod<Query['mainnet_allocation'], Querymainnet_allocationArgs, MeshContext>,
   /** null **/
-  allocations: InContextSdkMethod<Query['allocations'], QueryallocationsArgs, MeshContext>,
+  mainnet_allocations: InContextSdkMethod<Query['mainnet_allocations'], Querymainnet_allocationsArgs, MeshContext>,
   /** null **/
-  pool: InContextSdkMethod<Query['pool'], QuerypoolArgs, MeshContext>,
+  mainnet_pool: InContextSdkMethod<Query['mainnet_pool'], Querymainnet_poolArgs, MeshContext>,
   /** null **/
-  pools: InContextSdkMethod<Query['pools'], QuerypoolsArgs, MeshContext>,
+  mainnet_pools: InContextSdkMethod<Query['mainnet_pools'], Querymainnet_poolsArgs, MeshContext>,
   /** null **/
-  delegator: InContextSdkMethod<Query['delegator'], QuerydelegatorArgs, MeshContext>,
+  mainnet_delegator: InContextSdkMethod<Query['mainnet_delegator'], Querymainnet_delegatorArgs, MeshContext>,
   /** null **/
-  delegators: InContextSdkMethod<Query['delegators'], QuerydelegatorsArgs, MeshContext>,
+  mainnet_delegators: InContextSdkMethod<Query['mainnet_delegators'], Querymainnet_delegatorsArgs, MeshContext>,
   /** null **/
-  delegatedStake: InContextSdkMethod<Query['delegatedStake'], QuerydelegatedStakeArgs, MeshContext>,
+  mainnet_delegatedStake: InContextSdkMethod<Query['mainnet_delegatedStake'], Querymainnet_delegatedStakeArgs, MeshContext>,
   /** null **/
-  delegatedStakes: InContextSdkMethod<Query['delegatedStakes'], QuerydelegatedStakesArgs, MeshContext>,
+  mainnet_delegatedStakes: InContextSdkMethod<Query['mainnet_delegatedStakes'], Querymainnet_delegatedStakesArgs, MeshContext>,
   /** null **/
-  curator: InContextSdkMethod<Query['curator'], QuerycuratorArgs, MeshContext>,
+  mainnet_curator: InContextSdkMethod<Query['mainnet_curator'], Querymainnet_curatorArgs, MeshContext>,
   /** null **/
-  curators: InContextSdkMethod<Query['curators'], QuerycuratorsArgs, MeshContext>,
+  mainnet_curators: InContextSdkMethod<Query['mainnet_curators'], Querymainnet_curatorsArgs, MeshContext>,
   /** null **/
-  signal: InContextSdkMethod<Query['signal'], QuerysignalArgs, MeshContext>,
+  mainnet_signal: InContextSdkMethod<Query['mainnet_signal'], Querymainnet_signalArgs, MeshContext>,
   /** null **/
-  signals: InContextSdkMethod<Query['signals'], QuerysignalsArgs, MeshContext>,
+  mainnet_signals: InContextSdkMethod<Query['mainnet_signals'], Querymainnet_signalsArgs, MeshContext>,
   /** null **/
-  nameSignal: InContextSdkMethod<Query['nameSignal'], QuerynameSignalArgs, MeshContext>,
+  mainnet_nameSignal: InContextSdkMethod<Query['mainnet_nameSignal'], Querymainnet_nameSignalArgs, MeshContext>,
   /** null **/
-  nameSignals: InContextSdkMethod<Query['nameSignals'], QuerynameSignalsArgs, MeshContext>,
+  mainnet_nameSignals: InContextSdkMethod<Query['mainnet_nameSignals'], Querymainnet_nameSignalsArgs, MeshContext>,
   /** null **/
-  nameSignalSubgraphRelation: InContextSdkMethod<Query['nameSignalSubgraphRelation'], QuerynameSignalSubgraphRelationArgs, MeshContext>,
+  mainnet_nameSignalSubgraphRelation: InContextSdkMethod<Query['mainnet_nameSignalSubgraphRelation'], Querymainnet_nameSignalSubgraphRelationArgs, MeshContext>,
   /** null **/
-  nameSignalSubgraphRelations: InContextSdkMethod<Query['nameSignalSubgraphRelations'], QuerynameSignalSubgraphRelationsArgs, MeshContext>,
+  mainnet_nameSignalSubgraphRelations: InContextSdkMethod<Query['mainnet_nameSignalSubgraphRelations'], Querymainnet_nameSignalSubgraphRelationsArgs, MeshContext>,
   /** null **/
-  signalSubgraphDeploymentRelation: InContextSdkMethod<Query['signalSubgraphDeploymentRelation'], QuerysignalSubgraphDeploymentRelationArgs, MeshContext>,
+  mainnet_signalSubgraphDeploymentRelation: InContextSdkMethod<Query['mainnet_signalSubgraphDeploymentRelation'], Querymainnet_signalSubgraphDeploymentRelationArgs, MeshContext>,
   /** null **/
-  signalSubgraphDeploymentRelations: InContextSdkMethod<Query['signalSubgraphDeploymentRelations'], QuerysignalSubgraphDeploymentRelationsArgs, MeshContext>,
+  mainnet_signalSubgraphDeploymentRelations: InContextSdkMethod<Query['mainnet_signalSubgraphDeploymentRelations'], Querymainnet_signalSubgraphDeploymentRelationsArgs, MeshContext>,
   /** null **/
-  dispute: InContextSdkMethod<Query['dispute'], QuerydisputeArgs, MeshContext>,
+  mainnet_dispute: InContextSdkMethod<Query['mainnet_dispute'], Querymainnet_disputeArgs, MeshContext>,
   /** null **/
-  disputes: InContextSdkMethod<Query['disputes'], QuerydisputesArgs, MeshContext>,
+  mainnet_disputes: InContextSdkMethod<Query['mainnet_disputes'], Querymainnet_disputesArgs, MeshContext>,
   /** null **/
-  attestation: InContextSdkMethod<Query['attestation'], QueryattestationArgs, MeshContext>,
+  mainnet_attestation: InContextSdkMethod<Query['mainnet_attestation'], Querymainnet_attestationArgs, MeshContext>,
   /** null **/
-  attestations: InContextSdkMethod<Query['attestations'], QueryattestationsArgs, MeshContext>,
+  mainnet_attestations: InContextSdkMethod<Query['mainnet_attestations'], Querymainnet_attestationsArgs, MeshContext>,
   /** null **/
-  epoch: InContextSdkMethod<Query['epoch'], QueryepochArgs, MeshContext>,
+  mainnet_epoch: InContextSdkMethod<Query['mainnet_epoch'], Querymainnet_epochArgs, MeshContext>,
   /** null **/
-  epoches: InContextSdkMethod<Query['epoches'], QueryepochesArgs, MeshContext>,
+  mainnet_epoches: InContextSdkMethod<Query['mainnet_epoches'], Querymainnet_epochesArgs, MeshContext>,
   /** null **/
-  nameSignalTransaction: InContextSdkMethod<Query['nameSignalTransaction'], QuerynameSignalTransactionArgs, MeshContext>,
+  mainnet_nameSignalTransaction: InContextSdkMethod<Query['mainnet_nameSignalTransaction'], Querymainnet_nameSignalTransactionArgs, MeshContext>,
   /** null **/
-  nameSignalTransactions: InContextSdkMethod<Query['nameSignalTransactions'], QuerynameSignalTransactionsArgs, MeshContext>,
+  mainnet_nameSignalTransactions: InContextSdkMethod<Query['mainnet_nameSignalTransactions'], Querymainnet_nameSignalTransactionsArgs, MeshContext>,
   /** null **/
-  signalTransaction: InContextSdkMethod<Query['signalTransaction'], QuerysignalTransactionArgs, MeshContext>,
+  mainnet_signalTransaction: InContextSdkMethod<Query['mainnet_signalTransaction'], Querymainnet_signalTransactionArgs, MeshContext>,
   /** null **/
-  signalTransactions: InContextSdkMethod<Query['signalTransactions'], QuerysignalTransactionsArgs, MeshContext>,
+  mainnet_signalTransactions: InContextSdkMethod<Query['mainnet_signalTransactions'], Querymainnet_signalTransactionsArgs, MeshContext>,
   /** null **/
-  bridgeWithdrawalTransaction: InContextSdkMethod<Query['bridgeWithdrawalTransaction'], QuerybridgeWithdrawalTransactionArgs, MeshContext>,
+  mainnet_bridgeWithdrawalTransaction: InContextSdkMethod<Query['mainnet_bridgeWithdrawalTransaction'], Querymainnet_bridgeWithdrawalTransactionArgs, MeshContext>,
   /** null **/
-  bridgeWithdrawalTransactions: InContextSdkMethod<Query['bridgeWithdrawalTransactions'], QuerybridgeWithdrawalTransactionsArgs, MeshContext>,
+  mainnet_bridgeWithdrawalTransactions: InContextSdkMethod<Query['mainnet_bridgeWithdrawalTransactions'], Querymainnet_bridgeWithdrawalTransactionsArgs, MeshContext>,
   /** null **/
-  bridgeDepositTransaction: InContextSdkMethod<Query['bridgeDepositTransaction'], QuerybridgeDepositTransactionArgs, MeshContext>,
+  mainnet_bridgeDepositTransaction: InContextSdkMethod<Query['mainnet_bridgeDepositTransaction'], Querymainnet_bridgeDepositTransactionArgs, MeshContext>,
   /** null **/
-  bridgeDepositTransactions: InContextSdkMethod<Query['bridgeDepositTransactions'], QuerybridgeDepositTransactionsArgs, MeshContext>,
+  mainnet_bridgeDepositTransactions: InContextSdkMethod<Query['mainnet_bridgeDepositTransactions'], Querymainnet_bridgeDepositTransactionsArgs, MeshContext>,
   /** null **/
-  retryableTicket: InContextSdkMethod<Query['retryableTicket'], QueryretryableTicketArgs, MeshContext>,
+  mainnet_retryableTicket: InContextSdkMethod<Query['mainnet_retryableTicket'], Querymainnet_retryableTicketArgs, MeshContext>,
   /** null **/
-  retryableTickets: InContextSdkMethod<Query['retryableTickets'], QueryretryableTicketsArgs, MeshContext>,
+  mainnet_retryableTickets: InContextSdkMethod<Query['mainnet_retryableTickets'], Querymainnet_retryableTicketsArgs, MeshContext>,
   /** null **/
-  retryableTicketRedeemAttempt: InContextSdkMethod<Query['retryableTicketRedeemAttempt'], QueryretryableTicketRedeemAttemptArgs, MeshContext>,
+  mainnet_retryableTicketRedeemAttempt: InContextSdkMethod<Query['mainnet_retryableTicketRedeemAttempt'], Querymainnet_retryableTicketRedeemAttemptArgs, MeshContext>,
   /** null **/
-  retryableTicketRedeemAttempts: InContextSdkMethod<Query['retryableTicketRedeemAttempts'], QueryretryableTicketRedeemAttemptsArgs, MeshContext>,
+  mainnet_retryableTicketRedeemAttempts: InContextSdkMethod<Query['mainnet_retryableTicketRedeemAttempts'], Querymainnet_retryableTicketRedeemAttemptsArgs, MeshContext>,
   /** null **/
-  tokenManager: InContextSdkMethod<Query['tokenManager'], QuerytokenManagerArgs, MeshContext>,
+  mainnet_tokenManager: InContextSdkMethod<Query['mainnet_tokenManager'], Querymainnet_tokenManagerArgs, MeshContext>,
   /** null **/
-  tokenManagers: InContextSdkMethod<Query['tokenManagers'], QuerytokenManagersArgs, MeshContext>,
+  mainnet_tokenManagers: InContextSdkMethod<Query['mainnet_tokenManagers'], Querymainnet_tokenManagersArgs, MeshContext>,
   /** null **/
-  authorizedFunction: InContextSdkMethod<Query['authorizedFunction'], QueryauthorizedFunctionArgs, MeshContext>,
+  mainnet_authorizedFunction: InContextSdkMethod<Query['mainnet_authorizedFunction'], Querymainnet_authorizedFunctionArgs, MeshContext>,
   /** null **/
-  authorizedFunctions: InContextSdkMethod<Query['authorizedFunctions'], QueryauthorizedFunctionsArgs, MeshContext>,
+  mainnet_authorizedFunctions: InContextSdkMethod<Query['mainnet_authorizedFunctions'], Querymainnet_authorizedFunctionsArgs, MeshContext>,
   /** null **/
-  tokenLockWallet: InContextSdkMethod<Query['tokenLockWallet'], QuerytokenLockWalletArgs, MeshContext>,
+  mainnet_tokenLockWallet: InContextSdkMethod<Query['mainnet_tokenLockWallet'], Querymainnet_tokenLockWalletArgs, MeshContext>,
   /** null **/
-  tokenLockWallets: InContextSdkMethod<Query['tokenLockWallets'], QuerytokenLockWalletsArgs, MeshContext>,
+  mainnet_tokenLockWallets: InContextSdkMethod<Query['mainnet_tokenLockWallets'], Querymainnet_tokenLockWalletsArgs, MeshContext>,
   /** null **/
-  indexerDeployment: InContextSdkMethod<Query['indexerDeployment'], QueryindexerDeploymentArgs, MeshContext>,
+  mainnet_indexerDeployment: InContextSdkMethod<Query['mainnet_indexerDeployment'], Querymainnet_indexerDeploymentArgs, MeshContext>,
   /** null **/
-  indexerDeployments: InContextSdkMethod<Query['indexerDeployments'], QueryindexerDeploymentsArgs, MeshContext>,
+  mainnet_indexerDeployments: InContextSdkMethod<Query['mainnet_indexerDeployments'], Querymainnet_indexerDeploymentsArgs, MeshContext>,
   /** null **/
-  rewardCutHistoryEntity: InContextSdkMethod<Query['rewardCutHistoryEntity'], QueryrewardCutHistoryEntityArgs, MeshContext>,
+  mainnet_rewardCutHistoryEntity: InContextSdkMethod<Query['mainnet_rewardCutHistoryEntity'], Querymainnet_rewardCutHistoryEntityArgs, MeshContext>,
   /** null **/
-  rewardCutHistoryEntities: InContextSdkMethod<Query['rewardCutHistoryEntities'], QueryrewardCutHistoryEntitiesArgs, MeshContext>,
+  mainnet_rewardCutHistoryEntities: InContextSdkMethod<Query['mainnet_rewardCutHistoryEntities'], Querymainnet_rewardCutHistoryEntitiesArgs, MeshContext>,
   /** null **/
-  delegationPoolHistoryEntity: InContextSdkMethod<Query['delegationPoolHistoryEntity'], QuerydelegationPoolHistoryEntityArgs, MeshContext>,
+  mainnet_delegationPoolHistoryEntity: InContextSdkMethod<Query['mainnet_delegationPoolHistoryEntity'], Querymainnet_delegationPoolHistoryEntityArgs, MeshContext>,
   /** null **/
-  delegationPoolHistoryEntities: InContextSdkMethod<Query['delegationPoolHistoryEntities'], QuerydelegationPoolHistoryEntitiesArgs, MeshContext>,
+  mainnet_delegationPoolHistoryEntities: InContextSdkMethod<Query['mainnet_delegationPoolHistoryEntities'], Querymainnet_delegationPoolHistoryEntitiesArgs, MeshContext>,
   /** null **/
-  indexersRecalculateQueue: InContextSdkMethod<Query['indexersRecalculateQueue'], QueryindexersRecalculateQueueArgs, MeshContext>,
+  mainnet_indexersRecalculateQueue: InContextSdkMethod<Query['mainnet_indexersRecalculateQueue'], Querymainnet_indexersRecalculateQueueArgs, MeshContext>,
   /** null **/
-  indexersRecalculateQueues: InContextSdkMethod<Query['indexersRecalculateQueues'], QueryindexersRecalculateQueuesArgs, MeshContext>,
+  mainnet_indexersRecalculateQueues: InContextSdkMethod<Query['mainnet_indexersRecalculateQueues'], Querymainnet_indexersRecalculateQueuesArgs, MeshContext>,
   /** null **/
-  transaction: InContextSdkMethod<Query['transaction'], QuerytransactionArgs, MeshContext>,
+  mainnet_transaction: InContextSdkMethod<Query['mainnet_transaction'], Querymainnet_transactionArgs, MeshContext>,
   /** null **/
-  transactions: InContextSdkMethod<Query['transactions'], QuerytransactionsArgs, MeshContext>,
+  mainnet_transactions: InContextSdkMethod<Query['mainnet_transactions'], Querymainnet_transactionsArgs, MeshContext>,
   /** null **/
-  curatorSearch: InContextSdkMethod<Query['curatorSearch'], QuerycuratorSearchArgs, MeshContext>,
+  mainnet_curatorSearch: InContextSdkMethod<Query['mainnet_curatorSearch'], Querymainnet_curatorSearchArgs, MeshContext>,
   /** null **/
-  delegatorSearch: InContextSdkMethod<Query['delegatorSearch'], QuerydelegatorSearchArgs, MeshContext>,
+  mainnet_delegatorSearch: InContextSdkMethod<Query['mainnet_delegatorSearch'], Querymainnet_delegatorSearchArgs, MeshContext>,
   /** null **/
-  indexerSearch: InContextSdkMethod<Query['indexerSearch'], QueryindexerSearchArgs, MeshContext>,
+  mainnet_indexerSearch: InContextSdkMethod<Query['mainnet_indexerSearch'], Querymainnet_indexerSearchArgs, MeshContext>,
   /** null **/
-  accountSearch: InContextSdkMethod<Query['accountSearch'], QueryaccountSearchArgs, MeshContext>,
+  mainnet_accountSearch: InContextSdkMethod<Query['mainnet_accountSearch'], Querymainnet_accountSearchArgs, MeshContext>,
   /** Access to subgraph metadata **/
-  _meta: InContextSdkMethod<Query['_meta'], Query_metaArgs, MeshContext>
+  mainnet__meta: InContextSdkMethod<Query['mainnet__meta'], Querymainnet__metaArgs, MeshContext>
   };
 
   export type MutationSdk = {
@@ -11619,155 +11619,155 @@ export type _SubgraphErrorPolicy_ =
 
   export type SubscriptionSdk = {
       /** null **/
-  graphNetwork: InContextSdkMethod<Subscription['graphNetwork'], SubscriptiongraphNetworkArgs, MeshContext>,
+  mainnet_graphNetwork: InContextSdkMethod<Subscription['mainnet_graphNetwork'], Subscriptionmainnet_graphNetworkArgs, MeshContext>,
   /** null **/
-  graphNetworks: InContextSdkMethod<Subscription['graphNetworks'], SubscriptiongraphNetworksArgs, MeshContext>,
+  mainnet_graphNetworks: InContextSdkMethod<Subscription['mainnet_graphNetworks'], Subscriptionmainnet_graphNetworksArgs, MeshContext>,
   /** null **/
-  graphAccount: InContextSdkMethod<Subscription['graphAccount'], SubscriptiongraphAccountArgs, MeshContext>,
+  mainnet_graphAccount: InContextSdkMethod<Subscription['mainnet_graphAccount'], Subscriptionmainnet_graphAccountArgs, MeshContext>,
   /** null **/
-  graphAccounts: InContextSdkMethod<Subscription['graphAccounts'], SubscriptiongraphAccountsArgs, MeshContext>,
+  mainnet_graphAccounts: InContextSdkMethod<Subscription['mainnet_graphAccounts'], Subscriptionmainnet_graphAccountsArgs, MeshContext>,
   /** null **/
-  accountMetadata: InContextSdkMethod<Subscription['accountMetadata'], SubscriptionaccountMetadataArgs, MeshContext>,
+  mainnet_accountMetadata: InContextSdkMethod<Subscription['mainnet_accountMetadata'], Subscriptionmainnet_accountMetadataArgs, MeshContext>,
   /** null **/
-  graphAccountName: InContextSdkMethod<Subscription['graphAccountName'], SubscriptiongraphAccountNameArgs, MeshContext>,
+  mainnet_graphAccountName: InContextSdkMethod<Subscription['mainnet_graphAccountName'], Subscriptionmainnet_graphAccountNameArgs, MeshContext>,
   /** null **/
-  graphAccountNames: InContextSdkMethod<Subscription['graphAccountNames'], SubscriptiongraphAccountNamesArgs, MeshContext>,
+  mainnet_graphAccountNames: InContextSdkMethod<Subscription['mainnet_graphAccountNames'], Subscriptionmainnet_graphAccountNamesArgs, MeshContext>,
   /** null **/
-  subgraph: InContextSdkMethod<Subscription['subgraph'], SubscriptionsubgraphArgs, MeshContext>,
+  mainnet_subgraph: InContextSdkMethod<Subscription['mainnet_subgraph'], Subscriptionmainnet_subgraphArgs, MeshContext>,
   /** null **/
-  subgraphs: InContextSdkMethod<Subscription['subgraphs'], SubscriptionsubgraphsArgs, MeshContext>,
+  mainnet_subgraphs: InContextSdkMethod<Subscription['mainnet_subgraphs'], Subscriptionmainnet_subgraphsArgs, MeshContext>,
   /** null **/
-  subgraphMetadata: InContextSdkMethod<Subscription['subgraphMetadata'], SubscriptionsubgraphMetadataArgs, MeshContext>,
+  mainnet_subgraphMetadata: InContextSdkMethod<Subscription['mainnet_subgraphMetadata'], Subscriptionmainnet_subgraphMetadataArgs, MeshContext>,
   /** null **/
-  currentSubgraphDeploymentRelation: InContextSdkMethod<Subscription['currentSubgraphDeploymentRelation'], SubscriptioncurrentSubgraphDeploymentRelationArgs, MeshContext>,
+  mainnet_currentSubgraphDeploymentRelation: InContextSdkMethod<Subscription['mainnet_currentSubgraphDeploymentRelation'], Subscriptionmainnet_currentSubgraphDeploymentRelationArgs, MeshContext>,
   /** null **/
-  currentSubgraphDeploymentRelations: InContextSdkMethod<Subscription['currentSubgraphDeploymentRelations'], SubscriptioncurrentSubgraphDeploymentRelationsArgs, MeshContext>,
+  mainnet_currentSubgraphDeploymentRelations: InContextSdkMethod<Subscription['mainnet_currentSubgraphDeploymentRelations'], Subscriptionmainnet_currentSubgraphDeploymentRelationsArgs, MeshContext>,
   /** null **/
-  network: InContextSdkMethod<Subscription['network'], SubscriptionnetworkArgs, MeshContext>,
+  mainnet_network: InContextSdkMethod<Subscription['mainnet_network'], Subscriptionmainnet_networkArgs, MeshContext>,
   /** null **/
-  networks: InContextSdkMethod<Subscription['networks'], SubscriptionnetworksArgs, MeshContext>,
+  mainnet_networks: InContextSdkMethod<Subscription['mainnet_networks'], Subscriptionmainnet_networksArgs, MeshContext>,
   /** null **/
-  subgraphVersion: InContextSdkMethod<Subscription['subgraphVersion'], SubscriptionsubgraphVersionArgs, MeshContext>,
+  mainnet_subgraphVersion: InContextSdkMethod<Subscription['mainnet_subgraphVersion'], Subscriptionmainnet_subgraphVersionArgs, MeshContext>,
   /** null **/
-  subgraphVersions: InContextSdkMethod<Subscription['subgraphVersions'], SubscriptionsubgraphVersionsArgs, MeshContext>,
+  mainnet_subgraphVersions: InContextSdkMethod<Subscription['mainnet_subgraphVersions'], Subscriptionmainnet_subgraphVersionsArgs, MeshContext>,
   /** null **/
-  subgraphVersionMetadata: InContextSdkMethod<Subscription['subgraphVersionMetadata'], SubscriptionsubgraphVersionMetadataArgs, MeshContext>,
+  mainnet_subgraphVersionMetadata: InContextSdkMethod<Subscription['mainnet_subgraphVersionMetadata'], Subscriptionmainnet_subgraphVersionMetadataArgs, MeshContext>,
   /** null **/
-  subgraphDeployment: InContextSdkMethod<Subscription['subgraphDeployment'], SubscriptionsubgraphDeploymentArgs, MeshContext>,
+  mainnet_subgraphDeployment: InContextSdkMethod<Subscription['mainnet_subgraphDeployment'], Subscriptionmainnet_subgraphDeploymentArgs, MeshContext>,
   /** null **/
-  subgraphDeployments: InContextSdkMethod<Subscription['subgraphDeployments'], SubscriptionsubgraphDeploymentsArgs, MeshContext>,
+  mainnet_subgraphDeployments: InContextSdkMethod<Subscription['mainnet_subgraphDeployments'], Subscriptionmainnet_subgraphDeploymentsArgs, MeshContext>,
   /** null **/
-  subgraphDeploymentMetadata: InContextSdkMethod<Subscription['subgraphDeploymentMetadata'], SubscriptionsubgraphDeploymentMetadataArgs, MeshContext>,
+  mainnet_subgraphDeploymentMetadata: InContextSdkMethod<Subscription['mainnet_subgraphDeploymentMetadata'], Subscriptionmainnet_subgraphDeploymentMetadataArgs, MeshContext>,
   /** null **/
-  indexer: InContextSdkMethod<Subscription['indexer'], SubscriptionindexerArgs, MeshContext>,
+  mainnet_indexer: InContextSdkMethod<Subscription['mainnet_indexer'], Subscriptionmainnet_indexerArgs, MeshContext>,
   /** null **/
-  indexers: InContextSdkMethod<Subscription['indexers'], SubscriptionindexersArgs, MeshContext>,
+  mainnet_indexers: InContextSdkMethod<Subscription['mainnet_indexers'], Subscriptionmainnet_indexersArgs, MeshContext>,
   /** null **/
-  allocation: InContextSdkMethod<Subscription['allocation'], SubscriptionallocationArgs, MeshContext>,
+  mainnet_allocation: InContextSdkMethod<Subscription['mainnet_allocation'], Subscriptionmainnet_allocationArgs, MeshContext>,
   /** null **/
-  allocations: InContextSdkMethod<Subscription['allocations'], SubscriptionallocationsArgs, MeshContext>,
+  mainnet_allocations: InContextSdkMethod<Subscription['mainnet_allocations'], Subscriptionmainnet_allocationsArgs, MeshContext>,
   /** null **/
-  pool: InContextSdkMethod<Subscription['pool'], SubscriptionpoolArgs, MeshContext>,
+  mainnet_pool: InContextSdkMethod<Subscription['mainnet_pool'], Subscriptionmainnet_poolArgs, MeshContext>,
   /** null **/
-  pools: InContextSdkMethod<Subscription['pools'], SubscriptionpoolsArgs, MeshContext>,
+  mainnet_pools: InContextSdkMethod<Subscription['mainnet_pools'], Subscriptionmainnet_poolsArgs, MeshContext>,
   /** null **/
-  delegator: InContextSdkMethod<Subscription['delegator'], SubscriptiondelegatorArgs, MeshContext>,
+  mainnet_delegator: InContextSdkMethod<Subscription['mainnet_delegator'], Subscriptionmainnet_delegatorArgs, MeshContext>,
   /** null **/
-  delegators: InContextSdkMethod<Subscription['delegators'], SubscriptiondelegatorsArgs, MeshContext>,
+  mainnet_delegators: InContextSdkMethod<Subscription['mainnet_delegators'], Subscriptionmainnet_delegatorsArgs, MeshContext>,
   /** null **/
-  delegatedStake: InContextSdkMethod<Subscription['delegatedStake'], SubscriptiondelegatedStakeArgs, MeshContext>,
+  mainnet_delegatedStake: InContextSdkMethod<Subscription['mainnet_delegatedStake'], Subscriptionmainnet_delegatedStakeArgs, MeshContext>,
   /** null **/
-  delegatedStakes: InContextSdkMethod<Subscription['delegatedStakes'], SubscriptiondelegatedStakesArgs, MeshContext>,
+  mainnet_delegatedStakes: InContextSdkMethod<Subscription['mainnet_delegatedStakes'], Subscriptionmainnet_delegatedStakesArgs, MeshContext>,
   /** null **/
-  curator: InContextSdkMethod<Subscription['curator'], SubscriptioncuratorArgs, MeshContext>,
+  mainnet_curator: InContextSdkMethod<Subscription['mainnet_curator'], Subscriptionmainnet_curatorArgs, MeshContext>,
   /** null **/
-  curators: InContextSdkMethod<Subscription['curators'], SubscriptioncuratorsArgs, MeshContext>,
+  mainnet_curators: InContextSdkMethod<Subscription['mainnet_curators'], Subscriptionmainnet_curatorsArgs, MeshContext>,
   /** null **/
-  signal: InContextSdkMethod<Subscription['signal'], SubscriptionsignalArgs, MeshContext>,
+  mainnet_signal: InContextSdkMethod<Subscription['mainnet_signal'], Subscriptionmainnet_signalArgs, MeshContext>,
   /** null **/
-  signals: InContextSdkMethod<Subscription['signals'], SubscriptionsignalsArgs, MeshContext>,
+  mainnet_signals: InContextSdkMethod<Subscription['mainnet_signals'], Subscriptionmainnet_signalsArgs, MeshContext>,
   /** null **/
-  nameSignal: InContextSdkMethod<Subscription['nameSignal'], SubscriptionnameSignalArgs, MeshContext>,
+  mainnet_nameSignal: InContextSdkMethod<Subscription['mainnet_nameSignal'], Subscriptionmainnet_nameSignalArgs, MeshContext>,
   /** null **/
-  nameSignals: InContextSdkMethod<Subscription['nameSignals'], SubscriptionnameSignalsArgs, MeshContext>,
+  mainnet_nameSignals: InContextSdkMethod<Subscription['mainnet_nameSignals'], Subscriptionmainnet_nameSignalsArgs, MeshContext>,
   /** null **/
-  nameSignalSubgraphRelation: InContextSdkMethod<Subscription['nameSignalSubgraphRelation'], SubscriptionnameSignalSubgraphRelationArgs, MeshContext>,
+  mainnet_nameSignalSubgraphRelation: InContextSdkMethod<Subscription['mainnet_nameSignalSubgraphRelation'], Subscriptionmainnet_nameSignalSubgraphRelationArgs, MeshContext>,
   /** null **/
-  nameSignalSubgraphRelations: InContextSdkMethod<Subscription['nameSignalSubgraphRelations'], SubscriptionnameSignalSubgraphRelationsArgs, MeshContext>,
+  mainnet_nameSignalSubgraphRelations: InContextSdkMethod<Subscription['mainnet_nameSignalSubgraphRelations'], Subscriptionmainnet_nameSignalSubgraphRelationsArgs, MeshContext>,
   /** null **/
-  signalSubgraphDeploymentRelation: InContextSdkMethod<Subscription['signalSubgraphDeploymentRelation'], SubscriptionsignalSubgraphDeploymentRelationArgs, MeshContext>,
+  mainnet_signalSubgraphDeploymentRelation: InContextSdkMethod<Subscription['mainnet_signalSubgraphDeploymentRelation'], Subscriptionmainnet_signalSubgraphDeploymentRelationArgs, MeshContext>,
   /** null **/
-  signalSubgraphDeploymentRelations: InContextSdkMethod<Subscription['signalSubgraphDeploymentRelations'], SubscriptionsignalSubgraphDeploymentRelationsArgs, MeshContext>,
+  mainnet_signalSubgraphDeploymentRelations: InContextSdkMethod<Subscription['mainnet_signalSubgraphDeploymentRelations'], Subscriptionmainnet_signalSubgraphDeploymentRelationsArgs, MeshContext>,
   /** null **/
-  dispute: InContextSdkMethod<Subscription['dispute'], SubscriptiondisputeArgs, MeshContext>,
+  mainnet_dispute: InContextSdkMethod<Subscription['mainnet_dispute'], Subscriptionmainnet_disputeArgs, MeshContext>,
   /** null **/
-  disputes: InContextSdkMethod<Subscription['disputes'], SubscriptiondisputesArgs, MeshContext>,
+  mainnet_disputes: InContextSdkMethod<Subscription['mainnet_disputes'], Subscriptionmainnet_disputesArgs, MeshContext>,
   /** null **/
-  attestation: InContextSdkMethod<Subscription['attestation'], SubscriptionattestationArgs, MeshContext>,
+  mainnet_attestation: InContextSdkMethod<Subscription['mainnet_attestation'], Subscriptionmainnet_attestationArgs, MeshContext>,
   /** null **/
-  attestations: InContextSdkMethod<Subscription['attestations'], SubscriptionattestationsArgs, MeshContext>,
+  mainnet_attestations: InContextSdkMethod<Subscription['mainnet_attestations'], Subscriptionmainnet_attestationsArgs, MeshContext>,
   /** null **/
-  epoch: InContextSdkMethod<Subscription['epoch'], SubscriptionepochArgs, MeshContext>,
+  mainnet_epoch: InContextSdkMethod<Subscription['mainnet_epoch'], Subscriptionmainnet_epochArgs, MeshContext>,
   /** null **/
-  epoches: InContextSdkMethod<Subscription['epoches'], SubscriptionepochesArgs, MeshContext>,
+  mainnet_epoches: InContextSdkMethod<Subscription['mainnet_epoches'], Subscriptionmainnet_epochesArgs, MeshContext>,
   /** null **/
-  nameSignalTransaction: InContextSdkMethod<Subscription['nameSignalTransaction'], SubscriptionnameSignalTransactionArgs, MeshContext>,
+  mainnet_nameSignalTransaction: InContextSdkMethod<Subscription['mainnet_nameSignalTransaction'], Subscriptionmainnet_nameSignalTransactionArgs, MeshContext>,
   /** null **/
-  nameSignalTransactions: InContextSdkMethod<Subscription['nameSignalTransactions'], SubscriptionnameSignalTransactionsArgs, MeshContext>,
+  mainnet_nameSignalTransactions: InContextSdkMethod<Subscription['mainnet_nameSignalTransactions'], Subscriptionmainnet_nameSignalTransactionsArgs, MeshContext>,
   /** null **/
-  signalTransaction: InContextSdkMethod<Subscription['signalTransaction'], SubscriptionsignalTransactionArgs, MeshContext>,
+  mainnet_signalTransaction: InContextSdkMethod<Subscription['mainnet_signalTransaction'], Subscriptionmainnet_signalTransactionArgs, MeshContext>,
   /** null **/
-  signalTransactions: InContextSdkMethod<Subscription['signalTransactions'], SubscriptionsignalTransactionsArgs, MeshContext>,
+  mainnet_signalTransactions: InContextSdkMethod<Subscription['mainnet_signalTransactions'], Subscriptionmainnet_signalTransactionsArgs, MeshContext>,
   /** null **/
-  bridgeWithdrawalTransaction: InContextSdkMethod<Subscription['bridgeWithdrawalTransaction'], SubscriptionbridgeWithdrawalTransactionArgs, MeshContext>,
+  mainnet_bridgeWithdrawalTransaction: InContextSdkMethod<Subscription['mainnet_bridgeWithdrawalTransaction'], Subscriptionmainnet_bridgeWithdrawalTransactionArgs, MeshContext>,
   /** null **/
-  bridgeWithdrawalTransactions: InContextSdkMethod<Subscription['bridgeWithdrawalTransactions'], SubscriptionbridgeWithdrawalTransactionsArgs, MeshContext>,
+  mainnet_bridgeWithdrawalTransactions: InContextSdkMethod<Subscription['mainnet_bridgeWithdrawalTransactions'], Subscriptionmainnet_bridgeWithdrawalTransactionsArgs, MeshContext>,
   /** null **/
-  bridgeDepositTransaction: InContextSdkMethod<Subscription['bridgeDepositTransaction'], SubscriptionbridgeDepositTransactionArgs, MeshContext>,
+  mainnet_bridgeDepositTransaction: InContextSdkMethod<Subscription['mainnet_bridgeDepositTransaction'], Subscriptionmainnet_bridgeDepositTransactionArgs, MeshContext>,
   /** null **/
-  bridgeDepositTransactions: InContextSdkMethod<Subscription['bridgeDepositTransactions'], SubscriptionbridgeDepositTransactionsArgs, MeshContext>,
+  mainnet_bridgeDepositTransactions: InContextSdkMethod<Subscription['mainnet_bridgeDepositTransactions'], Subscriptionmainnet_bridgeDepositTransactionsArgs, MeshContext>,
   /** null **/
-  retryableTicket: InContextSdkMethod<Subscription['retryableTicket'], SubscriptionretryableTicketArgs, MeshContext>,
+  mainnet_retryableTicket: InContextSdkMethod<Subscription['mainnet_retryableTicket'], Subscriptionmainnet_retryableTicketArgs, MeshContext>,
   /** null **/
-  retryableTickets: InContextSdkMethod<Subscription['retryableTickets'], SubscriptionretryableTicketsArgs, MeshContext>,
+  mainnet_retryableTickets: InContextSdkMethod<Subscription['mainnet_retryableTickets'], Subscriptionmainnet_retryableTicketsArgs, MeshContext>,
   /** null **/
-  retryableTicketRedeemAttempt: InContextSdkMethod<Subscription['retryableTicketRedeemAttempt'], SubscriptionretryableTicketRedeemAttemptArgs, MeshContext>,
+  mainnet_retryableTicketRedeemAttempt: InContextSdkMethod<Subscription['mainnet_retryableTicketRedeemAttempt'], Subscriptionmainnet_retryableTicketRedeemAttemptArgs, MeshContext>,
   /** null **/
-  retryableTicketRedeemAttempts: InContextSdkMethod<Subscription['retryableTicketRedeemAttempts'], SubscriptionretryableTicketRedeemAttemptsArgs, MeshContext>,
+  mainnet_retryableTicketRedeemAttempts: InContextSdkMethod<Subscription['mainnet_retryableTicketRedeemAttempts'], Subscriptionmainnet_retryableTicketRedeemAttemptsArgs, MeshContext>,
   /** null **/
-  tokenManager: InContextSdkMethod<Subscription['tokenManager'], SubscriptiontokenManagerArgs, MeshContext>,
+  mainnet_tokenManager: InContextSdkMethod<Subscription['mainnet_tokenManager'], Subscriptionmainnet_tokenManagerArgs, MeshContext>,
   /** null **/
-  tokenManagers: InContextSdkMethod<Subscription['tokenManagers'], SubscriptiontokenManagersArgs, MeshContext>,
+  mainnet_tokenManagers: InContextSdkMethod<Subscription['mainnet_tokenManagers'], Subscriptionmainnet_tokenManagersArgs, MeshContext>,
   /** null **/
-  authorizedFunction: InContextSdkMethod<Subscription['authorizedFunction'], SubscriptionauthorizedFunctionArgs, MeshContext>,
+  mainnet_authorizedFunction: InContextSdkMethod<Subscription['mainnet_authorizedFunction'], Subscriptionmainnet_authorizedFunctionArgs, MeshContext>,
   /** null **/
-  authorizedFunctions: InContextSdkMethod<Subscription['authorizedFunctions'], SubscriptionauthorizedFunctionsArgs, MeshContext>,
+  mainnet_authorizedFunctions: InContextSdkMethod<Subscription['mainnet_authorizedFunctions'], Subscriptionmainnet_authorizedFunctionsArgs, MeshContext>,
   /** null **/
-  tokenLockWallet: InContextSdkMethod<Subscription['tokenLockWallet'], SubscriptiontokenLockWalletArgs, MeshContext>,
+  mainnet_tokenLockWallet: InContextSdkMethod<Subscription['mainnet_tokenLockWallet'], Subscriptionmainnet_tokenLockWalletArgs, MeshContext>,
   /** null **/
-  tokenLockWallets: InContextSdkMethod<Subscription['tokenLockWallets'], SubscriptiontokenLockWalletsArgs, MeshContext>,
+  mainnet_tokenLockWallets: InContextSdkMethod<Subscription['mainnet_tokenLockWallets'], Subscriptionmainnet_tokenLockWalletsArgs, MeshContext>,
   /** null **/
-  indexerDeployment: InContextSdkMethod<Subscription['indexerDeployment'], SubscriptionindexerDeploymentArgs, MeshContext>,
+  mainnet_indexerDeployment: InContextSdkMethod<Subscription['mainnet_indexerDeployment'], Subscriptionmainnet_indexerDeploymentArgs, MeshContext>,
   /** null **/
-  indexerDeployments: InContextSdkMethod<Subscription['indexerDeployments'], SubscriptionindexerDeploymentsArgs, MeshContext>,
+  mainnet_indexerDeployments: InContextSdkMethod<Subscription['mainnet_indexerDeployments'], Subscriptionmainnet_indexerDeploymentsArgs, MeshContext>,
   /** null **/
-  rewardCutHistoryEntity: InContextSdkMethod<Subscription['rewardCutHistoryEntity'], SubscriptionrewardCutHistoryEntityArgs, MeshContext>,
+  mainnet_rewardCutHistoryEntity: InContextSdkMethod<Subscription['mainnet_rewardCutHistoryEntity'], Subscriptionmainnet_rewardCutHistoryEntityArgs, MeshContext>,
   /** null **/
-  rewardCutHistoryEntities: InContextSdkMethod<Subscription['rewardCutHistoryEntities'], SubscriptionrewardCutHistoryEntitiesArgs, MeshContext>,
+  mainnet_rewardCutHistoryEntities: InContextSdkMethod<Subscription['mainnet_rewardCutHistoryEntities'], Subscriptionmainnet_rewardCutHistoryEntitiesArgs, MeshContext>,
   /** null **/
-  delegationPoolHistoryEntity: InContextSdkMethod<Subscription['delegationPoolHistoryEntity'], SubscriptiondelegationPoolHistoryEntityArgs, MeshContext>,
+  mainnet_delegationPoolHistoryEntity: InContextSdkMethod<Subscription['mainnet_delegationPoolHistoryEntity'], Subscriptionmainnet_delegationPoolHistoryEntityArgs, MeshContext>,
   /** null **/
-  delegationPoolHistoryEntities: InContextSdkMethod<Subscription['delegationPoolHistoryEntities'], SubscriptiondelegationPoolHistoryEntitiesArgs, MeshContext>,
+  mainnet_delegationPoolHistoryEntities: InContextSdkMethod<Subscription['mainnet_delegationPoolHistoryEntities'], Subscriptionmainnet_delegationPoolHistoryEntitiesArgs, MeshContext>,
   /** null **/
-  indexersRecalculateQueue: InContextSdkMethod<Subscription['indexersRecalculateQueue'], SubscriptionindexersRecalculateQueueArgs, MeshContext>,
+  mainnet_indexersRecalculateQueue: InContextSdkMethod<Subscription['mainnet_indexersRecalculateQueue'], Subscriptionmainnet_indexersRecalculateQueueArgs, MeshContext>,
   /** null **/
-  indexersRecalculateQueues: InContextSdkMethod<Subscription['indexersRecalculateQueues'], SubscriptionindexersRecalculateQueuesArgs, MeshContext>,
+  mainnet_indexersRecalculateQueues: InContextSdkMethod<Subscription['mainnet_indexersRecalculateQueues'], Subscriptionmainnet_indexersRecalculateQueuesArgs, MeshContext>,
   /** null **/
-  transaction: InContextSdkMethod<Subscription['transaction'], SubscriptiontransactionArgs, MeshContext>,
+  mainnet_transaction: InContextSdkMethod<Subscription['mainnet_transaction'], Subscriptionmainnet_transactionArgs, MeshContext>,
   /** null **/
-  transactions: InContextSdkMethod<Subscription['transactions'], SubscriptiontransactionsArgs, MeshContext>,
+  mainnet_transactions: InContextSdkMethod<Subscription['mainnet_transactions'], Subscriptionmainnet_transactionsArgs, MeshContext>,
   /** Access to subgraph metadata **/
-  _meta: InContextSdkMethod<Subscription['_meta'], Subscription_metaArgs, MeshContext>
+  mainnet__meta: InContextSdkMethod<Subscription['mainnet__meta'], Subscriptionmainnet__metaArgs, MeshContext>
   };
 
   export type Context = {

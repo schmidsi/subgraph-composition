@@ -358,7 +358,109 @@ yarn graphclient build
 </ul>
 ```
 
-See that the filed is now named `crossSubgraphs` and we also display the `deployedChain` field.
+Note that the filed is now named `crossSubgraphs` and we also display the `deployedChain` field.
+
+### Add prefixes
+
+Although we have a unified schema, one problem that we now have is that there is a clash in top level queries. If we send a simple query like:
+
+```graphql
+{
+  subgraphs(first: 1) {
+    id
+    deployedChain
+    metadata {
+      displayName
+    }
+  }
+}
+```
+
+The field `deployedChain` is undefined and we don't know how from which subgraph this result is. One possible solution would be to [leverage the transformation feature](https://github.com/graphprotocol/graph-client/tree/097cd595d0efdf71af57b7595e47e7bdddddc5fa/examples/transforms) and prefix all top-level fields with the chain name. To do this, we need to install the `transform-prefix` package
+
+```bash
+yarn add @graphql-mesh/transform-prefix
+```
+
+And then change tell Graph Client to use it in [`.graphclientrc.yml`](./packages/nextjs/.graphclientrc.yml):
+
+```yml
+sources:
+  - name: mainnet
+    handler:
+      graphql:
+        endpoint: https://gateway-arbitrum.network.thegraph.com/api/dc9b1200d80a1c064c90462b9c04f264/subgraphs/id/AwyZBdna4vTAHiqBWsrQ5ErFRMi6HCgGEkQMgNBseWTL
+
+    transforms: # new 👇
+      - prefix:
+          value: arbitrum_
+          includeRootOperations: true
+          includeTypes: false
+
+  - name: arbitrum
+    handler:
+      graphql:
+        endpoint: https://gateway-arbitrum.network.thegraph.com/api/dc9b1200d80a1c064c90462b9c04f264/subgraphs/id/DjUVVVSuKcCCTZSVzVXLioSd7AdqwGEyBrY4Ru5tuqzX
+
+    transforms: # new 👇
+      - prefix:
+          value: arbitrum_
+          includeRootOperations: true
+          includeTypes: false
+# ... rest of the file
+```
+
+Running `yarn graphclient serve-dev` again and inspecting the schema shows, that all top-level fields are now prefixed with the chain name. So the simple query from above would look like this now:
+
+```graphql
+{
+  arbitrum_subgraphs(first: 1) {
+    id
+    deployedChain
+    metadata {
+      displayName
+    }
+  }
+}
+```
+
+But the `crossSubgraphs` query does not work anymore. We need to change the resolver to use the new prefixed fields:
+
+From `context[source].Query.subgraphs` to `context[source].Query[\`${source}\_subgraphs\`]`
+
+```ts
+import { Resolvers } from "../../.graphclient";
+
+const chains = ["arbitrum", "mainnet"];
+
+export const resolvers: Resolvers = {
+  Query: {
+    crossSubgraphs: async (root: any, args: any, context: any, info: any) => {
+      // console.log("crossSubgraphs", root, args, context, info);
+      console.log(Object.keys(context.arbitrum.Query));
+
+      const results = await Promise.all(
+        chains.map((source) =>
+          context[source].Query[`${source}_subgraphs`]({
+            // <- here the query is prefixed too
+            root,
+            args,
+            context,
+            info,
+          }).then((subgraphs: any) =>
+            subgraphs.map((subgraph: any) => ({
+              ...subgraph,
+              deployedChain: source.toUpperCase(),
+            }))
+          )
+        )
+      ).then((allSubgraphs) => allSubgraphs.flat());
+
+      return results;
+    },
+  },
+};
+```
 
 ## Conclusion
 
