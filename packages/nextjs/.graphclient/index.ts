@@ -21,10 +21,10 @@ import { getMesh, ExecuteMeshFn, SubscribeMeshFn, MeshContext as BaseMeshContext
 import { MeshStore, FsStoreStorageAdapter } from '@graphql-mesh/store';
 import { path as pathModule } from '@graphql-mesh/cross-helpers';
 import { ImportFn } from '@graphql-mesh/types';
-import type { MainnetTypes } from './sources/mainnet/types';
 import type { ArbitrumTypes } from './sources/arbitrum/types';
-import * as importedModule$0 from "./sources/arbitrum/introspectionSchema";
-import * as importedModule$1 from "./sources/mainnet/introspectionSchema";
+import type { MainnetTypes } from './sources/mainnet/types';
+import * as importedModule$0 from "./sources/mainnet/introspectionSchema";
+import * as importedModule$1 from "./sources/arbitrum/introspectionSchema";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -118,6 +118,8 @@ export type Query = {
   rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
   delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
   delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
+  indexersRecalculateQueue?: Maybe<IndexersRecalculateQueue>;
+  indexersRecalculateQueues: Array<IndexersRecalculateQueue>;
   transaction?: Maybe<Transaction>;
   transactions: Array<Transaction>;
   curatorSearch: Array<Curator>;
@@ -768,6 +770,24 @@ export type QuerydelegationPoolHistoryEntitiesArgs = {
 };
 
 
+export type QueryindexersRecalculateQueueArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryindexersRecalculateQueuesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<IndexersRecalculateQueue_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<IndexersRecalculateQueue_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
 export type QuerytransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
@@ -911,6 +931,8 @@ export type Subscription = {
   rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
   delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
   delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
+  indexersRecalculateQueue?: Maybe<IndexersRecalculateQueue>;
+  indexersRecalculateQueues: Array<IndexersRecalculateQueue>;
   transaction?: Maybe<Transaction>;
   transactions: Array<Transaction>;
   /** Access to subgraph metadata */
@@ -1551,6 +1573,24 @@ export type SubscriptiondelegationPoolHistoryEntitiesArgs = {
   orderBy?: InputMaybe<DelegationPoolHistoryEntity_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   where?: InputMaybe<DelegationPoolHistoryEntity_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionindexersRecalculateQueueArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionindexersRecalculateQueuesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<IndexersRecalculateQueue_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<IndexersRecalculateQueue_filter>;
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
@@ -7372,6 +7412,43 @@ export type Indexer_orderBy =
   | 'delegatorsCount';
 
 /**
+ * ZONE OF DARK MAGIC DONT USE IT OR U DIE
+ *
+ */
+export type IndexersRecalculateQueue = {
+  /** ID is 0 - infinity */
+  id: Scalars['ID'];
+  indexer: Scalars['ID'];
+};
+
+export type IndexersRecalculateQueue_filter = {
+  id?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  indexer?: InputMaybe<Scalars['ID']>;
+  indexer_not?: InputMaybe<Scalars['ID']>;
+  indexer_gt?: InputMaybe<Scalars['ID']>;
+  indexer_lt?: InputMaybe<Scalars['ID']>;
+  indexer_gte?: InputMaybe<Scalars['ID']>;
+  indexer_lte?: InputMaybe<Scalars['ID']>;
+  indexer_in?: InputMaybe<Array<Scalars['ID']>>;
+  indexer_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<IndexersRecalculateQueue_filter>>>;
+  or?: InputMaybe<Array<InputMaybe<IndexersRecalculateQueue_filter>>>;
+};
+
+export type IndexersRecalculateQueue_orderBy =
+  | 'id'
+  | 'indexer';
+
+/**
  * Curator Name Signal for a single Subgraph
  *
  */
@@ -11569,6 +11646,9 @@ export type ResolversTypes = ResolversObject<{
   IndexerDeployment_orderBy: IndexerDeployment_orderBy;
   Indexer_filter: Indexer_filter;
   Indexer_orderBy: Indexer_orderBy;
+  IndexersRecalculateQueue: ResolverTypeWrapper<IndexersRecalculateQueue>;
+  IndexersRecalculateQueue_filter: IndexersRecalculateQueue_filter;
+  IndexersRecalculateQueue_orderBy: IndexersRecalculateQueue_orderBy;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Int8: ResolverTypeWrapper<Scalars['Int8']>;
   NameSignal: ResolverTypeWrapper<NameSignal>;
@@ -11690,6 +11770,8 @@ export type ResolversParentTypes = ResolversObject<{
   IndexerDeployment: IndexerDeployment;
   IndexerDeployment_filter: IndexerDeployment_filter;
   Indexer_filter: Indexer_filter;
+  IndexersRecalculateQueue: IndexersRecalculateQueue;
+  IndexersRecalculateQueue_filter: IndexersRecalculateQueue_filter;
   Int: Scalars['Int'];
   Int8: Scalars['Int8'];
   NameSignal: NameSignal;
@@ -11824,6 +11906,8 @@ export type QueryResolvers<ContextType = MeshContext, ParentType extends Resolve
   rewardCutHistoryEntities?: Resolver<Array<ResolversTypes['RewardCutHistoryEntity']>, ParentType, ContextType, RequireFields<QueryrewardCutHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
   delegationPoolHistoryEntity?: Resolver<Maybe<ResolversTypes['DelegationPoolHistoryEntity']>, ParentType, ContextType, RequireFields<QuerydelegationPoolHistoryEntityArgs, 'id' | 'subgraphError'>>;
   delegationPoolHistoryEntities?: Resolver<Array<ResolversTypes['DelegationPoolHistoryEntity']>, ParentType, ContextType, RequireFields<QuerydelegationPoolHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  indexersRecalculateQueue?: Resolver<Maybe<ResolversTypes['IndexersRecalculateQueue']>, ParentType, ContextType, RequireFields<QueryindexersRecalculateQueueArgs, 'id' | 'subgraphError'>>;
+  indexersRecalculateQueues?: Resolver<Array<ResolversTypes['IndexersRecalculateQueue']>, ParentType, ContextType, RequireFields<QueryindexersRecalculateQueuesArgs, 'skip' | 'first' | 'subgraphError'>>;
   transaction?: Resolver<Maybe<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<QuerytransactionArgs, 'id' | 'subgraphError'>>;
   transactions?: Resolver<Array<ResolversTypes['Transaction']>, ParentType, ContextType, RequireFields<QuerytransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
   curatorSearch?: Resolver<Array<ResolversTypes['Curator']>, ParentType, ContextType, RequireFields<QuerycuratorSearchArgs, 'text' | 'first' | 'skip' | 'subgraphError'>>;
@@ -11905,6 +11989,8 @@ export type SubscriptionResolvers<ContextType = MeshContext, ParentType extends 
   rewardCutHistoryEntities?: SubscriptionResolver<Array<ResolversTypes['RewardCutHistoryEntity']>, "rewardCutHistoryEntities", ParentType, ContextType, RequireFields<SubscriptionrewardCutHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
   delegationPoolHistoryEntity?: SubscriptionResolver<Maybe<ResolversTypes['DelegationPoolHistoryEntity']>, "delegationPoolHistoryEntity", ParentType, ContextType, RequireFields<SubscriptiondelegationPoolHistoryEntityArgs, 'id' | 'subgraphError'>>;
   delegationPoolHistoryEntities?: SubscriptionResolver<Array<ResolversTypes['DelegationPoolHistoryEntity']>, "delegationPoolHistoryEntities", ParentType, ContextType, RequireFields<SubscriptiondelegationPoolHistoryEntitiesArgs, 'skip' | 'first' | 'subgraphError'>>;
+  indexersRecalculateQueue?: SubscriptionResolver<Maybe<ResolversTypes['IndexersRecalculateQueue']>, "indexersRecalculateQueue", ParentType, ContextType, RequireFields<SubscriptionindexersRecalculateQueueArgs, 'id' | 'subgraphError'>>;
+  indexersRecalculateQueues?: SubscriptionResolver<Array<ResolversTypes['IndexersRecalculateQueue']>, "indexersRecalculateQueues", ParentType, ContextType, RequireFields<SubscriptionindexersRecalculateQueuesArgs, 'skip' | 'first' | 'subgraphError'>>;
   transaction?: SubscriptionResolver<Maybe<ResolversTypes['Transaction']>, "transaction", ParentType, ContextType, RequireFields<SubscriptiontransactionArgs, 'id' | 'subgraphError'>>;
   transactions?: SubscriptionResolver<Array<ResolversTypes['Transaction']>, "transactions", ParentType, ContextType, RequireFields<SubscriptiontransactionsArgs, 'skip' | 'first' | 'subgraphError'>>;
   _meta?: SubscriptionResolver<Maybe<ResolversTypes['_Meta_']>, "_meta", ParentType, ContextType, Partial<Subscription_metaArgs>>;
@@ -12374,6 +12460,12 @@ export type IndexerDeploymentResolvers<ContextType = MeshContext, ParentType ext
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
+export type IndexersRecalculateQueueResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['IndexersRecalculateQueue'] = ResolversParentTypes['IndexersRecalculateQueue']> = ResolversObject<{
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  indexer?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+}>;
+
 export interface Int8ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Int8'], any> {
   name: 'Int8';
 }
@@ -12725,6 +12817,7 @@ export type Resolvers<ContextType = MeshContext> = ResolversObject<{
   GraphNetwork?: GraphNetworkResolvers<ContextType>;
   Indexer?: IndexerResolvers<ContextType>;
   IndexerDeployment?: IndexerDeploymentResolvers<ContextType>;
+  IndexersRecalculateQueue?: IndexersRecalculateQueueResolvers<ContextType>;
   Int8?: GraphQLScalarType;
   NameSignal?: NameSignalResolvers<ContextType>;
   NameSignalSubgraphRelation?: NameSignalSubgraphRelationResolvers<ContextType>;
@@ -12756,7 +12849,7 @@ export type DirectiveResolvers<ContextType = MeshContext> = ResolversObject<{
   derivedFrom?: derivedFromDirectiveResolver<any, any, ContextType>;
 }>;
 
-export type MeshContext = ArbitrumTypes.Context & MainnetTypes.Context & BaseMeshContext;
+export type MeshContext = MainnetTypes.Context & ArbitrumTypes.Context & BaseMeshContext;
 
 
 import { fileURLToPath } from '@graphql-mesh/utils';
@@ -12765,10 +12858,10 @@ const baseDir = pathModule.join(pathModule.dirname(fileURLToPath(import.meta.url
 const importFn: ImportFn = <T>(moduleId: string) => {
   const relativeModuleId = (pathModule.isAbsolute(moduleId) ? pathModule.relative(baseDir, moduleId) : moduleId).split('\\').join('/').replace(baseDir + '/', '');
   switch(relativeModuleId) {
-    case ".graphclient/sources/arbitrum/introspectionSchema":
+    case ".graphclient/sources/mainnet/introspectionSchema":
       return Promise.resolve(importedModule$0) as T;
     
-    case ".graphclient/sources/mainnet/introspectionSchema":
+    case ".graphclient/sources/arbitrum/introspectionSchema":
       return Promise.resolve(importedModule$1) as T;
     
     default:

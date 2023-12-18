@@ -5816,6 +5816,43 @@ export type Indexer_orderBy =
   | 'delegatorsCount';
 
 /**
+ * ZONE OF DARK MAGIC DONT USE IT OR U DIE
+ *
+ */
+export type IndexersRecalculateQueue = {
+  /** ID is 0 - infinity */
+  id: Scalars['ID'];
+  indexer: Scalars['ID'];
+};
+
+export type IndexersRecalculateQueue_filter = {
+  id?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  indexer?: InputMaybe<Scalars['ID']>;
+  indexer_not?: InputMaybe<Scalars['ID']>;
+  indexer_gt?: InputMaybe<Scalars['ID']>;
+  indexer_lt?: InputMaybe<Scalars['ID']>;
+  indexer_gte?: InputMaybe<Scalars['ID']>;
+  indexer_lte?: InputMaybe<Scalars['ID']>;
+  indexer_in?: InputMaybe<Array<Scalars['ID']>>;
+  indexer_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  /** Filter for the block changed event. */
+  _change_block?: InputMaybe<BlockChangedFilter>;
+  and?: InputMaybe<Array<InputMaybe<IndexersRecalculateQueue_filter>>>;
+  or?: InputMaybe<Array<InputMaybe<IndexersRecalculateQueue_filter>>>;
+};
+
+export type IndexersRecalculateQueue_orderBy =
+  | 'id'
+  | 'indexer';
+
+/**
  * Curator Name Signal for a single Subgraph
  *
  */
@@ -6840,6 +6877,8 @@ export type Query = {
   rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
   delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
   delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
+  indexersRecalculateQueue?: Maybe<IndexersRecalculateQueue>;
+  indexersRecalculateQueues: Array<IndexersRecalculateQueue>;
   transaction?: Maybe<Transaction>;
   transactions: Array<Transaction>;
   curatorSearch: Array<Curator>;
@@ -7484,6 +7523,24 @@ export type QuerydelegationPoolHistoryEntitiesArgs = {
   orderBy?: InputMaybe<DelegationPoolHistoryEntity_orderBy>;
   orderDirection?: InputMaybe<OrderDirection>;
   where?: InputMaybe<DelegationPoolHistoryEntity_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryindexersRecalculateQueueArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryindexersRecalculateQueuesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<IndexersRecalculateQueue_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<IndexersRecalculateQueue_filter>;
   block?: InputMaybe<Block_height>;
   subgraphError?: _SubgraphErrorPolicy_;
 };
@@ -10271,6 +10328,8 @@ export type Subscription = {
   rewardCutHistoryEntities: Array<RewardCutHistoryEntity>;
   delegationPoolHistoryEntity?: Maybe<DelegationPoolHistoryEntity>;
   delegationPoolHistoryEntities: Array<DelegationPoolHistoryEntity>;
+  indexersRecalculateQueue?: Maybe<IndexersRecalculateQueue>;
+  indexersRecalculateQueues: Array<IndexersRecalculateQueue>;
   transaction?: Maybe<Transaction>;
   transactions: Array<Transaction>;
   /** Access to subgraph metadata */
@@ -10916,6 +10975,24 @@ export type SubscriptiondelegationPoolHistoryEntitiesArgs = {
 };
 
 
+export type SubscriptionindexersRecalculateQueueArgs = {
+  id: Scalars['ID'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionindexersRecalculateQueuesArgs = {
+  skip?: InputMaybe<Scalars['Int']>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<IndexersRecalculateQueue_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<IndexersRecalculateQueue_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
 export type SubscriptiontransactionArgs = {
   id: Scalars['ID'];
   block?: InputMaybe<Block_height>;
@@ -11517,6 +11594,10 @@ export type _SubgraphErrorPolicy_ =
   /** null **/
   delegationPoolHistoryEntities: InContextSdkMethod<Query['delegationPoolHistoryEntities'], QuerydelegationPoolHistoryEntitiesArgs, MeshContext>,
   /** null **/
+  indexersRecalculateQueue: InContextSdkMethod<Query['indexersRecalculateQueue'], QueryindexersRecalculateQueueArgs, MeshContext>,
+  /** null **/
+  indexersRecalculateQueues: InContextSdkMethod<Query['indexersRecalculateQueues'], QueryindexersRecalculateQueuesArgs, MeshContext>,
+  /** null **/
   transaction: InContextSdkMethod<Query['transaction'], QuerytransactionArgs, MeshContext>,
   /** null **/
   transactions: InContextSdkMethod<Query['transactions'], QuerytransactionsArgs, MeshContext>,
@@ -11677,6 +11758,10 @@ export type _SubgraphErrorPolicy_ =
   delegationPoolHistoryEntity: InContextSdkMethod<Subscription['delegationPoolHistoryEntity'], SubscriptiondelegationPoolHistoryEntityArgs, MeshContext>,
   /** null **/
   delegationPoolHistoryEntities: InContextSdkMethod<Subscription['delegationPoolHistoryEntities'], SubscriptiondelegationPoolHistoryEntitiesArgs, MeshContext>,
+  /** null **/
+  indexersRecalculateQueue: InContextSdkMethod<Subscription['indexersRecalculateQueue'], SubscriptionindexersRecalculateQueueArgs, MeshContext>,
+  /** null **/
+  indexersRecalculateQueues: InContextSdkMethod<Subscription['indexersRecalculateQueues'], SubscriptionindexersRecalculateQueuesArgs, MeshContext>,
   /** null **/
   transaction: InContextSdkMethod<Subscription['transaction'], SubscriptiontransactionArgs, MeshContext>,
   /** null **/
