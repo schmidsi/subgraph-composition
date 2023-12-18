@@ -426,7 +426,7 @@ Running `yarn graphclient serve-dev` again and inspecting the schema shows, that
 
 But the `crossSubgraphs` query does not work anymore. We need to change the resolver to use the new prefixed fields:
 
-From `context[source].Query.subgraphs` to `context[source].Query[\`${source}\_subgraphs\`]`
+From `context[source].Query.subgraphs` to `` context[source].Query[\`${source}\_subgraphs\`] ``
 
 ```ts
 import { Resolvers } from "../../.graphclient";
